@@ -2,13 +2,15 @@ TEX    = latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode --shell-escap
 PLOT   = gnuplot -e 'set term svg'
 
 PAPER  = thesis
-CHAPS  = 1introduction.tex 2related.tex 3approach.tex \
+CHAPS  = introduction.tex background.tex 3approach.tex \
 				 4results.tex 5conclusions.tex appA.tex 
 BIBS   = thesis.bib
 FIGDIR = fig
+FIGS   = uhhLogoL.pdf
 PLOTS  = 
 
-PLOTP  = $(foreach p, $(PLOTS), $(FIGDIR)/$(p).svg)
+PLOTP  = $(foreach p, $(PLOTS), $(FIGDIR)/$(p).svg) \
+				 $(foreach p, $(FIGS), $(FIGDIR)/$(p))
 
 $(FIGDIR)/%.svg : $(FIGDIR)/%.gp
 	$(PLOT) $< > $@
