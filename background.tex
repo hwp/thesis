@@ -7,13 +7,31 @@ Visual object recognition has been extensively studied in the recent decade. Vis
 
 Concerning object recognition, there are two types of task been studied: specific case and generic object category case \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person from a giving image. For instance, recognizing your neighbor's car, the Eiffel tower or a ten euro note. These objects have little variation in appearance and shape. Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example to tell an instance is a car or a coffee mug. In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. Different methods are used to deal with these two types of task. In general, they use different features and algorithms. Now, we will discuss some of the methods.
 
+\subsection{Visual Specific Object Recognition}
 One of the approaches which have achieved robust and efficient result in specific object recognition is proposed by Lowe \cite{lowe_object_1999}. His approach first extracts SIFT features from the image. Scale Invariant Feature Transform (SIFT)is a kind of local feature that is invariant to image translation, scaling, and rotation. Then, the extracted features are matched between train and test images. In the final step, the matched features are verified to confirm they are in a consistent geometric configuration. This approach has been widely used in robotic visual systems \cite{grauman_visual_2011}.
 
+\subsection{Visual Object Category Recognition}
 While specific object recognition can be solved as matching of local features, the task of object category recognition requires representations that capture the common characteristics of different instances in the same class. Example systems for object category recognition include the Viola-Jones face detector \cite{viola_rapid_2001}, bag-of-words model \cite{csurka_visual_2004} and HOG person detector \cite{dalal_histograms_2005}. 
 
-The bag-of-words model \cite{csurka_visual_2004} for object category recognition is motivated by the bag-of-words model in text categorization. The visual image with a collection of local feature descriptors is analog to a document with a collection of words. In practice, a vocabulary of visual words is first constructed with clustering the feature descriptors from a number of images. Here, descriptors like SIFT or SURF can be used. Then, an image can be represented as a histogram of the vocabulary. After that, classifiers like support vector machine or Na\"ive Bayes can be used for categorization.
+The bag-of-words model \cite{csurka_visual_2004} for object category recognition is motivated by the bag-of-words model in text categorization. The visual image with a collection of local feature descriptors is analog to a document with a collection of words. In practice, a vocabulary of visual words is first constructed with clustering the feature descriptors from a number of images. Here, descriptors like SIFT or SURF can be used. Then, an image can be represented as a histogram of the vocabulary. After that, classifiers like support vector machine or Na\"ive Bayes can be used for categorization. This bag-of-words model achieved high and robust categorization accuracy.
+
+Sivic et al. \cite{sivic_discovering_2005} used the bag-of-words model for unsupervised object categorization. Same as \cite{csurka_visual_2004}, given a collection of images, the feature of the images is first extracted as a bag of visual words. Then, generative models like Latent Semantic Analysis (pLSA) and Latent Dirichlet Allocation (LDA) are learned from the representation vectors. These models, which are successfully used for text analysis finding document topics, can also be used for finding the underlying common features of an object category. Since their learning method is unsupervised, it is applicable to a large unlabeled image set.
 
 \section{Multimodal Object Recognition}
+When thinking of how humans recognize objects, we use not only visual information, but also perceptions of other modalities, like auditory, haptic and olfactory perception. These extra perceptions provide complementary information. For example, a paper cup might have the same shape as a ceramic cup, and it is difficult to distinguish them only with vision. However, if we make some sound of them by knocking or touch them, we can use auditory or haptic information to tell the difference. This idea of multimodal object recognition is also applied to robotic systems.
+
+\subsection{Multimodal Object Recognition using pLSA Model}
+Nakamura et al. \cite{nakamura_multimodal_2007} proposed an unsupervised object categorization method for robots based on visual, audio and haptic information. In their approach, they extended the pLSA model in \cite{sivic_discovering_2005} for object categorization using multimodal features.
+
+The features of the three modalities are extracted as follows:
+\begin{description}
+  \item[Visual Information] \hfill \\
+    The first item
+  \item[Audio Information] \hfill \\
+    The second item
+  \item[Haptic Information] \hfill \\
+    The third etc \ldots
+\end{description}
 
 \section{Visual-Audio Speech Recognition}
 
