@@ -33,8 +33,9 @@ In their experiment, a robot hand was used to grasp and shake the objects. Durin
     For each grasp of an object, a 2-dimensional feature vector was collected by the pressure sensors on the robot finger. Then, the feature vectors were vector quantized with 5 clusters, which was generated in advance.
 \end{description}
 
+They tested the unsupervised categorization on 40 objects in 8 categories. The objects were toys like stuffed toys, rattles, tambourines and balls. It was shown that their categorization result of using three modalities was identical to the categorization result of human subject. However, categorization using one modality alone did not work as well.
 
-
+Furthermore, they also tested the performance of category and property inference of an unseen object. By using ``fold in'' heuristic \cite{hofmann_probabilistic_1999}, they correctly inferred the categories of all the objects in leave-one-out cross validation. For the property inference, their method can infer the auditory and haptic properties when given only the visual cue of the object.
 
 \section{Visual-Audio Speech Recognition}
 
