@@ -37,5 +37,16 @@ They tested the unsupervised categorization on 40 objects in 8 categories. The o
 
 Furthermore, they also tested the performance of category and property inference of an unseen object. By using ``fold in'' heuristic \cite{hofmann_probabilistic_1999}, they correctly inferred the categories of all the objects in leave-one-out cross validation. For the property inference, their method can infer the auditory and haptic properties when given only the visual cue of the object.
 
+\subsection{Behavior-Grounded Relational Learning}
+Another multimodal object categorization approach is the behavior-grounded relational learning proposed by Sinapov and Stoytchev \cite{sinapov_object_2011}. Different from the aforementioned multimodal pLSA approach, they used different features and a supervised learning method.
+
+They used an upper-torso humanoid robot to interact with the objects and collect proprioceptive and auditory information. The interactions included five exploratory behaviors, which are lift, shake, drop, crush and push. The proprioceptive data was recorded with 7 joint torque sensors and the auditory data was recorded by a microphone mounted on the robot head.
+
+The method for extracting proprioceptive and auditory features were described in \cite{bergquist_interactive_2009} and \cite{sinapov_interactive_2009}, respectively. Since the interactions spanned over time, the data recorded were sequences of vectors. Here, a proprioceptive vector consisted of the joint torques, and a auditory vector was a Short Time Fourier Transform (STFT) of the raw audio recording. These vectors were further quantized using Self-organizing Map (SOM). Then, one modality of one behavior execution could be represented as a sequence of nominal values, that are the states in the SOM. Furthermore, the similarity between two different sequence can be calculated with Needleman-Wunch alignment algorithm \cite{needleman_general_1970}.
+
+Based on the similarity of executions recordings, they constructed the relational features. The relational features of an object are the average similarities to a known object sets (for example the objects which are or are not plastic cups). The sets were the objects of the 6 categories, which are plastic cups, pop cans, metal objects, soft objects, empty bottles and objects with content. And, with 10 sensorimotor context (a behavior-modality combination), a object is represented by a $10 \times 2 \times 6 = 120$ dimensional vector.
+
+Consequently, they applied discriminative methods, like Support Vector Machine, k-Nearest Neighbor and Decision Tree, for learning the object category. They evaluated these methods with Cohen's kappa coefficient \cite{cohen_coefficient_1960}. Their approach achieved kappa coefficient from 0.4 to .85 for the recognition.
+
 \section{Visual-Audio Speech Recognition}
 
