@@ -6,7 +6,7 @@ CHAPS  = introduction.tex background.tex 3approach.tex \
 				 4results.tex 5conclusions.tex appA.tex 
 BIBS   = thesis.bib
 FIGDIR = fig
-FIGS   = uhhLogoL.pdf
+FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg ice_tgv.jpg
 PLOTS  = 
 
 PLOTP  = $(foreach p, $(PLOTS), $(FIGDIR)/$(p).svg) \
@@ -23,6 +23,5 @@ $(PAPER).pdf : $(PAPER).tex $(CHAPS) $(PLOTP) $(BIBS) $(PLOTP)
 
 .PHONY : clean
 clean :
-	rm -f *.bbl *.blg *.log *.aux *.toc *.lof *.fls \
-		$(FIGDIR)/*.tex  $(FIGDIR)/*.pdf_tex $(FIGDIR)/*.pdf
+	rm -f *.bbl *.blg *.log *.aux *.toc *.lof *.fls
 

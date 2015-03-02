@@ -5,7 +5,49 @@ In this chapter, three related fields regarding visual-audio object recognition 
 \section{Visual Object Recognition}
 Visual object recognition has been extensively studied in the recent decade. Vision is very essential for both humans and artificial agents to recognize an object, since it provides the most direct and informational clue about the object. Numerous methods have been proposed for visual object recognition and they have been used in a variety of applications.
 
-Concerning object recognition, there are two types of task been studied: specific case and generic object category case \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person from a giving image. For instance, recognizing your neighbor's car, the Eiffel tower or a ten euro note. These objects have little variation in appearance and shape. Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example to tell an instance is a car or a coffee mug. In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. Different methods are used to deal with these two types of task. In general, they use different features and algorithms. Now, we will discuss some of the methods.
+\begin{figure}[tbhp]
+  \centering
+  \begin{subfigure}[b]{.3\textwidth}
+    %\includegraphics[width=\textwidth]{tour_eiffel}
+    \caption{Something else}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.3\textwidth}
+    \centering
+    \includegraphics[width=.7\textwidth]{tour_eiffel}
+    \caption{The Eiffel Tower\footnotemark}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.3\textwidth}
+    \includegraphics[width=\textwidth]{turing}
+    \caption{Alan Turing}
+  \end{subfigure}
+  \caption{Examples of specific objects.}
+  \label{fig:specific}
+\end{figure}
+\footnotetext{Photo by \href{http://commons.wikimedia.org/wiki/User:Benh}{Benh}, licensed under \href{http://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}}
+
+Concerning object recognition, there are two types of tasks been studied: specific object recognition and object category recognition \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person. Examples of this case are Sam's coffee mug, the Eiffel tower or Alan Turing as shown in Figure~\ref{fig:specific}. These objects (or person) have little variation in appearance and shape. 
+
+\begin{figure}[tbhp]
+  \centering
+  \begin{subfigure}[b]{.45\textwidth}
+    \includegraphics[width=\textwidth]{ice_tgv} % figure from public domain
+    \caption{Trains}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \includegraphics[width=.4\textwidth]{tour_eiffel}
+    \caption{The Eiffel Tower}
+  \end{subfigure}
+  \caption{Examples of generic objects categories.}
+  \label{fig:generic}
+\end{figure}
+
+Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of trains or coffee mugs (Figure~\ref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. The category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
+
+As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
 
 \subsection{Visual Specific Object Recognition}
 One of the approaches which have achieved robust and efficient result in specific object recognition is proposed by Lowe \cite{lowe_object_1999}. His approach first extracts SIFT features from the image. Scale Invariant Feature Transform (SIFT)is a kind of local feature that is invariant to image translation, scaling, and rotation. Then, the extracted features are matched between train and test images. In the final step, the matched features are verified to confirm they are in a consistent geometric configuration. This approach has been widely used in robotic visual systems \cite{grauman_visual_2011}.
