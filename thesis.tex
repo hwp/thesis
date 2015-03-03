@@ -167,6 +167,9 @@
 
 \newcommand{\erdos}{Erd\H{o}s}
 \newcommand{\renyi}{-R\'{e}nyi}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 % it is recommented to define complex terms as expression/newcommand and use the expression in the tex instead.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -398,15 +401,41 @@ The hidden Markov models (HMM) are statistical models for sequence data, which h
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
 \section{Definition of HMM}
-First of all, what HMM generates or measures, are discrete-time sequences of observed data. One observation is represented as $\mathbf{X}=\{X_t\}, t = 1, 2, \dots, T$. Here, $X_i$ can be from a finite set, $\{1, 2, \dots, K\}$, or a continuous space, $\mathbb{R}^d$. For simplicity, we will only consider the continuous case, since our system is exclusively used on continuous data.
+A hidden Markov model describes a probability distribution of a discrete-time stochastic process under some certain assumptions. These assumptions include there is an unobserved or hidden state associated with every observation at each time and the states transition fulfills Markov property (e.g. Markov assumption). More precisely, one observed sequence, $\mathbf{x}=(x_t, t \in \mathbb{N})$, and its associated state sequence, $\mathbf{q}=(q_t, t \in \mathbb{N})$, has such properties:
 
-Formally, an HMM consists of the following elements:
-\begin{description}
-  \item[The number of (hidden) states, $N$]
-  \item[The state-transition probability, $A=\{a_{ij}\}$]
-  \item[The obvervation probability distribution, $B=\{b_{i}(x)\}$]
-  \item[The initial state distribution, $\pi=\{\pi_{i}\}$]
-\end{description}
+\begin{enumerate}
+  \item The conditional distribution of present observation (at a certain time $t$) depends only upon the present hidden state:
+    \[ P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1}) = P(x_t|q_t), t \in \mathbb{N} \]
+  \item (Markov property) The conditional probability distribution of future hidden state of the process depends only upon the present state:
+    \[ P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t), t \in \mathbb{N} \]
+\end{enumerate}
+
+Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\})$. Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
+
+Given the aforementioned assumptions, one HMM can be specified with the following parameters:
+\[ \theta = (A, B, \pi) \]
+such that
+\begin{itemize}
+  \item $A$ is the transition probability, $A = \{a_{ij}\}$, in which 
+    \[ a_{ij} = P(q_{t+1} = j | q_t = i), \quad i,j \in \{1, \dots, N\} \]
+  \item $B$ is the observation probability distribution, $B = \{b_j(x)\}$, in which
+    \[ b_j(x) = P(x_t = x | q_t = j), \quad i,j \in \{1, \dots, N\} \]
+  \item $\pi$ is the initial state distribution, $\pi = \{\pi_j\}$, in which
+    \[ \pi_j = P(q_1 = j), \quad i,j \in \{1, \dots, N\} \]
+\end{itemize}
+
+As for HMM-GMM, each $b_j(x)$, more specifically, is a probability density function (pdf) of a GMM, namely
+\[ b_j(x) = \sum_{k=1}^M c_{jk} \mathcal{N}(x, \mu_{jk}, \Sigma_{jk}) \]
+where $c_{jk}$ is the mixture weight (coefficient), $\mu_{jk}$ is the mean and $\Sigma_{jk}$ is the covariance matrix, each of the $k$-th component in state $j$ and $\mathcal{N}$ is the pdf of the Gaussian distribution.
+
+With the formal definition of HMM, there are still three problems of interest to be solved, in order to use HMM for real-world applications. These problems are:
+\begin{enumerate}
+  \item Given a model $\theta=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, what is the probability of the model generating such sequence, namely $P(\mathbf{x}|\theta)$?
+  \item Given a model $\theta$, and an observation sequence $\mathbf{x}$, what is the most likely hidden state sequence $\mathbf{q} = (q_1 q_2 \dots q_t)$, namely $\argmax_{\mathbf{q}}P(\mathbf{x}|\mathbf{q},\theta)$?
+  \item Given an observation sequence $\mathbf{x}$ (or a set of observations $\{\mathbf{x}^{(i)}\}$), how do we estimate the parameters that maximize $P(\mathbf{x}|\theta)$ (or $\prod_{i} P(\mathbf{x}^{(i)}|\theta) $)?
+\end{enumerate}
+
+In the following sections, we will show that the first and third problem can be solved using the forward-backward algorithm and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm \cite{forney_viterbi_1973}. However, the second problem is related to our system, so it will not be addressed.
 
 \section{Probability Evaluation}
 
