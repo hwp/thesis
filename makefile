@@ -2,8 +2,6 @@ TEX    = latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode --shell-escap
 PLOT   = gnuplot -e 'set term svg'
 
 PAPER  = thesis
-CHAPS  = introduction.tex background.tex 3approach.tex \
-				 4results.tex 5conclusions.tex appA.tex 
 BIBS   = thesis.bib
 FIGDIR = fig
 FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg themug.jpg mugs.jpg
@@ -18,7 +16,7 @@ $(FIGDIR)/%.svg : $(FIGDIR)/%.gp
 .PHONY : pdf 
 pdf : $(PAPER).pdf
 
-$(PAPER).pdf : $(PAPER).tex $(CHAPS) $(PLOTP) $(BIBS) $(PLOTP)
+$(PAPER).pdf : $(PAPER).tex $(PLOTP) $(BIBS) $(PLOTP)
 	$(TEX) $(PAPER)
 
 .PHONY : clean
