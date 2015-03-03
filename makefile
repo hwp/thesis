@@ -6,7 +6,7 @@ CHAPS  = introduction.tex background.tex 3approach.tex \
 				 4results.tex 5conclusions.tex appA.tex 
 BIBS   = thesis.bib
 FIGDIR = fig
-FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg ice_tgv.jpg
+FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg themug.jpg mugs.jpg
 PLOTS  = 
 
 PLOTP  = $(foreach p, $(PLOTS), $(FIGDIR)/$(p).svg) \

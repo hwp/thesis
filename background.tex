@@ -8,8 +8,8 @@ Visual object recognition has been extensively studied in the recent decade. Vis
 \begin{figure}[tbhp]
   \centering
   \begin{subfigure}[b]{.3\textwidth}
-    %\includegraphics[width=\textwidth]{tour_eiffel}
-    \caption{Something else}
+    \includegraphics[width=\textwidth]{themug}
+    \caption{Sam's coffee mug}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{.3\textwidth}
@@ -25,27 +25,29 @@ Visual object recognition has been extensively studied in the recent decade. Vis
   \caption{Examples of specific objects.}
   \label{fig:specific}
 \end{figure}
-\footnotetext{Photo by \href{http://commons.wikimedia.org/wiki/User:Benh}{Benh}, licensed under \href{http://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}}
+\footnotetext{``Eiffel Tower'' by \href{http://commons.wikimedia.org/wiki/User:Benh}{Benh}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}.}
 
 Concerning object recognition, there are two types of tasks been studied: specific object recognition and object category recognition \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person. Examples of this case are Sam's coffee mug, the Eiffel tower or Alan Turing as shown in Figure~\ref{fig:specific}. These objects (or person) have little variation in appearance and shape. 
 
 \begin{figure}[tbhp]
   \centering
   \begin{subfigure}[b]{.45\textwidth}
-    \includegraphics[width=\textwidth]{ice_tgv} % figure from public domain
-    \caption{Trains}
+    \includegraphics[width=.89\textwidth]{cars} % figure from public domain
+    \caption{Cars\footnotemark}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{.45\textwidth}
     \centering
-    \includegraphics[width=.4\textwidth]{tour_eiffel}
-    \caption{The Eiffel Tower}
+    \includegraphics[width=\textwidth]{mugs}
+    \caption{Coffee Mugs}
   \end{subfigure}
   \caption{Examples of generic objects categories.}
   \label{fig:generic}
 \end{figure}
+\footnotetext{The upper photo is ``Mercedes-Benz C 250'' by \href{http://commons.wikimedia.org/wiki/User:M_93}{M 93}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0/de}{CC BY-SA 3.0 de}.
+The lower photo is ``Porsche Carrera GT'' by \href{http://www.flickr.com/people/32659528@N00}{Brian Snelson}. Licensed under \href{http://creativecommons.org/licenses/by/2.0}{CC BY 2.0}}
 
-Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of trains or coffee mugs (Figure~\ref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. The category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
+Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see Figure~\ref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. A category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
 
 As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
 
