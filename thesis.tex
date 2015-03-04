@@ -396,7 +396,7 @@ Consequently, they applied discriminative methods, like Support Vector Machine, 
 
 \cleardoublepage
 \chapter{Theories of Hidden Markov Model}
-The hidden Markov models (HMM) are statistical models for sequence data, which have been well-known and widely used by researchers \cite{rabiner_fundamentals_1993}. Theories of HMM are initially published by Baum and his colleagues \cite{baum_statistical_1966, baum_maximization_1970}. They have been successfully applied to a number of research fields, including speech processing \cite{baker_dragon_1975, rabiner_fundamentals_1993}, image processing \cite{chen_off-line_1994}, bioinformatics \cite{koski_hidden_2001}, finance \cite{bhar_hidden_2004}, etc.
+The hidden Markov models (HMM) are statistical models for sequence data, which have been well-known and widely used by researchers \cite{rabiner_tutorial_1989, rabiner_fundamentals_1993}. Theories of HMM are initially published by Baum and his colleagues \cite{baum_statistical_1966, baum_maximization_1970}. They have been successfully applied to a number of research fields, including speech processing \cite{baker_dragon_1975, rabiner_fundamentals_1993}, image processing \cite{chen_off-line_1994}, bioinformatics \cite{koski_hidden_2001}, finance \cite{bhar_hidden_2004}, etc.
 
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
@@ -414,7 +414,7 @@ A hidden Markov model describes a probability distribution of a stationary discr
   \end{equation}
 \end{enumerate}
 
-Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$). Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
+Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$, with $N$ being the number of states). Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
 
 Given the aforementioned assumptions, one HMM can be specified with the following parameters:
 \[ \theta = (A, B, \pi) \]
@@ -462,12 +462,37 @@ Thus we get
 \begin{equation} \label{eq:prob_brute}
   P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi(q_1) b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
 \end{equation}
-Eq. \ref{eq:prob_brute} seems to be a solution, however, the number of possible state sequences is too large, which is $N^T$. That makes it impossible to calculate. Therefore, more efficient methods is needed.
+This is a direct solution, however, the number of possible state sequences is too large, which is $N^T$. Thus, the time efficiency would be $\Theta(T N^T)$ using big theta notation. That makes it impossible to calculate when $T$ is large, which is often the case. Therefore, more efficient methods is needed.
 
 \subsection{The Forward Procedure}
-One of the efficient solution is using the forward procedure.
+One of the efficient solution is using the forward procedure. Consider the forward variable $\alpha_i(t)$ defined as
+\begin{equation}
+  \alpha_i(t) = P(x_1,\dots,x_t,q_t=i|\theta) 
+\end{equation}
+it has the following properties
+\begin{enumerate}
+  \item At initial time
+    \begin{equation}
+      \alpha_i(1) = P(x_1,q_1=i|\theta) = \pi(i) b_i(x_1) \qquad j \in \{1,\dots,N\} ;
+    \end{equation}
+  \item The forward variable can be calculated iteratively
+    \begin{align}
+      \alpha_j(t+1) &= P(x_1,\dots,x_{t+1},q_{t+1}=j|\theta) \\
+      &= \sum_{i=1}^{N} P(x_1,\dots,x_{t+1},q_t=i,q_{t+1}=j|\theta) \\
+      &= \sum_{i=1}^{N} P(x_1,\dots,x_t,q_t=i|\theta) P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) \\
+      &= \sum_{i=1}^{N} \alpha_i(t) a_{ij} b_j(x_{t+1}) \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} ;
+    \end{align}
+  \item Sum over all the forward variable at time $T$, we get the probability
+    \begin{equation}
+      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x},q_T=i|\theta) = \sum_{i=1}^N \alpha_i(T) .
+    \end{equation}
+\end{enumerate}
+Since we only need to iteratively calculate all the $N$ forward variables from time $1$ to $T$, the time efficiency of the forward procedure is $\Theta(NT)$, which much faster than using the na\"ive solution (Eq. \ref{eq:prob_brute}).
+
+\subsection{The Backward Procedure}
 
 \section{Expectation-maximization Algorithm}
+
 
 \section{Baum-Welch Algorithm}
 
@@ -495,10 +520,10 @@ The first two cases are degenerated forms of HMM-GMM, which are simply a Gaussia
 Given a video of interaction with an object, the visual and acoustic features are extracted as follows:
 \subsection{Visual Feature}
 First, the image frames from the raw video are taken at frame rate of 5 fps (frames per second). For each image frame, SIFT descriptors of all the key points are calculated. Then, all the descriptors are quantized using a codebook or a vocabulary of descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a histogram. At last, the histogram is normalized (sum of which equals 1) and we get the bag-of-words feature. Since the codebook we use contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
- 
+
 \subsection{Audio Feature}
 The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
- 
+
 
 \section{Implementation Issues}
 \subsection{Scaling}
@@ -536,9 +561,9 @@ The audio data are sampled at 8000 Hz. We first use shifting windows with window
 %\fancyhead[LE]{\it \leftmark}
 %\chapter{}
 \fancyhead[LE,RO]{\it Bibliography}       % A bibliography never have a letter or numbering!
-    \bibliographystyle{plain}             % Style for presenting the literature
-    \addcontentsline{toc}{chapter}{Bibliography}% Add to the TOC
-    \bibliography{thesis}
+\bibliographystyle{plain}             % Style for presenting the literature
+\addcontentsline{toc}{chapter}{Bibliography}% Add to the TOC
+\bibliography{thesis}
 \cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
