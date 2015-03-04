@@ -474,6 +474,22 @@ One of the efficient solution is using the forward procedure.
 \cleardoublepage
 \chapter{HMM Model for Bimodal Object Recognition}
 \section{System Overview}
+The models we use in our system for learning the categories are hidden Markov models with Gaussian Mixtures (HMM-GMM). For each category, we learn two models, one with the positive instances and the other with negative instances, using the Baum-Welch algorithm. The models by themselves cannot be used for classification, however, with some calculation we can get the posterior probability of an object being in the category and use this probability for classification:
+\begin{equation}
+  P(\mathbf{x}|\theta^+) = \frac{P(\mathbf{x}|\theta^+)P(\theta^+)}{P(\mathbf{x}|\theta^+)P(\theta^+) + P(\mathbf{x}|\theta^-)P(\theta^-)}
+\end{equation}
+where $\theta^+$ and $\theta^-$ are the positive and negative models, $\mathbf{x}$ is the observation, $P(\cdot|\theta^+)$ and $P(\cdot|\theta^-)$ are the probability density functions, and $P(\theta^+)$, $P(\theta^-)$ are the prior probabilities. Since we will use shifting classification threshold to calculate the receiver operating characteristic (ROC) curve afterwards, the prior probabilities can be assumed to be equal, and result in
+\begin{equation}
+  P(\mathbf{x}|\theta^+) = \frac{P(\mathbf{x}|\theta^+)}{P(\mathbf{x}|\theta^+) + P(\mathbf{x}|\theta^-)} .
+\end{equation}
+There are several parameters in HMM-GMM we can choose, which include the number of states, $n$, and the number of mixture components for each state, $k$. In our experiments, we tried the following four cases:
+\begin{enumerate}
+  \item $n = 1$ and $k = 1$;
+  \item $n = 1$ and $k = 3$;
+  \item $n = 3$ and $k = 3$;
+  \item $n = 3$ and $k = 6$.
+\end{enumerate}
+The first two cases are degenerated forms of HMM-GMM, which are simply a Gaussian distribution and a Gaussian mixture model of three components, respectively. The parameters should be carefully chosen, for that small $n$ and $k$ may result in models that are too simple to learn the actual distribution, while large $n$ and $k$ may result in local optima or overfitting.
 
 \section{Feature Extraction}
 Given a video of interaction with an object, the visual and acoustic features are extracted as follows:
