@@ -195,7 +195,7 @@
 %\includegraphics*[width=0.09\textwidth]{uhhIconR_}
 %\parbox[c]{10cm}{
 %    \begin{center}
-%    Universität Hamburg --- MIN-Fakultät\\
+%    Universit"at Hamburg --- MIN-Fakult"at\\
 %    \trfachgruppe
 %    \end{center}
 %    }\hfill
@@ -401,7 +401,7 @@ The hidden Markov models (HMM) are statistical models for sequence data, which h
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
 \section{Definition of HMM}
-A hidden Markov model describes a probability distribution of a discrete-time stochastic process under some certain assumptions. These assumptions include there is an unobserved or hidden state associated with every observation at each time and the states transition fulfills Markov property (e.g. Markov assumption). More precisely, one observed sequence, $\mathbf{x}=(x_t, t \in \mathbb{N})$, and its associated state sequence, $\mathbf{q}=(q_t, t \in \mathbb{N})$, has such properties:
+A hidden Markov model describes a probability distribution of a stationary discrete-time stochastic process under certain assumptions. These assumptions include that there is an unobserved or hidden state associated with every observation at each time and the states transition meets the Markov property (also known as the Markov assumption). More precisely, for one observed sequence, $\mathbf{x}=(x_t, t \in \mathbb{N})$, and its associated state sequence, $\mathbf{q}=(q_t, t \in \mathbb{N})$, the following properties hold:
 
 \begin{enumerate}
   \item The conditional distribution of present observation (at a certain time $t$) depends only upon the present hidden state:
@@ -410,7 +410,7 @@ A hidden Markov model describes a probability distribution of a discrete-time st
     \[ P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t), t \in \mathbb{N} \]
 \end{enumerate}
 
-Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\})$. Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
+Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$). Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
 
 Given the aforementioned assumptions, one HMM can be specified with the following parameters:
 \[ \theta = (A, B, \pi) \]
@@ -435,7 +435,7 @@ With the formal definition of HMM, there are still three problems of interest to
   \item Given an observation sequence $\mathbf{x}$ (or a set of observations $\{\mathbf{x}^{(i)}\}$), how do we estimate the parameters that maximize $P(\mathbf{x}|\theta)$ (or $\prod_{i} P(\mathbf{x}^{(i)}|\theta) $)?
 \end{enumerate}
 
-In the following sections, we will show that the first and third problem can be solved using the forward-backward algorithm and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm \cite{forney_viterbi_1973}. However, the second problem is related to our system, so it will not be addressed.
+In the following sections, we will show that the first and third problem can be solved using the forward-backward algorithm and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm \cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
 
 \section{Probability Evaluation}
 
@@ -446,6 +446,15 @@ In the following sections, we will show that the first and third problem can be 
 \cleardoublepage
 \chapter{HMM Model for Bimodal Object Recognition}
 \section{System Overview}
+
+\section{Feature Extraction}
+Given a video of interaction with an object, the visual and acoustic features are extracted as follows:
+\subsection{Visual Feature}
+First, the image frames from the raw video are taken at frame rate of 5 fps (frames per second). For each image frame, SIFT descriptors of all the key points are calculated. Then, all the descriptors are quantized using a codebook or a vocabulary of descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a histogram. At last, the histogram is normalized (sum of which equals 1) and we get the bag-of-words feature. Since the codebook we use contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
+ 
+\subsection{Audio Feature}
+The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
+ 
 
 \section{Implementation Issues}
 \subsection{Scaling}
@@ -458,6 +467,7 @@ In the following sections, we will show that the first and third problem can be 
 \cleardoublepage
 \chapter{Experiment and Results}
 \section{Experiment Setup}
+
 \section{Evaluation}
 \section{Results}
 
@@ -491,8 +501,8 @@ In the following sections, we will show that the first and third problem can be 
 % Formal page 1
 \vspace{2cm}
 \chapter*{Erkl\"arung der Urheberschaft}
-\fancyhead[LE]{\it Erklärung der Urheberschaft}
-Ich versichere an Eides statt, dass ich die \trtype{} im Studiengang \trcourseofstudies{} selbstst\"andig verfasst und keine anderen als die angegebenen Hilfsmittel -- insbesondere keine im Quellenverzeichnis nicht benannten Internet-Quellen -- benutzt habe. Alle Stellen, die w\"ortlich oder sinngem\"a{\ss} aus Ver\"offentlichungen entnommen wurden, sind als solche kenntlich gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem anderen Prüfungsverfahren eingereicht habe und die eingereichte schriftliche Fassung der auf dem elektronischen Speichermedium entspricht.
+\fancyhead[LE]{\it Erkl\"arung der Urheberschaft}
+Ich versichere an Eides statt, dass ich die \trtype{} im Studiengang \trcourseofstudies{} selbstst\"andig verfasst und keine anderen als die angegebenen Hilfsmittel -- insbesondere keine im Quellenverzeichnis nicht benannten Internet-Quellen -- benutzt habe. Alle Stellen, die w\"ortlich oder sinngem\"a{\ss} aus Ver\"offentlichungen entnommen wurden, sind als solche kenntlich gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem anderen Pr\"ufungsverfahren eingereicht habe und die eingereichte schriftliche Fassung der auf dem elektronischen Speichermedium entspricht.
 
 %Ich versichere an Eides statt, dass ich die vorliegende \trtype{} selbstst\"andig und ohne unerlaubte Hilfe Dritter angefertigt habe. Alle Stellen, die inhaltlich oder w\"ortlich aus anderen Ver\"offentlichungen stammen, sind kenntlich gemacht. Diese Arbeit lag in gleicher oder \"ahnlicher Weise noch keiner Pr\"ufungsbeh\"orde vor und wurde bisher noch nicht ver\"offentlicht.
 
@@ -509,8 +519,8 @@ Ich versichere an Eides statt, dass ich die \trtype{} im Studiengang \trcourseof
 % Formal page 2
 \vspace{2cm}
 \chapter*{Erkl\"arung zur Ver\"offentlichung}
-\fancyhead[LE]{\it Erklärung der Veröffentlichung}
-Ich erkl\"are mein Einverständnis mit der Einstellung dieser \trtype{} in den Bestand der Bibliothek.
+\fancyhead[LE]{\it Erkl\"arung der Ver\"offentlichung}
+Ich erkl\"are mein Einverst"andnis mit der Einstellung dieser \trtype{} in den Bestand der Bibliothek.
 
 \vspace{4cm}
 \noindent Ort, Datum \hfill Unterschrift
@@ -522,5 +532,4 @@ Ich erkl\"are mein Einverständnis mit der Einstellung dieser \trtype{} in den Be
 \newpage
 
 \end{document}
-%EOF
 
