@@ -405,9 +405,13 @@ A hidden Markov model describes a probability distribution of a stationary discr
 
 \begin{enumerate}
   \item The conditional distribution of present observation (at a certain time $t$) depends only upon the present hidden state:
-    \[ P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1}) = P(x_t|q_t), t \in \mathbb{N} \]
+  \begin{equation} \label{eq:ob_prob}
+    P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1}) = P(x_t|q_t),\quad t \in \mathbb{N} 
+  \end{equation}
   \item (Markov property) The conditional probability distribution of future hidden state of the process depends only upon the present state:
-    \[ P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t), t \in \mathbb{N} \]
+  \begin{equation} \label{eq:markov_prop}
+    P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t),\quad t \in \mathbb{N}
+  \end{equation}
 \end{enumerate}
 
 Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$). Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
@@ -435,9 +439,33 @@ With the formal definition of HMM, there are still three problems of interest to
   \item Given an observation sequence $\mathbf{x}$ (or a set of observations $\{\mathbf{x}^{(i)}\}$), how do we estimate the parameters that maximize $P(\mathbf{x}|\theta)$ (or $\prod_{i} P(\mathbf{x}^{(i)}|\theta) $)?
 \end{enumerate}
 
-In the following sections, we will show that the first and third problem can be solved using the forward-backward algorithm and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm \cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
+In the following sections, we will show that the first and third problem can be solved using the forward/backward procedure and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm \cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
 
 \section{Probability Evaluation}
+Given a model $\theta=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, we wish to calculate the probability, $P(\mathbf{x}|\theta)$. A na\"ive solution to this is enumerating all possible state sequences and applying law of total probability, that is
+\begin{equation}
+  P(\mathbf{x}|\theta) = \sum_{\text{all } \mathbf{q}} P(\mathbf{x}|\mathbf{q},\theta) P(\mathbf{q}|\theta) .
+\end{equation}
+For a fixed state sequence $\mathbf{q} = (q_1 q_2 \dots q_T)$, we can derive that
+\begin{align}
+  P(\mathbf{x}|\mathbf{q},\theta) &= P(x_1|q_1,\theta) P(x_2|q_1,q_2,x_1,\theta) \dots P(x_T|q_1,\dots,q_T,x_1,\dots,x_{T-1},\theta) \\
+  &= P(x_1|q_1, \theta) P(x_1|q_1, \theta) \dots P(x_T|q_T, \theta) \\
+  &= b_{q_1}(x_1) b_{q_2}(x_2) \dots b_{q_T}(x_T)
+\end{align}
+and its probability is
+\begin{align}
+  P(\mathbf{q}|\theta) &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_1,q_2,\theta) \dots P(q_T|q_1,\dots,q_{T-1},\theta) \\
+  &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_2,\theta) \dots P(q_T|q_{T-1},\theta)  \\
+  &= \pi(q_1) a_{q_1q_2} \dots a_{q_{T-1}q_T} .
+\end{align}
+Thus we get 
+\begin{equation} \label{eq:prob_brute}
+  P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi(q_1) b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
+\end{equation}
+Eq. \ref{eq:prob_brute} seems to be a solution, however, the number of possible state sequences is too large, which is $N^T$. That makes it impossible to calculate. Therefore, more efficient methods is needed.
+
+\subsection{The Forward Procedure}
+One of the efficient solution is using the forward procedure.
 
 \section{Expectation-maximization Algorithm}
 
