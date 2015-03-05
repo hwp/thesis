@@ -401,7 +401,7 @@ The hidden Markov models (HMM) are statistical models for sequence data, which h
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
 \section{Definition of HMM}
-A hidden Markov model describes a probability distribution of a stationary discrete-time stochastic process under certain assumptions. These assumptions include that there is an unobserved or hidden state associated with every observation at each time and the states transition meets the Markov property (also known as the Markov assumption). More precisely, for one observed sequence, $\mathbf{x}=(x_t, t \in \mathbb{N})$, and its associated state sequence, $\mathbf{q}=(q_t, t \in \mathbb{N})$, the following properties hold:
+A hidden Markov model describes a probability distribution of a stationary discrete-time stochastic process under certain assumptions. These assumptions include that there is an unobserved or hidden state associated with every observation at each time and the states transition meets the Markov property (i.e. Markov assumption). More precisely, for one observed sequence, $\mathbf{x}=(x_t, t \in \mathbb{N})$, and its associated state sequence, $\mathbf{q}=(q_t, t \in \mathbb{N})$, the following properties hold:
 
 \begin{enumerate}
   \item The conditional distribution of present observation (at a certain time $t$) depends only upon the present hidden state:
@@ -439,7 +439,7 @@ With the formal definition of HMM, there are still three problems of interest to
   \item Given an observation sequence $\mathbf{x}$ (or a set of observations $\{\mathbf{x}^{(i)}\}$), how do we estimate the parameters that maximize $P(\mathbf{x}|\theta)$ (or $\prod_{i} P(\mathbf{x}^{(i)}|\theta) $)?
 \end{enumerate}
 
-In the following sections, we will show that the first and third problem can be solved using the forward/backward procedure and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm \cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
+In the following section, we will show that the first and third problem can be solved using the forward/backward procedure and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm \cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
 
 \section{Probability Evaluation}
 Given a model $\theta=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, we wish to calculate the probability, $P(\mathbf{x}|\theta)$. A na\"ive solution to this is enumerating all possible state sequences and applying law of total probability, that is
@@ -464,7 +464,7 @@ Thus we get
   P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi(q_1) b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
 \end{equation}
 
-This is a direct solution, however, the number of possible state sequences is too large, which is $N^T$. Thus, the time efficiency would be $\Theta(T N^T)$ using big theta notation. That makes it impossible to calculate when $T$ is large, which is often the case. Therefore, more efficient methods is needed.
+This is a direct solution, however, the number of possible state sequences is too large, which is $N^T$. Thus, the time efficiency would be $\Theta(T N^T)$ using big theta notation. That makes it impossible to calculate when $T$ is large, which is often the case. In the following part, we will present the forward procedure and the backward procedure, which are more efficient.
 
 \subsection{The Forward Procedure}
 One of the efficient solution is using the forward procedure. Consider the forward variable, $\alpha_t(i)$, which is the joint probability or the first $t$ observations and the state at time $t$, or defined as
@@ -493,7 +493,7 @@ it has the following properties:
 By using the three properties, we can iteratively calculate all the $N$ forward variables from time $1$ to $T$. The time efficiency of the forward procedure is $\Theta(TN^2)$, which much faster than using the na\"ive solution (Eq. \ref{eq:prob_brute}).
 
 \subsection{The Backward Procedure}
-Similar to the forward procedure, the backward procedure use the same idea of iterative calculation of variables based on previous steps, while the direction of iteration is backward, namely from $T$ to $1$. The backward variable is defined as
+The backward procedure is an alternative solution to calculating the probability. Similar to the forward procedure, the backward procedure use the same idea of iterative calculation of variables based on previous steps, while the direction of iteration is backward, namely from $T$ to $1$. The backward variable is defined as
 \begin{equation}
   \beta_t(i) = P(x_{t+1},\dots,x_T|q_t=i,\theta) .
 \end{equation}
@@ -508,7 +508,7 @@ The following properties hold:
     \begin{align}
       \beta_i(t) &= \sum_{j=1}^{N} P(x_{t+1},\dots,x_T,q_{t+1}=j|q_t=i,\theta) \\
       &= \sum_{j=1}^{N} P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) P(x_{t+2},\dots,x_T|q_{t+1}=j,\theta) \\
-      &= \sum_{j=1}^{N} a_{ij} b_j(x_{t+1}) \beta_{t+1}(j) .
+      &= \sum_{j=1}^{N} a_{ij} b_j(x_{t+1}) \beta_{t+1}(j) , \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} .
     \end{align}
   \item The probability is
     \begin{equation}
@@ -519,6 +519,13 @@ The following properties hold:
 Same as the forward procedure, the time efficiency of the backward procedure is $\Theta(TN^2)$.
 
 \section{Parameter Estimation}
+Parameter estimation of a statistical model is the adjustment of the parameters such that the model can best match the observed or empirical data. It often plays a crucial role in systems. As for HMM, we are interested in knowing what are the parameters that maximize the probability of the observation (i.e. maximum likelihood estimates):
+\begin{equation}
+  \theta^* = \argmax_{\theta} P(\mathbf{x}|\theta) .
+\end{equation}
+
+Unlike simple models, such as Gaussian distributions, the parameters of which can be calculated directly, HMM depends on unobserved latent variables (i.e. hidden states), which make it difficult to estimate. One general solution for parameter estimation of such models is using the expectation-maximization (EM) algorithm. The application of the EM algorithm for HMM is also known as the Baum-Welch algorithm. We will shows these algorithms in the following part.
+
 \subsection{Expectation-maximization Algorithm}
 \subsection{Baum-Welch Algorithm}
 
