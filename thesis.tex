@@ -446,6 +446,7 @@ Given a model $\theta=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x
 \begin{equation}
   P(\mathbf{x}|\theta) = \sum_{\text{all } \mathbf{q}} P(\mathbf{x}|\mathbf{q},\theta) P(\mathbf{q}|\theta) .
 \end{equation}
+
 For a fixed state sequence $\mathbf{q} = (q_1 q_2 \dots q_T)$, we can derive that
 \begin{align}
   P(\mathbf{x}|\mathbf{q},\theta) &= P(x_1|q_1,\theta) P(x_2|q_1,q_2,x_1,\theta) \dots P(x_T|q_1,\dots,q_T,x_1,\dots,x_{T-1},\theta) \\
@@ -462,39 +463,64 @@ Thus we get
 \begin{equation} \label{eq:prob_brute}
   P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi(q_1) b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
 \end{equation}
+
 This is a direct solution, however, the number of possible state sequences is too large, which is $N^T$. Thus, the time efficiency would be $\Theta(T N^T)$ using big theta notation. That makes it impossible to calculate when $T$ is large, which is often the case. Therefore, more efficient methods is needed.
 
 \subsection{The Forward Procedure}
-One of the efficient solution is using the forward procedure. Consider the forward variable $\alpha_i(t)$ defined as
+One of the efficient solution is using the forward procedure. Consider the forward variable, $\alpha_t(i)$, which is the joint probability or the first $t$ observations and the state at time $t$, or defined as
 \begin{equation}
-  \alpha_i(t) = P(x_1,\dots,x_t,q_t=i|\theta) 
+  \alpha_t(i) = P(x_1,\dots,x_t,q_t=i|\theta) 
 \end{equation}
-it has the following properties
+it has the following properties:
 \begin{enumerate}
-  \item At initial time
+  \item At initial time,
     \begin{equation}
-      \alpha_i(1) = P(x_1,q_1=i|\theta) = \pi(i) b_i(x_1) \qquad j \in \{1,\dots,N\} ;
+      \alpha_1(i) = P(x_1,q_1=i|\theta) = \pi(i) b_i(x_1), \qquad i \in \{1,\dots,N\} .
     \end{equation}
-  \item The forward variable can be calculated iteratively
+  \item The forward variable at $t \geq 2$ can be calculated via considering it is transitioned from all the possible previous states:
     \begin{align}
-      \alpha_j(t+1) &= P(x_1,\dots,x_{t+1},q_{t+1}=j|\theta) \\
+      \alpha_{t+1}(j) &= P(x_1,\dots,x_{t+1},q_{t+1}=j|\theta) \\
       &= \sum_{i=1}^{N} P(x_1,\dots,x_{t+1},q_t=i,q_{t+1}=j|\theta) \\
       &= \sum_{i=1}^{N} P(x_1,\dots,x_t,q_t=i|\theta) P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) \\
-      &= \sum_{i=1}^{N} \alpha_i(t) a_{ij} b_j(x_{t+1}) \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} ;
+      &= \left[ \sum_{i=1}^{N} a_{ij} \alpha_t(i) \right] b_j(x_{t+1}), \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} .
     \end{align}
-  \item Sum over all the forward variable at time $T$, we get the probability
+  \item Take the sum of all the forward variables at time $t = T$, we get the desired calculation of the probability,
     \begin{equation}
-      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x},q_T=i|\theta) = \sum_{i=1}^N \alpha_i(T) .
+      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x},q_T=i|\theta) = \sum_{i=1}^N \alpha_T(i) .
     \end{equation}
 \end{enumerate}
-Since we only need to iteratively calculate all the $N$ forward variables from time $1$ to $T$, the time efficiency of the forward procedure is $\Theta(NT)$, which much faster than using the na\"ive solution (Eq. \ref{eq:prob_brute}).
+
+By using the three properties, we can iteratively calculate all the $N$ forward variables from time $1$ to $T$. The time efficiency of the forward procedure is $\Theta(TN^2)$, which much faster than using the na\"ive solution (Eq. \ref{eq:prob_brute}).
 
 \subsection{The Backward Procedure}
+Similar to the forward procedure, the backward procedure use the same idea of iterative calculation of variables based on previous steps, while the direction of iteration is backward, namely from $T$ to $1$. The backward variable is defined as
+\begin{equation}
+  \beta_t(i) = P(x_{t+1},\dots,x_T|q_t=i,\theta) .
+\end{equation}
 
-\section{Expectation-maximization Algorithm}
+The following properties hold:
+\begin{enumerate}
+  \item At time $t = T$,
+    \begin{equation}
+      \beta_T(i) = 1, \qquad i \in \{1,\dots,N\} .
+    \end{equation}
+  \item The backward variable at $t \leq T - 1$ can be calculate inductively:
+    \begin{align}
+      \beta_i(t) &= \sum_{j=1}^{N} P(x_{t+1},\dots,x_T,q_{t+1}=j|q_t=i,\theta) \\
+      &= \sum_{j=1}^{N} P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) P(x_{t+2},\dots,x_T|q_{t+1}=j,\theta) \\
+      &= \sum_{j=1}^{N} a_{ij} b_j(x_{t+1}) \beta_{t+1}(j) .
+    \end{align}
+  \item The probability is
+    \begin{equation}
+      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x}|q_1=i,\theta) p(q_1=i|\theta) = \sum_{i=1}^N \beta_1(i) \pi(i) .
+    \end{equation}
+\end{enumerate}
 
+Same as the forward procedure, the time efficiency of the backward procedure is $\Theta(TN^2)$.
 
-\section{Baum-Welch Algorithm}
+\section{Parameter Estimation}
+\subsection{Expectation-maximization Algorithm}
+\subsection{Baum-Welch Algorithm}
 
 \cleardoublepage
 \chapter{HMM Model for Bimodal Object Recognition}
