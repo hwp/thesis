@@ -400,7 +400,7 @@ The hidden Markov models (HMM) are statistical models for sequence data, which h
 
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
-\section{Definition of HMM}
+\section{Definition of HMM} \label{sec:hmm}
 A hidden Markov model describes a probability distribution of a stationary discrete-time stochastic process under certain assumptions. These assumptions include that there is an unobserved or hidden state associated with every observation at each time and the states transition meets the Markov property (i.e. Markov assumption). More precisely, for one observed sequence, $\mathbf{x}=(x_t, t \in \mathbb{N})$, and its associated state sequence, $\mathbf{q}=(q_t, t \in \mathbb{N})$, the following properties hold:
 
 \begin{enumerate}
@@ -449,19 +449,19 @@ Given a model $\theta=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x
 
 For a fixed state sequence $\mathbf{q} = (q_1 q_2 \dots q_T)$, we can derive that
 \begin{align}
-  P(\mathbf{x}|\mathbf{q},\theta) &= P(x_1|q_1,\theta) P(x_2|q_1,q_2,x_1,\theta) \dots P(x_T|q_1,\dots,q_T,x_1,\dots,x_{T-1},\theta) \\
-  &= P(x_1|q_1, \theta) P(x_1|q_1, \theta) \dots P(x_T|q_T, \theta) \\
+  P(\mathbf{x}|\mathbf{q},\theta) &= P(x_1|q_1,\theta) P(x_2|q_1,q_2,x_1,\theta) \dots P(x_T|q_1,\dots,q_T,x_1,\dots,x_{T-1},\theta) \notag\\
+  &= P(x_1|q_1, \theta) P(x_1|q_1, \theta) \dots P(x_T|q_T, \theta) \notag\\
   &= b_{q_1}(x_1) b_{q_2}(x_2) \dots b_{q_T}(x_T)
 \end{align}
 and its probability is
 \begin{align}
-  P(\mathbf{q}|\theta) &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_1,q_2,\theta) \dots P(q_T|q_1,\dots,q_{T-1},\theta) \\
-  &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_2,\theta) \dots P(q_T|q_{T-1},\theta)  \\
-  &= \pi(q_1) a_{q_1q_2} \dots a_{q_{T-1}q_T} .
+  P(\mathbf{q}|\theta) &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_1,q_2,\theta) \dots P(q_T|q_1,\dots,q_{T-1},\theta) \notag\\
+  &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_2,\theta) \dots P(q_T|q_{T-1},\theta)  \notag\\
+  &= \pi_{q_1} a_{q_1q_2} \dots a_{q_{T-1}q_T} .
 \end{align}
 Thus we get 
 \begin{equation} \label{eq:prob_brute}
-  P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi(q_1) b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
+  P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi_{q_1} b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
 \end{equation}
 
 This is a direct solution, however, the number of possible state sequences is too large, which is $N^T$. Thus, the time efficiency would be $\Theta(T N^T)$ using big theta notation. That makes it impossible to calculate when $T$ is large, which is often the case. In the following part, we will present the forward procedure and the backward procedure, which are more efficient.
@@ -475,13 +475,13 @@ it has the following properties:
 \begin{enumerate}
   \item At initial time,
     \begin{equation}
-      \alpha_1(i) = P(x_1,q_1=i|\theta) = \pi(i) b_i(x_1), \qquad i \in \{1,\dots,N\} .
+      \alpha_1(i) = P(x_1,q_1=i|\theta) = \pi_i b_i(x_1), \qquad i \in \{1,\dots,N\} .
     \end{equation}
   \item The forward variable at $t \geq 2$ can be calculated via considering it is transitioned from all the possible previous states:
     \begin{align}
-      \alpha_{t+1}(j) &= P(x_1,\dots,x_{t+1},q_{t+1}=j|\theta) \\
-      &= \sum_{i=1}^{N} P(x_1,\dots,x_{t+1},q_t=i,q_{t+1}=j|\theta) \\
-      &= \sum_{i=1}^{N} P(x_1,\dots,x_t,q_t=i|\theta) P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) \\
+      \alpha_{t+1}(j) &= P(x_1,\dots,x_{t+1},q_{t+1}=j|\theta) \notag\\
+      &= \sum_{i=1}^{N} P(x_1,\dots,x_{t+1},q_t=i,q_{t+1}=j|\theta) \notag\\
+      &= \sum_{i=1}^{N} P(x_1,\dots,x_t,q_t=i|\theta) P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) \notag\\
       &= \left[ \sum_{i=1}^{N} a_{ij} \alpha_t(i) \right] b_j(x_{t+1}), \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} .
     \end{align}
   \item Take the sum of all the forward variables at time $t = T$, we get the desired calculation of the probability,
@@ -506,13 +506,13 @@ The following properties hold:
     \end{equation}
   \item The backward variable at $t \leq T - 1$ can be calculate inductively:
     \begin{align}
-      \beta_i(t) &= \sum_{j=1}^{N} P(x_{t+1},\dots,x_T,q_{t+1}=j|q_t=i,\theta) \\
-      &= \sum_{j=1}^{N} P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) P(x_{t+2},\dots,x_T|q_{t+1}=j,\theta) \\
+      \beta_i(t) &= \sum_{j=1}^{N} P(x_{t+1},\dots,x_T,q_{t+1}=j|q_t=i,\theta) \notag\\
+      &= \sum_{j=1}^{N} P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) P(x_{t+2},\dots,x_T|q_{t+1}=j,\theta) \notag\\
       &= \sum_{j=1}^{N} a_{ij} b_j(x_{t+1}) \beta_{t+1}(j) , \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} .
     \end{align}
   \item The probability is
     \begin{equation}
-      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x}|q_1=i,\theta) p(q_1=i|\theta) = \sum_{i=1}^N \beta_1(i) \pi(i) .
+      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x}|q_1=i,\theta) p(q_1=i|\theta) = \sum_{i=1}^N \beta_1(i) \pi_i .
     \end{equation}
 \end{enumerate}
 
@@ -557,14 +557,14 @@ The increase of likelihood function can be proved as follows: for any $\mathbf{z
 \end{equation}
 For both sides, if we multiply $P(\mathbf{z}|\mathbf{x},\theta')$ and sum over all $\mathbf{z}$, we get
 \begin{align}
-  \log P(\mathbf{x}|\theta) \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') 
-    &= \sum_{\mathbf{z}} \log P(\mathbf{x},\mathbf{z}|\theta) P(\mathbf{z}|\mathbf{x},\theta')
-    - \sum_{\mathbf{z}} \log P(\mathbf{z}|\mathbf{x},\theta) P(\mathbf{z}|\mathbf{x},\theta') \\
+  \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{x}|\theta) 
+    &= \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{x},\mathbf{z}|\theta)
+    - \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{z}|\mathbf{x},\theta) \notag\\
   \log P(\mathbf{x}|\theta) &= Q(\theta|\theta') + H(\theta|\theta') \label{eq:loglph}.
 \end{align}
 Here, $H(\theta|\theta')$ is defined as
 \begin{equation}
-  H(\theta|\theta') = - \sum_{\mathbf{z}} \log P(\mathbf{z}|\mathbf{x},\theta) P(\mathbf{z}|\mathbf{x},\theta')
+  H(\theta|\theta') = - \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{z}|\mathbf{x},\theta)
 \end{equation}
 From Gibbs' inequality we know that, for any $\theta$ and $\theta'$
 \begin{equation}
@@ -572,16 +572,61 @@ From Gibbs' inequality we know that, for any $\theta$ and $\theta'$
 \end{equation}
 with equality if and only if $\theta = \theta'$. Therefore, together with Eq. \ref{eq:loglph},
 \begin{align}
-  \log P(\mathbf{x}|\theta) - \log P(\mathbf{x}|\theta') &= Q(\theta|\theta') - Q(\theta'|\theta') + H(\theta|\theta') -  H(\theta|\theta) \\
+  \log P(\mathbf{x}|\theta) - \log P(\mathbf{x}|\theta') &= Q(\theta|\theta') - Q(\theta'|\theta') + H(\theta|\theta') -  H(\theta|\theta) \notag\\
   & \geq Q(\theta|\theta') - Q(\theta'|\theta')
 \end{align}
 
 Since $\theta^{(p+1)}$ is a maximum of $Q(\theta|\theta^{(p)})$, $Q(\theta^{(p+1)}|\theta^{(p)}) - Q(\theta^{(p)}|\theta^{(p)}) \geq 0$. Therefore, $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$.
   
-It is important to note that although the EM algorithm converges to a maximum estimate, there is no guaranty that the estimate is a global maximum (thus not a MLE). The resulting estimate is dependent on the initial estimate. Therefore, a good estimate should be computed with heuristics of the initial estimate.
+It is important to note that although the EM algorithm converges to a maximum estimate, there is no guaranty that the estimate is a global maximum (thus not a MLE). The resulting estimate is dependent on the initial estimate. Therefore, additional heuristic methods should be chosen for application of the EM algorithm.
 
 \subsection{Baum-Welch Algorithm}
+We have shown that the EM algorithm can be used for parameter estimation for models with latent variables and HMMs are examples or such models. Thus, applying the EM algorithm to the HMM would result in a solution for the third problem we stated in Section \ref{sec:hmm}. This method is known as the Baum-Welch algorithm.
 
+Before we proceed to derive the reestimation formulas, we first define variables $\gamma_t(i) = P(q_t=i|\mathbf{x},\theta)$ and $\xi_t(i,j) = P(q_t=i,q_{t+1}=j|\mathbf{x},\theta)$, which can be computed as follows:
+\begin{align}
+  \gamma_t(i) &= \frac{P(\mathbf{x},q_t=i|\theta)}{P(\mathbf{x}|\theta)} \notag\\
+  &= \frac{\alpha_t(i)\beta_t(i)}{P(\mathbf{x}|\theta)},
+\end{align}
+and
+\begin{align}
+  \xi_t(i,j) &= \frac{P(\mathbf{x},q_t=i,q_{t+1}=j|\theta)}{P(\mathbf{x}|\theta)} \notag\\
+  &=  \frac{\alpha_t(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)}{P(\mathbf{x}|\theta)}.
+\end{align}
+
+Now, we put the HMM into the frame of the EM algorithm.
+
+\paragraph{E-step}
+Consider parameters $\theta=(A,B,\pi)$ and $\theta'=(A',B',\pi')$, compute $Q(\theta|\theta')$:
+\begin{align}
+  Q(\theta|\theta') &= \sum_{\mathbf{q}} P(\mathbf{q}|\mathbf{x},\theta') \log P(\mathbf{x},\mathbf{q}|\theta) \notag\\
+  &= \sum_{\mathbf{q}} \frac{P(\mathbf{x},\mathbf{q}|\theta')}{P(\mathbf{x}|\theta')} 
+  (\log \pi_{q_1} + \sum_{t=1}^{T-1} \log a_{q_t q_{t+1}} + \sum_{t=1}^{T} \log b_{q_t}(x_t) ) \notag\\
+  &= \frac{1}{P(\mathbf{x}|\theta')} (Q_\pi(\pi|\theta') + Q_A(A|\theta') + Q_B(B|\theta')) \label{eq:qhmmsep}
+\end{align}
+where
+\begin{align}
+  Q_\pi(\pi|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \log \pi_{q_1}  \notag\\
+  &= \sum_{i=1}^{N} p(\mathbf{x},q_1=i|\theta') \log \pi_{i} \notag\\
+  &= \sum_{i=1}^{N} \gamma'(i) \log \pi_{i},
+\end{align}
+\begin{align}
+  Q_A(A|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \sum_{t=1}^{T-1} \log a_{q_t q_{t+1}} \notag\\
+  &= \sum_{i=1}^{N} \sum_{j=1}^{N} \sum_{t=1}^{T-1} P(\mathbf{x},q_t=i,q_{t+1}=j|\theta') \log a_{ij} \notag\\
+  &= \sum_{i=1}^{N} \sum_{j=1}^{N} (\sum_{t=1}^{T-1} \xi'_t(i, j)) \log a_{ij}
+\end{align}
+and
+\begin{align}
+  Q_B(B|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \sum_{t=1}^{T} \log b_{q_t}(x_t) \notag\\
+  &= \sum_{i=1}^{N} \sum_{t=1}^{T} p(\mathbf{x},q_t=i|\theta') \log b_{i}(x_t) \notag\\
+  &= \sum_{i=1}^{N} \sum_{t=1}^{T} \gamma'(i) \log b_{i}(x_t).
+\end{align}
+
+\paragraph{M-step}
+For fixed $\mathbf{x}$ and $\theta'$, to maximize $Q(\theta|\theta')$, we can see from Eq. \ref{eq:qhmmsep} that we only need to separately find parameters $\pi$, $A$ and $B$ that maximize $Q_\pi(\pi|\theta')$, $Q_A(A|\theta')$ and $Q_B(B|\theta')$.
+
+
+ 
 \cleardoublepage
 \chapter{HMM Model for Bimodal Object Recognition}
 \section{System Overview}
