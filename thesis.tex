@@ -524,9 +524,62 @@ Parameter estimation of a statistical model is the adjustment of the parameters 
   \theta^* = \argmax_{\theta} P(\mathbf{x}|\theta) .
 \end{equation}
 
-Unlike simple models, such as Gaussian distributions, the parameters of which can be calculated directly, HMM depends on unobserved latent variables (i.e. hidden states), which make it difficult to estimate. One general solution for parameter estimation of such models is using the expectation-maximization (EM) algorithm. The application of the EM algorithm for HMM is also known as the Baum-Welch algorithm. We will shows these algorithms in the following part.
+Unlike simple models, such as Gaussian distributions, the parameters of which can be calculated directly, HMM depends on unobserved latent variables (i.e. hidden states), which make it difficult to estimate. One general solution for parameter estimation of models with latent variables is the expectation-maximization (EM) algorithm. The application of the EM algorithm for HMM is known as the Baum-Welch algorithm. We will shows these two algorithms in the following part.
 
 \subsection{Expectation-maximization Algorithm}
+The expectation-maximization algorithm is a method for finding the maximum likelihood estimates (MLE) of parameters of models with latent variables \cite{dempster_maximum_1977}. Its idea is reestimating parameters via an expectation step (E-step) and a maximization step (M-step), in which the reestimated parameters have greater likelihood, and repeating such process until the likelihood reaches a maximum.
+
+More specifically, consider observed data $\mathbf{x}$, unobserved data (i.e. latent variables) $\mathbf{z}$ and a set of parameters $\theta$, the likelihood function is
+\begin{equation}
+  L(\theta;\mathbf{x}) = P(\mathbf{x}|\theta) = \sum_{\mathbf{z}} P(\mathbf{x},\mathbf{z}|\theta) .
+\end{equation}
+The goal is maximizing the likelihood function:
+\begin{equation}
+  \theta^* = \argmax_\theta L(\theta;\mathbf{x}).
+\end{equation}
+
+We introduce a function $Q(\theta|\theta')$, which is the conditional expectation of the log likelihood function with respect to the conditional distribution of $\mathbf{z}$ given $\mathbf{x}$ and $\theta'$:
+\begin{equation}
+  Q(\theta|\theta') = \text{E}_{\mathbf{z}|\mathbf{x},\theta'} \log P(\mathbf{x},\mathbf{z}|\theta) .
+\end{equation}
+
+A process of parameters reestimation consisting of the following two steps:
+\begin{description}
+  \item[E-Step] Compute $Q(\theta|\theta^{(p)})$;
+  \item[M-Step] Choose $\theta^{(p+1)}$ to be the value of $\theta$ that maximize $Q(\theta|\theta^{(p)})$.
+\end{description}
+
+After each process it is guarantied that $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$. Therefore, if we start from an initial estimate $\theta^{(0)}$ and iteratively compute $\theta^{(1)},\theta^{(2)},\theta^{(3)},\dots$, we will get a sequence of estimates, which converges to a local maximum.
+
+The increase of likelihood function can be proved as follows: for any $\mathbf{z}$, we have
+\begin{equation}
+  \log P(\mathbf{x}|\theta) = \log P(\mathbf{x},\mathbf{z}|\theta) - \log P(\mathbf{z}|\mathbf{x},\theta). 
+\end{equation}
+For both sides, if we multiply $P(\mathbf{z}|\mathbf{x},\theta')$ and sum over all $\mathbf{z}$, we get
+\begin{align}
+  \log P(\mathbf{x}|\theta) \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') 
+    &= \sum_{\mathbf{z}} \log P(\mathbf{x},\mathbf{z}|\theta) P(\mathbf{z}|\mathbf{x},\theta')
+    - \sum_{\mathbf{z}} \log P(\mathbf{z}|\mathbf{x},\theta) P(\mathbf{z}|\mathbf{x},\theta') \\
+  \log P(\mathbf{x}|\theta) &= Q(\theta|\theta') + H(\theta|\theta') \label{eq:loglph}.
+\end{align}
+Here, $H(\theta|\theta')$ is defined as
+\begin{equation}
+  H(\theta|\theta') = - \sum_{\mathbf{z}} \log P(\mathbf{z}|\mathbf{x},\theta) P(\mathbf{z}|\mathbf{x},\theta')
+\end{equation}
+From Gibbs' inequality we know that, for any $\theta$ and $\theta'$
+\begin{equation}
+  H(\theta|\theta') \geq H(\theta|\theta),
+\end{equation}
+with equality if and only if $\theta = \theta'$. Therefore, together with Eq. \ref{eq:loglph},
+\begin{align}
+  \log P(\mathbf{x}|\theta) - \log P(\mathbf{x}|\theta') &= Q(\theta|\theta') - Q(\theta'|\theta') + H(\theta|\theta') -  H(\theta|\theta) \\
+  & \geq Q(\theta|\theta') - Q(\theta'|\theta')
+\end{align}
+
+Since $\theta^{(p+1)}$ is a maximum of $Q(\theta|\theta^{(p)})$, $Q(\theta^{(p+1)}|\theta^{(p)}) - Q(\theta^{(p)}|\theta^{(p)}) \geq 0$. Therefore, $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$.
+  
+It is important to note that although the EM algorithm converges to a maximum estimate, there is no guaranty that the estimate is a global maximum (thus not a MLE). The resulting estimate is dependent on the initial estimate. Therefore, a good estimate should be computed with heuristics of the initial estimate.
+
 \subsection{Baum-Welch Algorithm}
 
 \cleardoublepage
