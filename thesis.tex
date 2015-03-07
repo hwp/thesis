@@ -72,8 +72,6 @@
 \usepackage{tabularx}                   % Tables with fixed width but variable rows
 \usepackage{url,xspace,boxedminipage}   % Accurate display of URLs
 
-\usepackage{subcaption}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PDF Information und Definitions:
 \author{\trauthor}
@@ -97,6 +95,12 @@
             plainpages=false
             ]{hyperref}
 \fi
+
+%%%% added by hwp %%%%
+\usepackage{subcaption}
+\usepackage[symbol*]{footmisc}
+\usepackage[capitalize]{cleveref}
+\newcommand{\crefrangeconjunction}{--}
 
 \ifx\pdftexversion\undefined
 \else
@@ -318,7 +322,7 @@ Visual object recognition has been extensively studied in the recent decade. Vis
 \end{figure}
 \footnotetext{``Eiffel Tower'' by \href{http://commons.wikimedia.org/wiki/User:Benh}{Benh}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}.}
 
-Concerning object recognition, there are two types of tasks been studied: specific object recognition and object category recognition \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person. Examples of this case are Sam's coffee mug, the Eiffel tower or Alan Turing as shown in Figure~\ref{fig:specific}. These objects (or person) have little variation in appearance and shape. 
+Concerning object recognition, there are two types of tasks been studied: specific object recognition and object category recognition \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person. Examples of this case are Sam's coffee mug, the Eiffel tower or Alan Turing as shown in \cref{fig:specific}. These objects (or person) have little variation in appearance and shape. 
 
 \begin{figure}[tbhp]
   \centering
@@ -338,7 +342,7 @@ Concerning object recognition, there are two types of tasks been studied: specif
 \footnotetext{The upper photo is ``Mercedes-Benz C 250'' by \href{http://commons.wikimedia.org/wiki/User:M_93}{M 93}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0/de}{CC BY-SA 3.0 de}.
 The lower photo is ``Porsche Carrera GT'' by \href{http://www.flickr.com/people/32659528@N00}{Brian Snelson}. Licensed under \href{http://creativecommons.org/licenses/by/2.0}{CC BY 2.0}}
 
-Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see Figure~\ref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. A category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
+Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see \cref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. A category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
 
 As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
 
@@ -405,12 +409,14 @@ A hidden Markov model describes a probability distribution of a stationary discr
 
 \begin{enumerate}
   \item The conditional distribution of present observation (at a certain time $t$) depends only upon the present hidden state:
-  \begin{equation} \label{eq:ob_prob}
+  \begin{equation}
     P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1}) = P(x_t|q_t),\quad t \in \mathbb{N} 
+    \label{eq:ob_prob}
   \end{equation}
   \item (Markov property) The conditional probability distribution of future hidden state of the process depends only upon the present state:
-  \begin{equation} \label{eq:markov_prop}
+  \begin{equation}
     P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t),\quad t \in \mathbb{N}
+    \label{eq:markov_prop}
   \end{equation}
 \end{enumerate}
 
@@ -430,7 +436,7 @@ such that
 
 As for HMM-GMM, each $b_j(x)$, more specifically, is a probability density function (pdf) of a GMM, namely
 \[ b_j(x) = \sum_{k=1}^M c_{jk} \mathcal{N}(x, \mu_{jk}, \Sigma_{jk}) \]
-where $c_{jk}$ is the mixture weight (coefficient), $\mu_{jk}$ is the mean and $\Sigma_{jk}$ is the covariance matrix, each of the $k$-th component in state $j$ and $\mathcal{N}$ is the pdf of the Gaussian distribution.
+where $c_{jk}$ is the mixture weight (coefficient), $\mu_{jk}$ is the mean and $\Sigma_{jk}$ is the covariance matrix, each of the $k$-th component in state $j$ and $\mathcal{N}$ is the pdf of the Gaussian distribution. 
 
 With the formal definition of HMM, there are still three problems of interest to be solved, in order to use HMM for real-world applications. These problems are:
 \begin{enumerate}
@@ -460,8 +466,9 @@ and its probability is
   &= \pi_{q_1} a_{q_1q_2} \dots a_{q_{T-1}q_T} .
 \end{align}
 Thus we get 
-\begin{equation} \label{eq:prob_brute}
+\begin{equation}
   P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi_{q_1} b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
+  \label{eq:prob_brute}
 \end{equation}
 
 This is a direct solution, however, the number of possible state sequences is too large, which is $N^T$. Thus, the time efficiency would be $\Theta(T N^T)$ using big theta notation. That makes it impossible to calculate when $T$ is large, which is often the case. In the following part, we will present the forward procedure and the backward procedure, which are more efficient.
@@ -490,7 +497,7 @@ it has the following properties:
     \end{equation}
 \end{enumerate}
 
-By using the three properties, we can iteratively calculate all the $N$ forward variables from time $1$ to $T$. The time efficiency of the forward procedure is $\Theta(TN^2)$, which much faster than using the na\"ive solution (Eq. \ref{eq:prob_brute}).
+By using the three properties, we can iteratively calculate all the $N$ forward variables from time $1$ to $T$. The time efficiency of the forward procedure is $\Theta(TN^2)$, which much faster than using the na\"ive solution (\cref{eq:prob_brute}).
 
 \subsection{The Backward Procedure}
 The backward procedure is an alternative solution to calculating the probability. Similar to the forward procedure, the backward procedure use the same idea of iterative calculation of variables based on previous steps, while the direction of iteration is backward, namely from $T$ to $1$. The backward variable is defined as
@@ -543,7 +550,7 @@ We introduce a function $Q(\theta|\theta')$, which is the conditional expectatio
   Q(\theta|\theta') = \text{E}_{\mathbf{z}|\mathbf{x},\theta'} \log P(\mathbf{x},\mathbf{z}|\theta) .
 \end{equation}
 
-A process of parameters reestimation consisting of the following two steps:
+A process of parameters reestimation consists of the following two steps:
 \begin{description}
   \item[E-Step] Compute $Q(\theta|\theta^{(p)})$;
   \item[M-Step] Choose $\theta^{(p+1)}$ to be the value of $\theta$ that maximize $Q(\theta|\theta^{(p)})$.
@@ -560,7 +567,8 @@ For both sides, if we multiply $P(\mathbf{z}|\mathbf{x},\theta')$ and sum over a
   \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{x}|\theta) 
     &= \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{x},\mathbf{z}|\theta)
     - \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{z}|\mathbf{x},\theta) \notag\\
-  \log P(\mathbf{x}|\theta) &= Q(\theta|\theta') + H(\theta|\theta') \label{eq:loglph}.
+  \log P(\mathbf{x}|\theta) &= Q(\theta|\theta') + H(\theta|\theta')
+  \label{eq:loglph}.
 \end{align}
 Here, $H(\theta|\theta')$ is defined as
 \begin{equation}
@@ -570,7 +578,7 @@ From Gibbs' inequality we know that, for any $\theta$ and $\theta'$
 \begin{equation}
   H(\theta|\theta') \geq H(\theta|\theta),
 \end{equation}
-with equality if and only if $\theta = \theta'$. Therefore, together with Eq. \ref{eq:loglph},
+with equality if and only if $\theta = \theta'$. Therefore, together with \cref{eq:loglph},
 \begin{align}
   \log P(\mathbf{x}|\theta) - \log P(\mathbf{x}|\theta') &= Q(\theta|\theta') - Q(\theta'|\theta') + H(\theta|\theta') -  H(\theta|\theta) \notag\\
   & \geq Q(\theta|\theta') - Q(\theta'|\theta')
@@ -578,37 +586,42 @@ with equality if and only if $\theta = \theta'$. Therefore, together with Eq. \r
 
 Since $\theta^{(p+1)}$ is a maximum of $Q(\theta|\theta^{(p)})$, $Q(\theta^{(p+1)}|\theta^{(p)}) - Q(\theta^{(p)}|\theta^{(p)}) \geq 0$. Therefore, $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$.
   
-It is important to note that although the EM algorithm converges to a maximum estimate, there is no guaranty that the estimate is a global maximum (thus not a MLE). The resulting estimate is dependent on the initial estimate. Therefore, additional heuristic methods should be chosen for application of the EM algorithm.
+It is important to note that although the EM algorithm converges to a maximum estimate, there is no guaranty that the estimate is a global maximum (thus not a MLE). The resulting estimate depends on the initial estimate. Therefore, additional heuristic methods should be chosen for application of the EM algorithm.
 
 \subsection{Baum-Welch Algorithm}
-We have shown that the EM algorithm can be used for parameter estimation for models with latent variables and HMMs are examples or such models. Thus, applying the EM algorithm to the HMM would result in a solution for the third problem we stated in Section \ref{sec:hmm}. This method is known as the Baum-Welch algorithm.
+We have shown that the EM algorithm can be used for parameter estimation for models with latent variables and HMMs are examples or such models. Thus, applying the EM algorithm to the HMM would result in a solution for the third problem we stated in \cref{sec:hmm}. This method is known as the Baum-Welch algorithm.
 
 Before we proceed to derive the reestimation formulas, we first define variables $\gamma_t(i) = P(q_t=i|\mathbf{x},\theta)$ and $\xi_t(i,j) = P(q_t=i,q_{t+1}=j|\mathbf{x},\theta)$, which can be computed as follows:
 \begin{align}
   \gamma_t(i) &= \frac{P(\mathbf{x},q_t=i|\theta)}{P(\mathbf{x}|\theta)} \notag\\
-  &= \frac{\alpha_t(i)\beta_t(i)}{P(\mathbf{x}|\theta)},
+  &= \frac{\alpha_t(i)\beta_t(i)}{P(\mathbf{x}|\theta)} ,
+  \label{eq:hmmgamma}
 \end{align}
 and
 \begin{align}
   \xi_t(i,j) &= \frac{P(\mathbf{x},q_t=i,q_{t+1}=j|\theta)}{P(\mathbf{x}|\theta)} \notag\\
-  &=  \frac{\alpha_t(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)}{P(\mathbf{x}|\theta)}.
+  &=  \frac{\alpha_t(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)}{P(\mathbf{x}|\theta)} .
+  \label{eq:hmmxi}
 \end{align}
 
 Now, we put the HMM into the frame of the EM algorithm.
 
 \paragraph{E-step}
-Consider parameters $\theta=(A,B,\pi)$ and $\theta'=(A',B',\pi')$, compute $Q(\theta|\theta')$:
+Consider parameters $\theta=(A,B,\pi)$ and $\theta'=(A',B',\pi')$ 
+\footnote{We use `` $'$ '' to indicate parameters or variables from the previous estimate.}
+, compute $Q(\theta|\theta')$:
 \begin{align}
   Q(\theta|\theta') &= \sum_{\mathbf{q}} P(\mathbf{q}|\mathbf{x},\theta') \log P(\mathbf{x},\mathbf{q}|\theta) \notag\\
   &= \sum_{\mathbf{q}} \frac{P(\mathbf{x},\mathbf{q}|\theta')}{P(\mathbf{x}|\theta')} 
   (\log \pi_{q_1} + \sum_{t=1}^{T-1} \log a_{q_t q_{t+1}} + \sum_{t=1}^{T} \log b_{q_t}(x_t) ) \notag\\
-  &= \frac{1}{P(\mathbf{x}|\theta')} (Q_\pi(\pi|\theta') + Q_A(A|\theta') + Q_B(B|\theta')) \label{eq:qhmmsep}
+  &= \frac{1}{P(\mathbf{x}|\theta')} (Q_\pi(\pi|\theta') + Q_A(A|\theta') + Q_B(B|\theta'))
+  \label{eq:qhmmsep}
 \end{align}
 where
 \begin{align}
   Q_\pi(\pi|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \log \pi_{q_1}  \notag\\
   &= \sum_{i=1}^{N} p(\mathbf{x},q_1=i|\theta') \log \pi_{i} \notag\\
-  &= \sum_{i=1}^{N} \gamma'(i) \log \pi_{i},
+  &= \sum_{i=1}^{N} \gamma'_1(i) \log \pi_{i},
 \end{align}
 \begin{align}
   Q_A(A|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \sum_{t=1}^{T-1} \log a_{q_t q_{t+1}} \notag\\
@@ -619,14 +632,66 @@ and
 \begin{align}
   Q_B(B|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \sum_{t=1}^{T} \log b_{q_t}(x_t) \notag\\
   &= \sum_{i=1}^{N} \sum_{t=1}^{T} p(\mathbf{x},q_t=i|\theta') \log b_{i}(x_t) \notag\\
-  &= \sum_{i=1}^{N} \sum_{t=1}^{T} \gamma'(i) \log b_{i}(x_t).
+  &= \sum_{i=1}^{N} \sum_{t=1}^{T} \gamma'_t(i) \log b_{i}(x_t) .
+  \label{eq:qhmmb}
 \end{align}
 
 \paragraph{M-step}
-For fixed $\mathbf{x}$ and $\theta'$, to maximize $Q(\theta|\theta')$, we can see from Eq. \ref{eq:qhmmsep} that we only need to separately find parameters $\pi$, $A$ and $B$ that maximize $Q_\pi(\pi|\theta')$, $Q_A(A|\theta')$ and $Q_B(B|\theta')$.
+For fixed $\mathbf{x}$ and $\theta'$, to maximize $Q(\theta|\theta')$, we can see from \cref{eq:qhmmsep} that we only need to find parameters $\pi$, $A$ and $B$ that maximize $Q_\pi(\pi|\theta')$, $Q_A(A|\theta')$ and $Q_B(B|\theta')$, individually.
 
+In order to be a valid distribution, the parameters subjects to the following constraints
+\begin{align}
+  \sum_{i=1}^{N} \pi_i &= 1  \\
+  \sum_{j=1}^{N} a_{ij} &= 1 , \qquad \forall i 
+\end{align}
+and $b_i(x)$ is a valid probability density function of a GMM.
 
- 
+From Gibb's inequality, we know that the maximum of 
+\begin{equation}
+  \sum_{i=1}^N w_i \log y_i
+\end{equation}
+subject to $\sum_{i=1}^N y_i = 1$, is attained when
+\begin{equation}
+  y_i = \frac{w_i}{\sum_{j=1}^N w_j} .
+\end{equation} 
+Therefore, the reestimation of $\pi$ and $A$ are
+\begin{equation}
+  \pi_i = \frac{\gamma'_1(i)}{\sum_{j=1}^N \gamma'_1(j)} = \gamma'_1(i)
+  \label{eq:hmmpi}
+\end{equation} 
+and
+\begin{equation}
+  a_{ij} = \frac{\sum_{t=1}^{T-1} \xi'_t(i,j)}{\sum_{k=1}^N \sum_{t=1}^{T-1} \xi'_t(i,k)} = \frac{\sum_{t=1}^{T-1} \xi'_t(i,j)}{\sum_{t=1}^{T-1} \gamma'_t(i)}
+  \label{eq:hmma}
+\end{equation} 
+
+For the parameters $B$, from \cref{eq:qhmmb}, we can see that is it similar to reestiamting the parameters in a GMM, except that the terms are weighted with the expected occurrences of that state, $\sum_{t=1}^{T} \gamma'_t(i)$. And the result is as follows \cite{bilmes_gentle_1998}:
+\begin{equation}
+  c_{jk} = \frac{\sum_{t=1}^{T} \gamma'_t(j,k)}{\sum_{t=1}^{T} \sum_{l=1}^{M} \gamma'_t(j,l)},
+  \label{eq:hmmc}
+\end{equation}
+\begin{equation}
+  \mu_{jk} = \frac{\sum_{t=1}^{T} \gamma'_t(j,k) x_t}{\sum_{t=1}^{T} \gamma'_t(j,k)}
+  \label{eq:hmmmu}
+\end{equation}
+and
+\begin{equation}
+  \Sigma_{jk} = \frac{\sum_{t=1}^{T} \gamma'_t(j,k) (x_t-\mu'_{jk})(x_t-\mu'_{jk})^T}{\sum_{t=1}^{T} \gamma'_t(j,k)}
+  \label{eq:hmmsigma}
+\end{equation}
+where $\gamma'_t(j,k)$ is the probability of being state $j$ at time $t$ with the $k$-th mixture component (under the condition of the previous estimate $\theta'$):
+\begin{equation}
+  \gamma'_t(j,k) = \gamma'_t(j) \frac{c'_{jk} \mathcal{N}(x_t,\mu_{jk},\Sigma_{jk})} {b_j(x_t)} . \label{eq:hmmgamma2}
+\end{equation}
+
+To summarize, the reestimation of HMM parameters consists of the following steps:
+\begin{enumerate}
+  \item Compute $\alpha'_t(i)$ and $\beta'_t(i)$ using the forward and backward procedures;
+  \item Compute $\gamma'_t(i)$, $\xi'_t(i,j)$ as well as $\gamma'_t(j,k)$ using \cref{eq:hmmgamma,eq:hmmxi,eq:hmmgamma2};
+  \item Compute the new parameters $\pi_i$, $a_{ij}$, $c_{jk}$, $\mu_{jk}$ and $\Sigma_{jk}$ using \cref{eq:hmmpi,eq:hmma,eq:hmmc,eq:hmmmu,eq:hmmsigma}.
+\end{enumerate}
+And, by repeating these steps, we can get an estimate of the parameters which attain a local maximum of the likelihood function.
+
 \cleardoublepage
 \chapter{HMM Model for Bimodal Object Recognition}
 \section{System Overview}
