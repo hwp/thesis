@@ -6,8 +6,10 @@ BIBS   = thesis.bib
 FIGDIR = fig
 FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg themug.jpg mugs.jpg
 PLOTS  = 
+TIKZS  = hmm
 
 PLOTP  = $(foreach p, $(PLOTS), $(FIGDIR)/$(p).svg) \
+				 $(foreach p, $(TIKZS), $(FIGDIR)/$(p).tex) \
 				 $(foreach p, $(FIGS), $(FIGDIR)/$(p))
 
 $(FIGDIR)/%.svg : $(FIGDIR)/%.gp
@@ -21,5 +23,8 @@ $(PAPER).pdf : $(PAPER).tex $(PLOTP) $(BIBS) $(PLOTP)
 
 .PHONY : clean
 clean :
-	rm -f *.bbl *.blg *.log *.aux *.toc *.lof *.fls
+	rm -f $(PAPER).bbl $(PAPER).blg $(PAPER).log $(PAPER).aux \
+		$(PAPER).toc $(PAPER).lof $(PAPER).fls $(PAPER).lot $(PAPER).out \
+		$(PAPER).fdb_latexmk \
+		$(foreach p, $(PLOTS), $(FIGDIR)/$(p).svg) 
 

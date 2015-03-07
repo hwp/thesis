@@ -101,6 +101,11 @@
 \usepackage[symbol*]{footmisc}
 \usepackage[capitalize]{cleveref}
 \newcommand{\crefrangeconjunction}{--}
+\usepackage{tikz}
+\usepackage[labelfont=bf,width=.75\textwidth]{caption}
+
+\newcommand{\includetikz}[1]{\input{fig/#1.tex}}
+%%%% end of added by hwp %%%%
 
 \ifx\pdftexversion\undefined
 \else
@@ -410,7 +415,7 @@ A hidden Markov model describes a probability distribution of a stationary discr
 \begin{enumerate}
   \item The conditional distribution of present observation (at a certain time $t$) depends only upon the present hidden state:
   \begin{equation}
-    P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1}) = P(x_t|q_t),\quad t \in \mathbb{N} 
+    P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1},x_{t+1},\dots,x_T) = P(x_t|q_t), \quad t \in \mathbb{N} 
     \label{eq:ob_prob}
   \end{equation}
   \item (Markov property) The conditional probability distribution of future hidden state of the process depends only upon the present state:
@@ -437,6 +442,15 @@ such that
 As for HMM-GMM, each $b_j(x)$, more specifically, is a probability density function (pdf) of a GMM, namely
 \[ b_j(x) = \sum_{k=1}^M c_{jk} \mathcal{N}(x, \mu_{jk}, \Sigma_{jk}) \]
 where $c_{jk}$ is the mixture weight (coefficient), $\mu_{jk}$ is the mean and $\Sigma_{jk}$ is the covariance matrix, each of the $k$-th component in state $j$ and $\mathcal{N}$ is the pdf of the Gaussian distribution. 
+
+\begin{figure}[t]
+  \centering
+  \includetikz{hmm}
+  \caption[HMM as a Bayesian network.]{HMM as a Bayesian network. The directed edges indicate conditional dependencies. Each state variable is only conditional dependent of its previous state and each observation is only conditional dependent of the state at that time.}
+  \label{fig:hmm}
+\end{figure}
+
+The structure of an HMM can be shown as a Bayesian network by unfolding the variables over time (see \cref{fig:hmm}).
 
 With the formal definition of HMM, there are still three problems of interest to be solved, in order to use HMM for real-world applications. These problems are:
 \begin{enumerate}
