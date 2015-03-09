@@ -302,7 +302,7 @@ Your English abstract here (mandatory if written in English and recommended othe
 %In this chapter, three related fields regarding visual-audio object recognition will be reviewed. First, the traditional methods of object recognition based on visual information exclusively will be introduced. Then, the state-of-the-art in multimodal object recognition will be presented. Finally, the application of visual-audio integration in speech recognition will be explained.
 
 \cleardoublepage
-\chapter{Visual Object Recognition}
+\chapter{Visual Features for Object Recognition}
 Visual object recognition has been extensively studied in the recent decade. Vision is very essential for both humans and artificial agents to recognize an object, since it provides the most direct and informational clue about the object. Numerous methods have been proposed for visual object recognition and they have been used in a variety of applications.
 
 \begin{figure}[tbhp]
@@ -347,29 +347,33 @@ Concerning object recognition, there are two types of tasks been studied: specif
 \footnotetext{The upper photo is ``Mercedes-Benz C 250'' by \href{http://commons.wikimedia.org/wiki/User:M_93}{M 93}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0/de}{CC BY-SA 3.0 de}.
 The lower photo is ``Porsche Carrera GT'' by \href{http://www.flickr.com/people/32659528@N00}{Brian Snelson}. Licensed under \href{http://creativecommons.org/licenses/by/2.0}{CC BY 2.0}}
 
-Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see \cref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape. A category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
+Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see \cref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape.
 
-As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
+Different features are designed for the two tasks. In this chapter, we will show two features that are related to our system. The features are the Scale-invariant feature transform for specific object recognition and the bag of visual words model for generic object category recognition.
 
-\section{Visual Specific Object Recognition}
-One of the approaches which have achieved robust and efficient result in specific object recognition is proposed by Lowe \cite{lowe_object_1999}. His approach first extracts SIFT features from the image. Scale Invariant Feature Transform (SIFT)is a kind of local feature that is invariant to image translation, scaling, and rotation. Then, the extracted features are matched between train and test images. In the final step, the matched features are verified to confirm they are in a consistent geometric configuration. This approach has been widely used in robotic visual systems \cite{grauman_visual_2011}.
+%A category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
 
-\section{Visual Object Category Recognition}
+%As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
+
+\section{Scale-invariant Feature Transform}
+One of the approaches which have achieved robust and efficient result in specific object recognition is proposed by Lowe \cite{lowe_object_1999}. His approach first extracts SIFT features from the image. Scale Invariant Feature Transform (SIFT) is a kind of local feature that is invariant to image translation, scaling, and rotation. Then, the extracted features are matched between train and test images. In the final step, the matched features are verified to confirm they are in a consistent geometric configuration. This approach has been widely used in robotic visual systems \cite{grauman_visual_2011}.
+
+\section{Bag of Visual Words Model}
 While specific object recognition can be solved as matching of local features, the task of object category recognition requires representations that capture the common characteristics of different instances in the same class. Example systems for object category recognition include the Viola-Jones face detector \cite{viola_rapid_2001}, bag-of-words model \cite{csurka_visual_2004} and HOG person detector \cite{dalal_histograms_2005}. 
 
 The bag-of-words model \cite{csurka_visual_2004} for object category recognition is motivated by the bag-of-words model in text categorization. The visual image with a collection of local feature descriptors is analog to a document with a collection of words. In practice, a vocabulary of visual words is first constructed with clustering the feature descriptors from a number of images. Here, descriptors like SIFT or SURF can be used. Then, an image can be represented as a histogram of the vocabulary. After that, classifiers like support vector machine or Na\"ive Bayes can be used for categorization. This bag-of-words model achieved high and robust categorization accuracy.
 
 Sivic et al. \cite{sivic_discovering_2005} used the bag-of-words model for unsupervised object categorization. Same as \cite{csurka_visual_2004}, given a collection of images, the feature of the images is first extracted as a bag of visual words. Then, generative models like Latent Semantic Analysis (pLSA) and Latent Dirichlet Allocation (LDA) are learned from the representation vectors. These models, which are successfully used for text analysis finding document topics, can also be used for finding the underlying common features of an object category. Since their learning method is unsupervised, it is applicable to a large unlabeled image set.
 
-\cleardoublepage
-\chapter{Visual Features}
-\section{Scale-invariant Feature Transform}
-\section{Bag of Visual Words Model}
+\section{Summary}
+
 
 \cleardoublepage
 \chapter{Acoustic Features}
 \section{Short Time Fourier Transform}
 \section{Mel-frequency Cepstrum Coefficient}
+
+\section{Summary}
 
 \cleardoublepage
 \chapter{Methods for Multimodal Object Recognition}
@@ -403,6 +407,8 @@ Based on the similarity of executions recordings, they constructed the relationa
 
 Consequently, they applied discriminative methods, like Support Vector Machine, k-Nearest Neighbor and Decision Tree, for learning the object category. They evaluated these methods with Cohen's kappa coefficient \cite{cohen_coefficient_1960}. Their approach achieved kappa coefficient from 0.4 to .85 for the recognition.
 
+\section{Summary}
+
 \cleardoublepage
 \chapter{Theories of Hidden Markov Model}
 The hidden Markov models (HMM) are statistical models for sequence data, which have been well-known and widely used by researchers \cite{rabiner_tutorial_1989, rabiner_fundamentals_1993}. Theories of HMM are initially published by Baum and his colleagues \cite{baum_statistical_1966, baum_maximization_1970}. They have been successfully applied to a number of research fields, including speech processing \cite{baker_dragon_1975, rabiner_fundamentals_1993}, image processing \cite{chen_off-line_1994}, bioinformatics \cite{koski_hidden_2001}, finance \cite{bhar_hidden_2004}, etc.
@@ -425,6 +431,15 @@ A hidden Markov model describes a probability distribution of a stationary discr
   \end{equation}
 \end{enumerate}
 
+\begin{figure}[t]
+  \centering
+  \includetikz{hmm}
+  \caption[HMM as a Bayesian network.]{HMM as a Bayesian network. The directed edges indicate conditional dependencies. Each state variable is only conditional dependent of its previous state and each observation is only conditional dependent of the state at that time.}
+  \label{fig:hmm}
+\end{figure}
+
+These conditional dependencies can be shown as a Bayesian network by unfolding the variables over time (see \cref{fig:hmm}).
+
 Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$, with $N$ being the number of states). Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
 
 Given the aforementioned assumptions, one HMM can be specified with the following parameters:
@@ -442,15 +457,6 @@ such that
 As for HMM-GMM, each $b_j(x)$, more specifically, is a probability density function (pdf) of a GMM, namely
 \[ b_j(x) = \sum_{k=1}^M c_{jk} \mathcal{N}(x, \mu_{jk}, \Sigma_{jk}) \]
 where $c_{jk}$ is the mixture weight (coefficient), $\mu_{jk}$ is the mean and $\Sigma_{jk}$ is the covariance matrix, each of the $k$-th component in state $j$ and $\mathcal{N}$ is the pdf of the Gaussian distribution. 
-
-\begin{figure}[t]
-  \centering
-  \includetikz{hmm}
-  \caption[HMM as a Bayesian network.]{HMM as a Bayesian network. The directed edges indicate conditional dependencies. Each state variable is only conditional dependent of its previous state and each observation is only conditional dependent of the state at that time.}
-  \label{fig:hmm}
-\end{figure}
-
-The structure of an HMM can be shown as a Bayesian network by unfolding the variables over time (see \cref{fig:hmm}).
 
 With the formal definition of HMM, there are still three problems of interest to be solved, in order to use HMM for real-world applications. These problems are:
 \begin{enumerate}
@@ -548,7 +554,7 @@ Parameter estimation of a statistical model is the adjustment of the parameters 
 Unlike simple models, such as Gaussian distributions, the parameters of which can be calculated directly, HMM depends on unobserved latent variables (i.e. hidden states), which make it difficult to estimate. One general solution for parameter estimation of models with latent variables is the expectation-maximization (EM) algorithm. The application of the EM algorithm for HMM is known as the Baum-Welch algorithm. We will shows these two algorithms in the following part.
 
 \subsection{Expectation-maximization Algorithm}
-The expectation-maximization algorithm is a method for finding the maximum likelihood estimates (MLE) of parameters of models with latent variables \cite{dempster_maximum_1977}. Its idea is reestimating parameters via an expectation step (E-step) and a maximization step (M-step), in which the reestimated parameters have greater likelihood, and repeating such process until the likelihood reaches a maximum.
+The expectation-maximization algorithm is a method for finding the maximum likelihood estimates (MLE) of parameters of models with latent variables \cite{dempster_maximum_1977}. Its idea is reestimating parameters via an expectation step (E-step) and a maximization step (M-step), in which the reestimated parameters have greater likelihood, and repeating such procedure until the likelihood reaches a maximum.
 
 More specifically, consider observed data $\mathbf{x}$, unobserved data (i.e. latent variables) $\mathbf{z}$ and a set of parameters $\theta$, the likelihood function is
 \begin{equation}
@@ -564,13 +570,13 @@ We introduce a function $Q(\theta|\theta')$, which is the conditional expectatio
   Q(\theta|\theta') = \text{E}_{\mathbf{z}|\mathbf{x},\theta'} \log P(\mathbf{x},\mathbf{z}|\theta) .
 \end{equation}
 
-A process of parameters reestimation consists of the following two steps:
+A procedure of parameters reestimation consists of the following two steps:
 \begin{description}
   \item[E-Step] Compute $Q(\theta|\theta^{(p)})$;
   \item[M-Step] Choose $\theta^{(p+1)}$ to be the value of $\theta$ that maximize $Q(\theta|\theta^{(p)})$.
 \end{description}
 
-After each process it is guarantied that $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$. Therefore, if we start from an initial estimate $\theta^{(0)}$ and iteratively compute $\theta^{(1)},\theta^{(2)},\theta^{(3)},\dots$, we will get a sequence of estimates, which converges to a local maximum.
+After each procedure it is guarantied that $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$. Therefore, if we start from an initial estimate $\theta^{(0)}$ and iteratively compute $\theta^{(1)},\theta^{(2)},\theta^{(3)},\dots$, we will get a sequence of estimates, which converges to a local maximum.
 
 The increase of likelihood function can be proved as follows: for any $\mathbf{z}$, we have
 \begin{equation}
@@ -706,8 +712,16 @@ To summarize, the reestimation of HMM parameters consists of the following steps
 \end{enumerate}
 And, by repeating these steps, we can get an estimate of the parameters which attain a local maximum of the likelihood function.
 
+\section{Summary}
+In this chapter, we presented the theories of hidden Markov models. The key points include:
+\begin{itemize}
+  \item HMMs are statistical models for sequenced data with latent variables (i.e. hidden states). The parameters include the initial state distribution, state transition probability and observation probability distribution.
+  \item The probability of HMM can be computed using the forward or the backward procedure.
+  \item The parameters of HMM can be estimated by the Baum-Welch algorithm, which is an application of the EM algorithm. There is on guaranty that the result is a global optimum.
+\end{itemize}
+
 \cleardoublepage
-\chapter{HMM Model for Bimodal Object Recognition}
+\chapter{HMM for Bimodal Object Recognition}
 \section{System Overview}
 The models we use in our system for learning the categories are hidden Markov models with Gaussian Mixtures (HMM-GMM). For each category, we learn two models, one with the positive instances and the other with negative instances, using the Baum-Welch algorithm. The models by themselves cannot be used for classification, however, with some calculation we can get the posterior probability of an object being in the category and use this probability for classification:
 \begin{equation}
