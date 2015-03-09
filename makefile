@@ -9,8 +9,8 @@ FIGDIR = fig
 PAPER  = thesis
 BIBS   = thesis.bib
 FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg themug.jpg mugs.jpg hann.svg hamming.svg
-GPSRC  = 
-SVGSRC = hann hamming window spec256 spec1024 spec64
+GPSRC  = window spec256 spec1024 spec64
+SVGSRC = hann hamming 
 TIKZS  = hmm
 
 # temporary files
