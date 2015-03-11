@@ -1,6 +1,6 @@
 # programs 
 TEX    = latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode --shell-escape" 
-PLOT   = gnuplot -e 'set term svg'
+PLTEPS = gnuplot -e 'set term epslatex size 5,3'
 
 # figure directory
 FIGDIR = fig
@@ -8,25 +8,27 @@ FIGDIR = fig
 # sources
 PAPER  = thesis
 BIBS   = thesis.bib
-FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg themug.jpg mugs.jpg hann.svg hamming.svg
-GPSRC  = window spec256 spec1024 spec64
+FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg themug.jpg mugs.jpg
+GPSRC  = spec256 spec1024 spec64
 SVGSRC = hann hamming 
 TIKZS  = hmm
 
-# temporary files
-SVGMID = $(foreach p, $(GPSRC), $(FIGDIR)/$(p).svg)
-PDFMID = $(foreach p, $(GPSRC) $(SVGSRC), $(FIGDIR)/$(p).pdf)
-# LTXMID = $(foreach p, $(GPSRC) $(SVGSRC), $(FIGDIR)/$(p)pdf_tex)
+# intermediate files
+TEXMID = $(foreach p, $(GPSRC), $(FIGDIR)/$(p).tex)
+EPSMID = $(foreach p, $(GPSRC), $(FIGDIR)/$(p).eps)
+PDFMID = $(foreach p, $(SVGSRC), $(FIGDIR)/$(p).pdf)
+
+MIDALL = $(TEXMID) $(EPSMID) $(PDFMID)
 
 # all figures 
-FIGALL = $(PDFMID) \
+FIGALL = $(TEXMID) $(PDFMID) \
 				 $(foreach p, $(TIKZS), $(FIGDIR)/$(p).tex) \
 				 $(foreach p, $(FIGS), $(FIGDIR)/$(p))
 
 # rules
-$(FIGDIR)/%.svg : $(FIGDIR)/%.gp
-	$(PLOT) $< > $@
-
+$(FIGDIR)/%.tex: $(FIGDIR)/%.gp
+	$(PLTEPS) -e "set output '$@'" $<
+	
 $(FIGDIR)/%.pdf : $(FIGDIR)/%.svg
 	inkscape -D -z --file=$< --export-pdf=$@
 
@@ -42,5 +44,5 @@ clean :
 	rm -f $(PAPER).bbl $(PAPER).blg $(PAPER).log $(PAPER).aux \
 		$(PAPER).toc $(PAPER).lof $(PAPER).fls $(PAPER).lot $(PAPER).out \
 		$(PAPER).fdb_latexmk \
-		$(SVGMID) $(PDFMID)
+		$(MIDALL)
 

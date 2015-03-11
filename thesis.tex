@@ -175,7 +175,7 @@
 \newcommand{\crefrangeconjunction}{--}
 \usepackage{tikz}
 
-\newcommand{\includetikz}[1]{\input{fig/#1.tex}}
+\newcommand{\includetexfig}[1]{\input{fig/#1.tex}}
 %\newcommand{\includesvg}[1]{\def\svgwidth{.6\textwidth}\footnotesize\input{fig/#1.eps_tex}}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -424,19 +424,19 @@ Therefore, only the first half (index from $0$ to $\frac{N}{2}$) of the DFT cont
 \begin{figure}[t]
   \centering
   \begin{subfigure}[b]{.8\textwidth}
-    \includegraphics[width=\textwidth]{spec1024}
+    \includetexfig{spec1024}
     \caption{$N=1024$}
     \label{fig:spec1024}
   \end{subfigure}
 
   \begin{subfigure}[b]{.8\textwidth}
-    \includegraphics[width=\textwidth]{spec256}
+    \includetexfig{spec256}
     \caption{$N=256$}
     \label{fig:spec256}
   \end{subfigure}
 
   \begin{subfigure}[b]{.8\textwidth}
-    \includegraphics[width=\textwidth]{spec64}
+    \includetexfig{spec64}
     \caption{$N=64$}
     \label{fig:spec64}
   \end{subfigure}
@@ -548,7 +548,7 @@ A hidden Markov model describes a probability distribution of a stationary discr
 
 \begin{figure}[t]
   \centering
-  \includetikz{hmm}
+  \includetexfig{hmm}
   \caption[HMM as a Bayesian network.]{HMM as a Bayesian network. The directed edges indicate conditional dependencies. Each state variable is only conditional dependent of its previous state and each observation is only conditional dependent of the state at that time.}
   \label{fig:hmm}
 \end{figure}

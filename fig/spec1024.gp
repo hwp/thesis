@@ -1,4 +1,4 @@
-set term svg size 500, 200 name 'spec1024'
+set term epslatex size 5,2
 set style line 11 lc rgb '#808080' lt 1
 set border 3 front ls 11
 set tics nomirror out scale 0.75
