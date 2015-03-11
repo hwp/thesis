@@ -303,7 +303,7 @@ Your English abstract here (mandatory if written in English and recommended othe
 %In this chapter, three related fields regarding visual-audio object recognition will be reviewed. First, the traditional methods of object recognition based on visual information exclusively will be introduced. Then, the state-of-the-art in multimodal object recognition will be presented. Finally, the application of visual-audio integration in speech recognition will be explained.
 
 \cleardoublepage
-\chapter{Visual Features for Object Recognition}
+\chapter{Visual Features}
 Visual object recognition has been extensively studied in the recent decade. Vision is very essential for both humans and artificial agents to recognize an object, since it provides the most direct and informational clue about the object. Numerous methods have been proposed for visual object recognition and they have been used in a variety of applications.
 
 \begin{figure}[tbhp]
@@ -348,16 +348,30 @@ Concerning object recognition, there are two types of tasks been studied: specif
 \footnotetext{The upper photo is ``Mercedes-Benz C 250'' by \href{http://commons.wikimedia.org/wiki/User:M_93}{M 93}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0/de}{CC BY-SA 3.0 de}.
 The lower photo is ``Porsche Carrera GT'' by \href{http://www.flickr.com/people/32659528@N00}{Brian Snelson}. Licensed under \href{http://creativecommons.org/licenses/by/2.0}{CC BY 2.0}}
 
-Unlike the specific case, generic object category recognition cope with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see \cref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape.
+Unlike the specific case, generic object category recognition deal with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see \cref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape.
 
-Different features are designed for the two tasks. In this chapter, we will show two features that are related to our system. The features are the Scale-invariant feature transform for specific object recognition and the bag of visual words model for generic object category recognition.
+Different features are designed for the two tasks. In this chapter, we will present the basic concepts of local features and the SIFT descriptor as an example of local features. We will also introduce the bag of visual words model, which is a good solution to generic object category recognition.
 
 %A category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
 
 %As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
 
-\section{Scale-invariant Feature Transform}
-One of the approaches which have achieved robust and efficient result in specific object recognition is proposed by Lowe \cite{lowe_object_1999}. His approach first extracts SIFT features from the image. Scale Invariant Feature Transform (SIFT) is a kind of local feature that is invariant to image translation, scaling, and rotation. Then, the extracted features are matched between train and test images. In the final step, the matched features are verified to confirm they are in a consistent geometric configuration. This approach has been widely used in robotic visual systems \cite{grauman_visual_2011}.
+\section{Local Features}
+Thinking of representing an image of an object, one method is extracting patterns that describe the whole picture, such as using the intensities of pixels. These methods are the global image representations. However, since the structures of most object appearances are very complex and the images are usually subject to lightning condition, scaling, rotation, translation as well as occlusion, such global image representations can hardly generate robust result. 
+
+In contrast to global representations, the local feature representations describe the structure of a local patch or region of the image. These representations are designed to be invariant to a range of image transformations, such as scaling, rotation, translation and affine deformation. The development of local features in the past decade has made it possible to implement robust and efficient object recognition applications.
+
+A local feature is a combination of two components: 
+\begin{description}
+  \item[Key points detection] Detect a set of points of interest (i.e. key points) and the region around it, in a scale- or affine-invariant manner. Examples of key points detection methods include the Laplacian-of-Gaussian (LoG) detector \cite{lindeberg_feature_1998}, the difference-of-Gaussian (DoG) detector \cite{lowe_object_1999}, Harris affine detector \cite{mikolajczyk_scale_2004} and maximally stable external regions (MSER) \cite{matas_robust_2004}. 
+  \item[Feature description] For each key points, compute its descriptor, which is a feature vector that describe the local region. Examples of feature description methods include the scale invariant feature transform (SIFT) and ``speed-up'' robust features (SURF) \cite{bay_speeded-up_2008}.
+\end{description}
+
+When 
+
+\subsection{The SIFT Descriptor}
+The scale invariant feature transform (SIFT) is one of the state-of-the-art features that are used for visual object recognition. It is a local feature, which is invariant to image translation, scaling and rotation. SIFT was originally published in papers by Lowe \cite{lowe_object_1999,lowe_distinctive_2004}. Although in the original papers, the SIFT descriptor is designed with the DoG detector, it can also be combined with other detection methods.
+
 
 \section{Bag of Visual Words Model}
 While specific object recognition can be solved as matching of local features, the task of object category recognition requires representations that capture the common characteristics of different instances in the same class. Example systems for object category recognition include the Viola-Jones face detector \cite{viola_rapid_2001}, bag-of-words model \cite{csurka_visual_2004} and HOG person detector \cite{dalal_histograms_2005}. 
@@ -899,9 +913,10 @@ The audio data are sampled at 8000 Hz. We first use shifting windows with window
 
 %\fancyhead[LE]{\it \leftmark}
 %\chapter{}
-\fancyhead[LE,RO]{\it Bibliography}       % A bibliography never have a letter or numbering!
-\bibliographystyle{plain}             % Style for presenting the literature
-\addcontentsline{toc}{chapter}{Bibliography}% Add to the TOC
+
+\fancyhead[LE,RO]{\it Bibliography}          % A bibliography never have a letter or numbering!
+\bibliographystyle{abbrv}                    % Style for presenting the literature
+\addcontentsline{toc}{chapter}{Bibliography} % Add to the TOC
 \bibliography{thesis}
 \cleardoublepage
 
@@ -911,8 +926,6 @@ The audio data are sampled at 8000 Hz. We first use shifting windows with window
 \chapter*{Erkl\"arung der Urheberschaft}
 \fancyhead[LE]{\it Erkl\"arung der Urheberschaft}
 Ich versichere an Eides statt, dass ich die \trtype{} im Studiengang \trcourseofstudies{} selbstst\"andig verfasst und keine anderen als die angegebenen Hilfsmittel -- insbesondere keine im Quellenverzeichnis nicht benannten Internet-Quellen -- benutzt habe. Alle Stellen, die w\"ortlich oder sinngem\"a{\ss} aus Ver\"offentlichungen entnommen wurden, sind als solche kenntlich gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem anderen Pr\"ufungsverfahren eingereicht habe und die eingereichte schriftliche Fassung der auf dem elektronischen Speichermedium entspricht.
-
-%Ich versichere an Eides statt, dass ich die vorliegende \trtype{} selbstst\"andig und ohne unerlaubte Hilfe Dritter angefertigt habe. Alle Stellen, die inhaltlich oder w\"ortlich aus anderen Ver\"offentlichungen stammen, sind kenntlich gemacht. Diese Arbeit lag in gleicher oder \"ahnlicher Weise noch keiner Pr\"ufungsbeh\"orde vor und wurde bisher noch nicht ver\"offentlicht.
 
 \vspace{4cm}
 \noindent Ort, Datum \hfill Unterschrift
