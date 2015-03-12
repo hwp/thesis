@@ -357,21 +357,48 @@ Different features are designed for the two tasks. In this chapter, we will pres
 %As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
 
 \section{Local Features}
-Thinking of representing an image of an object, one method is extracting patterns that describe the whole picture, such as using the intensities of pixels. These methods are the global image representations. However, since the structures of most object appearances are very complex and the images are usually subject to lightning condition, scaling, rotation, translation as well as occlusion, such global image representations can hardly generate robust result. 
+Thinking of representing an object in an image, one method is extracting patterns that describe the whole picture, such as using the intensities of pixels. These methods are the global image representations. However, since the structures of most object appearances are very complex and the images are usually subject to lighting variations, scaling, rotations, translations as well as occlusions, such global image representations can hardly generate robust result. 
 
-In contrast to global representations, the local feature representations describe the structure of a local patch or region of the image. These representations are designed to be invariant to a range of image transformations, such as scaling, rotation, translation and affine deformation. The development of local features in the past decade has made it possible to implement robust and efficient object recognition applications.
+In contrast to global representations, the local feature representation uses features of a local patches or regions to describe the image. These representations are designed to be invariant to a range of image transformations, such as scaling, rotation, translation and affine deformation. The development of local features in the past decade has made it possible to implement robust and efficient object recognition applications.
 
-A local feature is a combination of two components: 
+A local feature extraction consists of the following two steps: 
 \begin{description}
   \item[Key points detection] Detect a set of points of interest (i.e. key points) and the region around it, in a scale- or affine-invariant manner. Examples of key points detection methods include the Laplacian-of-Gaussian (LoG) detector \cite{lindeberg_feature_1998}, the difference-of-Gaussian (DoG) detector \cite{lowe_object_1999}, Harris affine detector \cite{mikolajczyk_scale_2004} and maximally stable external regions (MSER) \cite{matas_robust_2004}. 
   \item[Feature description] For each key points, compute its descriptor, which is a feature vector that describe the local region. Examples of feature description methods include the scale invariant feature transform (SIFT) and ``speed-up'' robust features (SURF) \cite{bay_speeded-up_2008}.
 \end{description}
 
-When 
+Once descriptors are extracted, the similarity between images can be computed via comparing the local features they have. This yields a direct application for specific object recognition.
+
+In the following section, we will introduce the DoG detector and the SIFT descriptor, as these methods are used in our system.
+
+\subsection{The difference-of-Gaussian Detector}
+The key points detection should be in a way that it can be repeated with different images of the same object. Therefore, the detectors are required to be scale or affine invariant. The difference-of-Gaussian (DoG) detector is an instance of scale invariant detectors.
+
+Given an image $I(x)$, the DoG detector finds the position $x$ and the scale $\sigma$ that maximize (locally) the difference-of-Gaussian:
+\begin{equation}
+  D(x,\sigma) = (G(x,k\sigma) - G(x,\sigma)) * I(x)
+\end{equation}
+where $G(x,\sigma)$ is the Gaussian convolution mask, $k$ is a constant and $*$ is convolution. An efficient way to calculating the DoG is first smoothing (convoluting) the image with Gaussian mask at different scale, and then subtracting the results with the adjacent scales. Local maxima are located in several layers of DoG filtered images (each at different scales), such that $D(x,\sigma)$ is larger than the eight neighbors in same layer and the nine neighbors on each of the adjacent layers.
+
+After the local maxima are found, an additional filtering step is added, in order to remove the points on edges. This is accomplished by evaluating the Hessian matrix at the points.
+
+At the end, the selected points with the regions surrounding them (typically, $r = 3\sigma$) are extracted for further processing.
 
 \subsection{The SIFT Descriptor}
-The scale invariant feature transform (SIFT) is one of the state-of-the-art features that are used for visual object recognition. It is a local feature, which is invariant to image translation, scaling and rotation. SIFT was originally published in papers by Lowe \cite{lowe_object_1999,lowe_distinctive_2004}. Although in the original papers, the SIFT descriptor is designed with the DoG detector, it can also be combined with other detection methods.
+The scale invariant feature transform (SIFT) descriptor is one of the state-of-the-art features that are used for visual object recognition. SIFT was originally published in papers by Lowe \cite{lowe_object_1999,lowe_distinctive_2004}. 
+Although in the original papers, the SIFT descriptor is designed with the DoG detector, it can also be combined with other detection methods \cite{mikolajczyk_performance_2005}.
 
+Once key points are located, the feature description of the key points should be in the way that it is invariant to many image transformations. What the key points detectors, such as DoG detector, has already achieved is scale and translation invariance. In addition to that, the SIFT descriptor provides features that are invariant to rotation and illumination.
+
+The SIFT descriptor describes a key point as histograms of gradient orientations. Specifically, it is computed via the following steps:
+\begin{enumerate}
+  \item Normalize the size and orientation of the region around the key point according the scale, which is the result of scale invariant detector, and the dominant orientation.
+  \item The region is divided to a $16 \times 16$ regular grid. For each location, the gradient orientation is computed.
+  \item These locations are again divide into a $4 \times 4$ regular grid. For each cell, the gradient orientation histogram with 8 orientation bins is computed according to the gradient magnitudes applied with a Gaussian window.
+  \item Combining the $16$ histograms will result in a $16 \times 8 = 128$ dimensional vector. Normalize this vector and the result is the SIFT descriptor.
+\end{enumerate}
+
+The rotation invariance is achieved by the selecting the dominant orientation in the first step and the illumination invariance is achieved by the normalization in the last step.
 
 \section{Bag of Visual Words Model}
 While specific object recognition can be solved as matching of local features, the task of object category recognition requires representations that capture the common characteristics of different instances in the same class. Example systems for object category recognition include the Viola-Jones face detector \cite{viola_rapid_2001}, bag-of-words model \cite{csurka_visual_2004} and HOG person detector \cite{dalal_histograms_2005}. 
