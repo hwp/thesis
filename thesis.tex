@@ -304,8 +304,11 @@ Your English abstract here (mandatory if written in English and recommended othe
 
 \cleardoublepage
 \chapter{Visual Features}
-Visual object recognition has been extensively studied in the recent decade. Vision is very essential for both humans and artificial agents to recognize an object, since it provides the most direct and informational clue about the object. Numerous methods have been proposed for visual object recognition and they have been used in a variety of applications.
+Visual object recognition has been extensively studied in the recent decade. Vision is very essential for both humans and artificial agents to recognize an object, since the appearance of the object provides us with the most direct and informational features. Numerous features have been proposed for visual object recognition and they have been used in a variety of applications.
 
+In this chapter, we will present the state-of-the-art representation of object images using local features and the bag-of-words model, which is based on local features.
+
+\iffalse
 \begin{figure}[tbhp]
   \centering
   \begin{subfigure}[b]{.3\textwidth}
@@ -328,7 +331,7 @@ Visual object recognition has been extensively studied in the recent decade. Vis
 \end{figure}
 \footnotetext{``Eiffel Tower'' by \href{http://commons.wikimedia.org/wiki/User:Benh}{Benh}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}.}
 
-Concerning object recognition, there are two types of tasks been studied: specific object recognition and object category recognition \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person. Examples of this case are Sam's coffee mug, the Eiffel tower or Alan Turing as shown in \cref{fig:specific}. These objects (or person) have little variation in appearance and shape. 
+Concerning object recognition, there are two types of tasks been studied: specific object recognition and object category recognition \cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object, place or person. Examples of this case are Sam's coffee mug, the Eiffel tower or Alan Turing. These objects (or person) have little variation in appearance and shape. 
 
 \begin{figure}[tbhp]
   \centering
@@ -348,18 +351,19 @@ Concerning object recognition, there are two types of tasks been studied: specif
 \footnotetext{The upper photo is ``Mercedes-Benz C 250'' by \href{http://commons.wikimedia.org/wiki/User:M_93}{M 93}. Licensed under \href{http://creativecommons.org/licenses/by-sa/3.0/de}{CC BY-SA 3.0 de}.
 The lower photo is ``Porsche Carrera GT'' by \href{http://www.flickr.com/people/32659528@N00}{Brian Snelson}. Licensed under \href{http://creativecommons.org/licenses/by/2.0}{CC BY 2.0}}
 
-Unlike the specific case, generic object category recognition deal with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs (see \cref{fig:generic}). In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape.
+Unlike the specific case, generic object category recognition deal with classifying an instance to a category, for example, telling a object is an instance of cars or coffee mugs. In this case, the objects belongs to the same category have the same conceptual meaning, but may vary in appearance and shape.
 
 Different features are designed for the two tasks. In this chapter, we will present the basic concepts of local features and the SIFT descriptor as an example of local features. We will also introduce the bag of visual words model, which is a good solution to generic object category recognition.
+\fi
 
 %A category can also be a function or an attribute of the object, like objects that can be sit on or soft objects.
 
 %As we have seen, these two types of tasks try to solve different problems. Therefore, different features and learning methods are required. Some of the approaches will be discussed in the rest of this section.
 
 \section{Local Features}
-Thinking of representing an object in an image, one method is extracting patterns that describe the whole picture, such as using the intensities of pixels. These methods are the global image representations. However, since the structures of most object appearances are very complex and the images are usually subject to lighting variations, scaling, rotations, translations as well as occlusions, such global image representations can hardly generate robust result. 
+Thinking of representing an object in an image, one method is extracting patterns that describe the whole picture, such as using the intensities of pixels. These methods are the global image representations. However, since the structures of most object appearances are very complex and the images are also subject to lighting variations, scaling, rotations, translations as well as occlusions, such global image representations can hardly generate robust results. 
 
-In contrast to global representations, the local feature representation uses features of a local patches or regions to describe the image. These representations are designed to be invariant to a range of image transformations, such as scaling, rotation, translation and affine deformation. The development of local features in the past decade has made it possible to implement robust and efficient object recognition applications.
+In contrast to global representations, the local feature representation uses features of a local patches or regions to describe the image. These representations are designed to be invariant to a range of image transformations, such as scaling, rotation, translation and affine deformation. The development of such local features in the past decade has made it possible to implement robust and efficient object recognition applications.
 
 A local feature extraction consists of the following two steps: 
 \begin{description}
@@ -400,10 +404,12 @@ The SIFT descriptor describes a key point as histograms of gradient orientations
 
 The rotation invariance is achieved by the selecting the dominant orientation in the first step and the illumination invariance is achieved by the normalization in the last step.
 
-\section{Bag of Visual Words Model}
-While specific object recognition can be solved as matching of local features, the task of object category recognition requires representations that capture the common characteristics of different instances in the same class. Example systems for object category recognition include the Viola-Jones face detector \cite{viola_rapid_2001}, bag-of-words model \cite{csurka_visual_2004} and HOG person detector \cite{dalal_histograms_2005}. 
+\section{The Bag-of-Words Model}
+While specific object recognition can be solved as matching of local features, the local feature representation cannot be directly applied to object category recognition. Local features are very robust to variations of the same part of an object. However, the objects in the same category are not identical. Thus, in this case, a valid representations should capture the common characteristics of different instances in the same class. On of the solution is the bag-of-words model \cite{csurka_visual_2004}.
 
-The bag-of-words model \cite{csurka_visual_2004} for object category recognition is motivated by the bag-of-words model in text categorization. The visual image with a collection of local feature descriptors is analog to a document with a collection of words. In practice, a vocabulary of visual words is first constructed with clustering the feature descriptors from a number of images. Here, descriptors like SIFT or SURF can be used. Then, an image can be represented as a histogram of the vocabulary. After that, classifiers like support vector machine or Na\"ive Bayes can be used for categorization. This bag-of-words model achieved high and robust categorization accuracy.
+The bag-of-words model (sometimes referred as bag of visual words, bag of feature or bag of key points when used for computer vision) for object category recognition is motivated by the bag-of-words model in natural language processing. The visual image with a collection of local feature descriptors can be regarded as a document with a collection of words. In practice, a vocabulary of visual words is first constructed with clustering the feature descriptors from a number of images. Here, descriptors like SIFT or SURF can be used. Then, an image can be represented as a histogram of the vocabulary. After that, classifiers like support vector machine or Na\"ive Bayes can be used for categorization.
+
+Like  bla bla bla 
 
 Sivic et al. \cite{sivic_discovering_2005} used the bag-of-words model for unsupervised object categorization. Same as \cite{csurka_visual_2004}, given a collection of images, the feature of the images is first extracted as a bag of visual words. Then, generative models like Latent Semantic Analysis (pLSA) and Latent Dirichlet Allocation (LDA) are learned from the representation vectors. These models, which are successfully used for text analysis finding document topics, can also be used for finding the underlying common features of an object category. Since their learning method is unsupervised, it is applicable to a large unlabeled image set.
 
