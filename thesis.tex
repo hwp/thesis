@@ -367,8 +367,8 @@ In contrast to global representations, the local feature representation uses fea
 
 A local feature extraction consists of the following two steps: 
 \begin{description}
-  \item[Key points detection] Detect a set of points of interest (i.e. key points) and the region around it, in a scale- or affine-invariant manner. Examples of key points detection methods include the Laplacian-of-Gaussian (LoG) detector \cite{lindeberg_feature_1998}, the difference-of-Gaussian (DoG) detector \cite{lowe_object_1999}, Harris affine detector \cite{mikolajczyk_scale_2004} and maximally stable external regions (MSER) \cite{matas_robust_2004}. 
-  \item[Feature description] For each key points, compute its descriptor, which is a feature vector that describe the local region. Examples of feature description methods include the scale invariant feature transform (SIFT) and ``speed-up'' robust features (SURF) \cite{bay_speeded-up_2008}.
+  \item[Keypoint detection] Detect a set of points of interest (i.e. keypoints) and the region around it, in a scale- or affine-invariant manner. Examples of keypoints detection methods include the Laplacian-of-Gaussian (LoG) detector \cite{lindeberg_feature_1998}, the difference-of-Gaussian (DoG) detector \cite{lowe_object_1999}, Harris affine detector \cite{mikolajczyk_scale_2004} and maximally stable external regions (MSER) \cite{matas_robust_2004}. 
+  \item[Feature description] For each keypoint, compute its descriptor, which is a feature vector that describe the local region. Examples of feature description methods include the scale invariant feature transform (SIFT) and ``speed-up'' robust features (SURF) \cite{bay_speeded-up_2008}.
 \end{description}
 
 Once descriptors are extracted, the similarity between images can be computed via comparing the local features they have. This yields a direct application for specific object recognition.
@@ -376,7 +376,7 @@ Once descriptors are extracted, the similarity between images can be computed vi
 In the following section, we will introduce the DoG detector and the SIFT descriptor, as these methods are used in our system.
 
 \subsection{The difference-of-Gaussian Detector}
-The key points detection should be in a way that it can be repeated with different images of the same object. Therefore, the detectors are required to be scale or affine invariant. The difference-of-Gaussian (DoG) detector is an instance of scale invariant detectors.
+The keypoint detection should be in a way that it can be repeated with different images of the same object. Therefore, the detectors are required to be scale or affine invariant. The difference-of-Gaussian (DoG) detector is an instance of scale invariant detectors.
 
 Given an image $I(x)$, the DoG detector finds the position $x$ and the scale $\sigma$ that maximize (locally) the difference-of-Gaussian:
 \begin{equation}
@@ -392,11 +392,11 @@ At the end, the selected points with the regions surrounding them (typically, $r
 The scale invariant feature transform (SIFT) descriptor is one of the state-of-the-art features that are used for visual object recognition. SIFT was originally published in papers by Lowe \cite{lowe_object_1999,lowe_distinctive_2004}. 
 Although in the original papers, the SIFT descriptor is designed with the DoG detector, it can also be combined with other detection methods \cite{mikolajczyk_performance_2005}.
 
-Once key points are located, the feature description of the key points should be in the way that it is invariant to many image transformations. What the key points detectors, such as DoG detector, has already achieved is scale and translation invariance. In addition to that, the SIFT descriptor provides features that are invariant to rotation and illumination.
+Once keypoints are located, the feature description of the keypoints should be in the way that it is invariant to many image transformations. What the keypoints detectors, such as DoG detector, has already achieved is scale and translation invariance. In addition to that, the SIFT descriptor provides features that are invariant to rotation and illumination variation.
 
-The SIFT descriptor describes a key point as histograms of gradient orientations. Specifically, it is computed via the following steps:
+The SIFT descriptor describes a keypoint as histograms of gradient orientations. Specifically, it is computed via the following steps:
 \begin{enumerate}
-  \item Normalize the size and orientation of the region around the key point according the scale, which is the result of scale invariant detector, and the dominant orientation.
+  \item Normalize the size and orientation of the region around the keypoint according the scale, which is the result of scale invariant detector, and the dominant orientation.
   \item The region is divided to a $16 \times 16$ regular grid. For each location, the gradient orientation is computed.
   \item These locations are again divide into a $4 \times 4$ regular grid. For each cell, the gradient orientation histogram with 8 orientation bins is computed according to the gradient magnitudes applied with a Gaussian window.
   \item Combining the $16$ histograms will result in a $16 \times 8 = 128$ dimensional vector. Normalize this vector and the result is the SIFT descriptor.
@@ -405,16 +405,24 @@ The SIFT descriptor describes a key point as histograms of gradient orientations
 The rotation invariance is achieved by the selecting the dominant orientation in the first step and the illumination invariance is achieved by the normalization in the last step.
 
 \section{The Bag-of-Words Model}
-While specific object recognition can be solved as matching of local features, the local feature representation cannot be directly applied to object category recognition. Local features are very robust to variations of the same part of an object. However, the objects in the same category are not identical. Thus, in this case, a valid representations should capture the common characteristics of different instances in the same class. On of the solution is the bag-of-words model \cite{csurka_visual_2004}.
+While specific object recognition can be solved as matching of local features, the local feature representation cannot be directly applied to object category recognition. Local features are very robust to variations of the same part of a particular object. However, the objects in the same category are not identical in appearance. Thus, in this case, a valid representations should capture the common characteristics of different instances in the same class. One of the solution is the bag-of-words model \cite{csurka_visual_2004}.
 
-The bag-of-words model (sometimes referred as bag of visual words, bag of feature or bag of key points when used for computer vision) for object category recognition is motivated by the bag-of-words model in natural language processing. The visual image with a collection of local feature descriptors can be regarded as a document with a collection of words. In practice, a vocabulary of visual words is first constructed with clustering the feature descriptors from a number of images. Here, descriptors like SIFT or SURF can be used. Then, an image can be represented as a histogram of the vocabulary. After that, classifiers like support vector machine or Na\"ive Bayes can be used for categorization.
+The bag-of-words model is first used in nature language processing. Its idea is considering a document as a multiset consisting of words, namely counting the number of occurrences and disregarding the sequence or position of the words. Therefore, a document can be represented as a histogram of distinctive words. The bag-of-words model has been successfully applied to a number of nature language processing and information retrieval tasks, such as text classification.
 
-Like  bla bla bla 
+Analogous to natural text, an image, which contains a collection of keypoints (or local feature descriptors), can also regarded as an document. And, this is the idea of the bag-of-words model for computer vision. In this case, the model is also referred as bag of visual words, bag of feature or bag of keypoints. 
 
-Sivic et al. \cite{sivic_discovering_2005} used the bag-of-words model for unsupervised object categorization. Same as \cite{csurka_visual_2004}, given a collection of images, the feature of the images is first extracted as a bag of visual words. Then, generative models like Latent Semantic Analysis (pLSA) and Latent Dirichlet Allocation (LDA) are learned from the representation vectors. These models, which are successfully used for text analysis finding document topics, can also be used for finding the underlying common features of an object category. Since their learning method is unsupervised, it is applicable to a large unlabeled image set.
+However, there is an essential difference between a word and a local feature descriptor, which is that a word is a nominal value while a descriptor is a real vector. Thus, a vector quantization step is carried out to map a descriptor to a visual ``word''. In most of the applications, the descriptors are quantized by matching to the nearest neighbor in a vocabulary, which is constructed in advance by clustering, such as k-means. Another benefit from quantization is that the different but similar descriptors are put into the same class. Therefore, the representation is more robust to variations between objects in the same category.
+
+Similar to that in nature language processing, images represented by bag-of-words model can be used for further learning. These applications includes supervised classification using support vector machine or na\"ive Bayes \cite{csurka_visual_2004} and unsupervised categorization using probabilistic latent semantic analysis or latent Dirichlet allocation \cite{sivic_discovering_2005}.
 
 \section{Summary}
-
+In this chapter, we have presented the local features and the bag-of-words model for visual object recognition. The key points include:
+\begin{itemize}
+  \item The local feature representation is one of the state-of-art technique for computer vision. The representation is computed via keypoint detection and feature description. The results are a number of descriptors of the points of interest in the image. 
+  \item The DoG detector is invariant to scaling.
+  \item The SIFT descriptors are invariant to rotation and illumination variation.
+  \item The Bag-of-words model, which is based on local features, is a more general representation of a image. 
+\end{itemize}
 
 \cleardoublepage
 \chapter{Audio Features}
@@ -905,7 +913,7 @@ The first two cases are degenerated forms of HMM-GMM, which are simply a Gaussia
 \section{Feature Extraction}
 Given a video of interaction with an object, the visual and acoustic features are extracted as follows:
 \subsection{Visual Feature}
-First, the image frames from the raw video are taken at frame rate of 5 fps (frames per second). For each image frame, SIFT descriptors of all the key points are calculated. Then, all the descriptors are quantized using a codebook or a vocabulary of descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a histogram. At last, the histogram is normalized (sum of which equals 1) and we get the bag-of-words feature. Since the codebook we use contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
+First, the image frames from the raw video are taken at frame rate of 5 fps (frames per second). For each image frame, SIFT descriptors of all the keypoints are calculated. Then, all the descriptors are quantized using a codebook or a vocabulary of descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a histogram. At last, the histogram is normalized (sum of which equals 1) and we get the bag-of-words feature. Since the codebook we use contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
 
 \subsection{Audio Feature}
 The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
