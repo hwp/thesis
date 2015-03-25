@@ -8,7 +8,7 @@ FIGDIR = fig
 # sources
 PAPER  = thesis
 BIBS   = thesis.bib
-FIGS   = uhhLogoL.pdf tour_eiffel.jpg turing.jpg themug.jpg mugs.jpg
+FIGS   = uhhLogoL.pdf
 GPSRC  = spec256 spec1024 spec64
 SVGSRC = hann hamming 
 TIKZS  = hmm
