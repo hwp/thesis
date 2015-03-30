@@ -333,6 +333,8 @@ Consequently, they applied discriminative methods, like Support Vector Machine, 
 
 \cleardoublepage
 \chapter{Visual Features}
+\label{ch:visual}
+
 Visual object recognition has been extensively studied in the recent decade. Vision is very essential for both humans and artificial agents to recognize an object, since the appearance of the object provides us with the most direct and informational features. Numerous features have been proposed for visual object recognition and they have been used in a variety of applications.
 
 In this chapter, we will present the state-of-the-art representation of object images using local features and the bag-of-words model, which is based on local features.
@@ -771,7 +773,7 @@ with equality if and only if $\theta = \theta'$. Therefore, together with \cref{
 
 Since $\theta^{(p+1)}$ is a maximum of $Q(\theta|\theta^{(p)})$, $Q(\theta^{(p+1)}|\theta^{(p)}) - Q(\theta^{(p)}|\theta^{(p)}) \geq 0$. Therefore, $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$.
   
-It is important to note that although the EM algorithm converges to a maximum estimate, there is no guaranty that the estimate is a global maximum (thus not a MLE). The resulting estimate depends on the initial estimate. Therefore, additional heuristic methods should be chosen for application of the EM algorithm.
+It is important to note that although the EM algorithm converges to a maximum estimate, there is no guarantee that the estimate is a global maximum (thus not a MLE). The resulting estimate depends on the initial estimate. Therefore, additional heuristic methods should be chosen for application of the EM algorithm.
 
 \subsection{Baum-Welch Algorithm}
 We have shown that the EM algorithm can be used for parameter estimation for models with latent variables and HMMs are examples or such models. Thus, applying the EM algorithm to the HMM would result in a solution for the third problem we stated in \cref{sec:hmm}. This method is known as the Baum-Welch algorithm.
@@ -882,14 +884,41 @@ In this chapter, we have presented the theories of hidden Markov models. The key
 \begin{itemize}
   \item HMMs are statistical models for time series data with latent variables (i.e. hidden states). The parameters include the initial state distribution, state transition probability and observation probability distribution.
   \item The probability of HMM can be computed using the forward or the backward procedure.
-  \item The parameters of HMM can be estimated by the Baum-Welch algorithm, which is an application of the EM algorithm. There is no guarantee that the result is a global optimum.
+  \item The parameters of HMM can be estimated by the Baum-Welch algorithm, which is an application of the EM algorithm. However, the result is not assured to be a global optimum.
 \end{itemize}
 
 \cleardoublepage
 \chapter{HMM for Bimodal Object Recognition}
+So far we have introduced some methods for extracting visual and audio features as well as HMM, a statistical model for time series data. It is now sufficient to combine them together to build a system for visual-audio object recognition. This chapter describes and discusses the design of our system as well as the issues we meet upon implementing the system. 
 
+\section{System Design}
+Before proceeding to explain how the system is structured, it is necessary to mention that the goal is to build a system for recognizing objects from video recordings of interactions with the objects. To achieve this goal, the system should be designed in the way that:
+\begin{itemize}
+  \item The visual and audio representations can be effectively learned for category classification.
+  \item The system accounts for time series data, since an interaction is in essence perceived as images and sound which vary over time.
+  \item A proper modality fusion method is selected in order to make vision and audio a good complement of each other.
+\end{itemize}
 
-\section{System Overview}
+\subsection{Visual Processing Pipeline}
+As mentioned in \cref{ch:visual}, the bag-of-words models with SIFT descriptors are powerful at representing the visual features of objects among the same category. And, the applications of bag-of-words models have achieved satisfying performance in visual object category recognition. Therefore, we use the bag-of-words models as the visual feature.
+
+\begin{figure}[t]
+  \centering
+  \includetexfig{vpipe}
+  \caption{The visual processing pipeline.}
+  \label{fig:vpipe}
+\end{figure}
+
+The visual processing pipeline is shown in \cref{fig:vpipe}. First, the image frames from the raw video are taken at frame rate of 5 frames per second. For each image frame, the keypoints are detected using the DoG keypoint detector. Then, the SIFT descriptors of all the keypoints are computed. All the descriptors are quantized using a codebook of visual descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a normalized histogram (i.e. the bag-of-words feature). Since the codebook used in the experiment contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
+
+\subsection{Audio Processing Pipeline}
+
+The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
+
+\subsection{Choice of Model}
+
+\subsection{Methods for Bimodal Fusion}
+
 The models we use in our system for learning the categories are hidden Markov models with Gaussian Mixtures (HMM-GMM). For each category, we learn two models, one with the positive instances and the other with negative instances, using the Baum-Welch algorithm. The models by themselves cannot be used for classification, however, with some calculation we can get the posterior probability of an object being in the category and use this probability for classification:
 \begin{equation}
   P(\mathbf{x}|\theta^+) = \frac{P(\mathbf{x}|\theta^+)P(\theta^+)}{P(\mathbf{x}|\theta^+)P(\theta^+) + P(\mathbf{x}|\theta^-)P(\theta^-)}
@@ -907,13 +936,6 @@ There are several parameters in HMM-GMM we can choose, which include the number 
 \end{enumerate}
 The first two cases are degenerated forms of HMM-GMM, which are simply a Gaussian distribution and a Gaussian mixture model of three components, respectively. The parameters should be carefully chosen, for that small $n$ and $k$ may result in models that are too simple to learn the actual distribution, while large $n$ and $k$ may result in local optima or overfitting.
 
-\section{Feature Extraction}
-Given a video of interaction with an object, the visual and acoustic features are extracted as follows:
-\subsection{Visual Feature}
-First, the image frames from the raw video are taken at frame rate of 5 fps (frames per second). For each image frame, SIFT descriptors of all the keypoints are calculated. Then, all the descriptors are quantized using a codebook or a vocabulary of descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a histogram. At last, the histogram is normalized (sum of which equals 1) and we get the bag-of-words feature. Since the codebook we use contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
-
-\subsection{Audio Feature}
-The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
 
 
 \section{Implementation Issues}
@@ -922,7 +944,6 @@ The audio data are sampled at 8000 Hz. We first use shifting windows with window
 \subsection{Initial Estimates}
 \subsection{Parameter Selection}
 
-\section{Methods for Bimodal Fusion}
 
 \cleardoublepage
 \chapter{Experiment and Results}
