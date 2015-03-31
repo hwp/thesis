@@ -900,7 +900,7 @@ Before proceeding to explain how the system is structured, it is necessary to me
 \end{itemize}
 
 \subsection{Visual Processing Pipeline}
-As mentioned in \cref{ch:visual}, the bag-of-words models with SIFT descriptors are powerful at representing the visual features of objects among the same category. And, the applications of bag-of-words models have achieved satisfying performance in visual object category recognition. Therefore, we use the bag-of-words models as the visual feature.
+As mentioned in \cref{ch:visual}, the bag-of-words models with SIFT descriptors are powerful at representing the visual features of objects among the same category. And, the applications of bag-of-words models have achieved satisfying performance in visual object category recognition. Therefore, we use the bag-of-words models as the visual feature. The visual processing pipeline is shown in \cref{fig:vpipe}. 
 
 \begin{figure}[t]
   \centering
@@ -909,9 +909,17 @@ As mentioned in \cref{ch:visual}, the bag-of-words models with SIFT descriptors 
   \label{fig:vpipe}
 \end{figure}
 
-The visual processing pipeline is shown in \cref{fig:vpipe}. First, the image frames from the raw video are taken at frame rate of 5 frames per second. For each image frame, the keypoints are detected using the DoG keypoint detector. Then, the SIFT descriptors of all the keypoints are computed. All the descriptors are quantized using a codebook of visual descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a normalized histogram (i.e. the bag-of-words feature). Since the codebook used in the experiment contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
+First, the image frames from the raw video are taken at frame rate of 5 frames per second. For each image frame, the keypoints are detected using the DoG keypoint detector. Then, the SIFT descriptors of all the keypoints are computed. All the descriptors are quantized using a codebook of visual descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a normalized histogram (i.e. the bag-of-words feature). Since the codebook used in the experiment contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
 
 \subsection{Audio Processing Pipeline}
+We choose the MFCCs as the audio feature, because the MFCCs have been commonly used in speech recognition, speaker recognition as well as music information retrieval applications. The audio processing pipeline is shown in \cref{fig:apipe}.
+
+\begin{figure}[t]
+  \centering
+  \includetexfig{apipe}
+  \caption{The audio processing pipeline.}
+  \label{fig:apipe}
+\end{figure}
 
 The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
 
