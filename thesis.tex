@@ -578,7 +578,7 @@ In this chapter, we have presented some of the features for audio processing. Th
 
 \cleardoublepage
 \chapter{Theories of Hidden Markov Model}
-The hidden Markov models (HMM) are statistical models for time series data, which have been well-known and widely used by researchers~\cite{rabiner_tutorial_1989, rabiner_fundamentals_1993}. Theories of HMM are initially published by Baum and his colleagues~\cite{baum_statistical_1966, baum_maximization_1970}. They have been successfully applied to a number of research fields, including speech processing~\cite{baker_dragon_1975, rabiner_fundamentals_1993}, image processing~\cite{chen_off-line_1994}, bioinformatics~\cite{koski_hidden_2001}, finance~\cite{bhar_hidden_2004}, etc.
+The hidden Markov models (HMM) are statistical models for time series data, which have been well-known and widely used by researchers~\cite{rabiner_tutorial_1989, rabiner_fundamentals_1993}. Theories of HMM are initially published by Baum and his colleagues~\cite{baum_statistical_1966, baum_maximization_1970}. They have been successfully applied to a number of research fields, including speech processing~\cite{baker_dragon_1975, rabiner_fundamentals_1993}, image processing~\cite{chen_off-line_1994}, gesture recognition~\cite{mitra_gesture_2007}, bioinformatics~\cite{koski_hidden_2001}, finance~\cite{bhar_hidden_2004}, etc.
 
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
@@ -610,7 +610,7 @@ These conditional dependencies can be shown as a Bayesian network by unfolding t
 Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$, with $N$ being the number of states). Since our system is exclusively used on continuous data, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
 
 Given the aforementioned assumptions, one HMM can be specified with the following parameters:
-\[ \theta = (A, B, \pi) \]
+\[ \lambda = (A, B, \pi) \]
 such that
 \begin{itemize}
   \item $A$ is the transition probability, $A = \{a_{ij}\}$, in which 
@@ -627,34 +627,34 @@ where $c_{jk}$ is the mixture weight (coefficient), $\mu_{jk}$ is the mean and $
 
 With the formal definition of HMM, there are still three problems of interest to be solved, in order to use HMM for real-world applications. These problems are:
 \begin{enumerate}
-  \item Given a model $\theta=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, what is the probability of the model generating such sequence, namely $P(\mathbf{x}|\theta)$?
-  \item Given a model $\theta$, and an observation sequence $\mathbf{x}$, what is the most likely hidden state sequence $\mathbf{q} = (q_1 q_2 \dots q_t)$, namely $\argmax_{\mathbf{q}}P(\mathbf{x}|\mathbf{q},\theta)$?
-  \item Given an observation sequence $\mathbf{x}$ (or a set of observations $\{\mathbf{x}^{(i)}\}$), how do we estimate the parameters that maximize $P(\mathbf{x}|\theta)$ (or $\prod_{i} P(\mathbf{x}^{(i)}|\theta) $)?
+  \item Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, what is the probability of the model generating such sequence, namely $P(\mathbf{x}|\lambda)$?
+  \item Given a model $\lambda$, and an observation sequence $\mathbf{x}$, what is the most likely hidden state sequence $\mathbf{q} = (q_1 q_2 \dots q_t)$, namely $\argmax_{\mathbf{q}}P(\mathbf{x}|\mathbf{q},\lambda)$?
+  \item Given an observation sequence $\mathbf{x}$ (or a set of observations $\{\mathbf{x}^{(i)}\}$), how do we estimate the parameters that maximize $P(\mathbf{x}|\lambda)$ (or $\prod_{i} P(\mathbf{x}^{(i)}|\lambda) $)?
 \end{enumerate}
 
 In the following section, we will show that the first and third problem can be solved using the forward/backward procedure and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm~\cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
 
 \section{Probability Evaluation}
-Given a model $\theta=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, we wish to calculate the probability, $P(\mathbf{x}|\theta)$. A na\"ive solution to this is enumerating all possible state sequences and applying law of total probability, that is
+Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, we wish to calculate the probability, $P(\mathbf{x}|\lambda)$. A na\"ive solution to this is enumerating all possible state sequences and applying law of total probability, that is
 \begin{equation}
-  P(\mathbf{x}|\theta) = \sum_{\text{all } \mathbf{q}} P(\mathbf{x}|\mathbf{q},\theta) P(\mathbf{q}|\theta) .
+  P(\mathbf{x}|\lambda) = \sum_{\text{all } \mathbf{q}} P(\mathbf{x}|\mathbf{q},\lambda) P(\mathbf{q}|\lambda) .
 \end{equation}
 
 For a fixed state sequence $\mathbf{q} = (q_1 q_2 \dots q_T)$, we can derive that
 \begin{align}
-  P(\mathbf{x}|\mathbf{q},\theta) &= P(x_1|q_1,\theta) P(x_2|q_1,q_2,x_1,\theta) \dots P(x_T|q_1,\dots,q_T,x_1,\dots,x_{T-1},\theta) \notag\\
-  &= P(x_1|q_1, \theta) P(x_1|q_1, \theta) \dots P(x_T|q_T, \theta) \notag\\
+  P(\mathbf{x}|\mathbf{q},\lambda) &= P(x_1|q_1,\lambda) P(x_2|q_1,q_2,x_1,\lambda) \dots P(x_T|q_1,\dots,q_T,x_1,\dots,x_{T-1},\lambda) \notag\\
+  &= P(x_1|q_1, \lambda) P(x_1|q_1, \lambda) \dots P(x_T|q_T, \lambda) \notag\\
   &= b_{q_1}(x_1) b_{q_2}(x_2) \dots b_{q_T}(x_T)
 \end{align}
 and its probability is
 \begin{align}
-  P(\mathbf{q}|\theta) &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_1,q_2,\theta) \dots P(q_T|q_1,\dots,q_{T-1},\theta) \notag\\
-  &= P(q_1|\theta) P(q_2|q_1,\theta) P(q_3|q_2,\theta) \dots P(q_T|q_{T-1},\theta)  \notag\\
+  P(\mathbf{q}|\lambda) &= P(q_1|\lambda) P(q_2|q_1,\lambda) P(q_3|q_1,q_2,\lambda) \dots P(q_T|q_1,\dots,q_{T-1},\lambda) \notag\\
+  &= P(q_1|\lambda) P(q_2|q_1,\lambda) P(q_3|q_2,\lambda) \dots P(q_T|q_{T-1},\lambda)  \notag\\
   &= \pi_{q_1} a_{q_1q_2} \dots a_{q_{T-1}q_T} .
 \end{align}
 Thus we get 
 \begin{equation}
-  P(\mathbf{x}|\theta) = \sum_{q_1,q_2,\dots,q_T} \pi_{q_1} b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
+  P(\mathbf{x}|\lambda) = \sum_{q_1,q_2,\dots,q_T} \pi_{q_1} b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
   \label{eq:prob_brute}
 \end{equation}
 
@@ -663,24 +663,24 @@ This is a direct solution, however, the number of possible state sequences is to
 \subsection{The Forward Procedure}
 One of the efficient solution is using the forward procedure. Consider the forward variable, $\alpha_t(i)$, which is the joint probability or the first $t$ observations and the state at time $t$, or defined as
 \begin{equation}
-  \alpha_t(i) = P(x_1,\dots,x_t,q_t=i|\theta) 
+  \alpha_t(i) = P(x_1,\dots,x_t,q_t=i|\lambda) 
 \end{equation}
 it has the following properties:
 \begin{enumerate}
   \item At initial time,
     \begin{equation}
-      \alpha_1(i) = P(x_1,q_1=i|\theta) = \pi_i b_i(x_1), \qquad i \in \{1,\dots,N\} .
+      \alpha_1(i) = P(x_1,q_1=i|\lambda) = \pi_i b_i(x_1), \qquad i \in \{1,\dots,N\} .
     \end{equation}
   \item The forward variable at $t \geq 2$ can be calculated via considering it is transitioned from all the possible previous states:
     \begin{align}
-      \alpha_{t+1}(j) &= P(x_1,\dots,x_{t+1},q_{t+1}=j|\theta) \notag\\
-      &= \sum_{i=1}^{N} P(x_1,\dots,x_{t+1},q_t=i,q_{t+1}=j|\theta) \notag\\
-      &= \sum_{i=1}^{N} P(x_1,\dots,x_t,q_t=i|\theta) P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) \notag\\
+      \alpha_{t+1}(j) &= P(x_1,\dots,x_{t+1},q_{t+1}=j|\lambda) \notag\\
+      &= \sum_{i=1}^{N} P(x_1,\dots,x_{t+1},q_t=i,q_{t+1}=j|\lambda) \notag\\
+      &= \sum_{i=1}^{N} P(x_1,\dots,x_t,q_t=i|\lambda) P(q_{t+1}=j|q_t=i,\lambda) P(x_{t+1}|q_{t+1}=j,\lambda) \notag\\
       &= \left[ \sum_{i=1}^{N} a_{ij} \alpha_t(i) \right] b_j(x_{t+1}), \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} .
     \end{align}
   \item Take the sum of all the forward variables at time $t = T$, we get the desired calculation of the probability,
     \begin{equation}
-      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x},q_T=i|\theta) = \sum_{i=1}^N \alpha_T(i) .
+      P(\mathbf{x}|\lambda) = \sum_{i=1}^N P(\mathbf{x},q_T=i|\lambda) = \sum_{i=1}^N \alpha_T(i) .
     \end{equation}
 \end{enumerate}
 
@@ -689,7 +689,7 @@ By using the three properties, we can iteratively calculate all the $N$ forward 
 \subsection{The Backward Procedure}
 The backward procedure is an alternative solution to calculating the probability. Similar to the forward procedure, the backward procedure use the same idea of iterative calculation of variables based on previous steps, while the direction of iteration is backward, namely from $T$ to $1$. The backward variable is defined as
 \begin{equation}
-  \beta_t(i) = P(x_{t+1},\dots,x_T|q_t=i,\theta) .
+  \beta_t(i) = P(x_{t+1},\dots,x_T|q_t=i,\lambda) .
 \end{equation}
 
 The following properties hold:
@@ -700,13 +700,13 @@ The following properties hold:
     \end{equation}
   \item The backward variable at $t \leq T - 1$ can be calculate inductively:
     \begin{align}
-      \beta_i(t) &= \sum_{j=1}^{N} P(x_{t+1},\dots,x_T,q_{t+1}=j|q_t=i,\theta) \notag\\
-      &= \sum_{j=1}^{N} P(q_{t+1}=j|q_t=i,\theta) P(x_{t+1}|q_{t+1}=j,\theta) P(x_{t+2},\dots,x_T|q_{t+1}=j,\theta) \notag\\
+      \beta_i(t) &= \sum_{j=1}^{N} P(x_{t+1},\dots,x_T,q_{t+1}=j|q_t=i,\lambda) \notag\\
+      &= \sum_{j=1}^{N} P(q_{t+1}=j|q_t=i,\lambda) P(x_{t+1}|q_{t+1}=j,\lambda) P(x_{t+2},\dots,x_T|q_{t+1}=j,\lambda) \notag\\
       &= \sum_{j=1}^{N} a_{ij} b_j(x_{t+1}) \beta_{t+1}(j) , \qquad t \in \{1,\dots,T - 1\}, j \in \{1,\dots,N\} .
     \end{align}
   \item The probability is
     \begin{equation}
-      P(\mathbf{x}|\theta) = \sum_{i=1}^N P(\mathbf{x}|q_1=i,\theta) p(q_1=i|\theta) = \sum_{i=1}^N \beta_1(i) \pi_i .
+      P(\mathbf{x}|\lambda) = \sum_{i=1}^N P(\mathbf{x}|q_1=i,\lambda) p(q_1=i|\lambda) = \sum_{i=1}^N \beta_1(i) \pi_i .
     \end{equation}
 \end{enumerate}
 
@@ -715,7 +715,7 @@ Same as the forward procedure, the time efficiency of the backward procedure is 
 \section{Parameter Estimation}
 Parameter estimation of a statistical model is the adjustment of the parameters such that the model can best match the observed or empirical data. It plays a crucial role in systems. As for HMM, we are interested in knowing what are the parameters that maximize the probability of the observation (i.e. maximum likelihood estimates):
 \begin{equation}
-  \theta^* = \argmax_{\theta} P(\mathbf{x}|\theta) .
+  \lambda^* = \argmax_{\lambda} P(\mathbf{x}|\lambda) .
 \end{equation}
 
 Unlike simple models, such as Gaussian distributions, the parameters of which can be calculated directly, HMM depends on unobserved latent variables (i.e. hidden states), which make it difficult to estimate. One general solution for parameter estimation of models with latent variables is the expectation-maximization (EM) algorithm. The application of the EM algorithm for HMM is known as the Baum-Welch algorithm. We will shows these two algorithms in the following part.
@@ -723,108 +723,108 @@ Unlike simple models, such as Gaussian distributions, the parameters of which ca
 \subsection{Expectation-maximization Algorithm}
 The expectation-maximization algorithm is a method for finding the maximum likelihood estimates (MLE) of parameters of models with latent variables~\cite{dempster_maximum_1977}. Its idea is reestimating parameters via an expectation step (E-step) and a maximization step (M-step), in which the reestimated parameters have greater likelihood, and repeating such procedure until the likelihood reaches a maximum.
 
-More specifically, consider observed data $\mathbf{x}$, unobserved data (i.e. latent variables) $\mathbf{z}$ and a set of parameters $\theta$, the likelihood function is
+More specifically, consider observed data $\mathbf{x}$, unobserved data (i.e. latent variables) $\mathbf{z}$ and a set of parameters $\lambda$, the likelihood function is
 \begin{equation}
-  L(\theta;\mathbf{x}) = P(\mathbf{x}|\theta) = \sum_{\mathbf{z}} P(\mathbf{x},\mathbf{z}|\theta) .
+  L(\lambda;\mathbf{x}) = P(\mathbf{x}|\lambda) = \sum_{\mathbf{z}} P(\mathbf{x},\mathbf{z}|\lambda) .
 \end{equation}
 The goal is maximizing the likelihood function:
 \begin{equation}
-  \theta^* = \argmax_\theta L(\theta;\mathbf{x}).
+  \lambda^* = \argmax_\lambda L(\lambda;\mathbf{x}).
 \end{equation}
 
-We introduce a function $Q(\theta|\theta')$, which is the conditional expectation of the log likelihood function with respect to the conditional distribution of $\mathbf{z}$ given $\mathbf{x}$ and $\theta'$:
+We introduce a function $Q(\lambda|\lambda')$, which is the conditional expectation of the log likelihood function with respect to the conditional distribution of $\mathbf{z}$ given $\mathbf{x}$ and $\lambda'$:
 \begin{equation}
-  Q(\theta|\theta') = \text{E}_{\mathbf{z}|\mathbf{x},\theta'} \log P(\mathbf{x},\mathbf{z}|\theta) .
+  Q(\lambda|\lambda') = \text{E}_{\mathbf{z}|\mathbf{x},\lambda'} \log P(\mathbf{x},\mathbf{z}|\lambda) .
 \end{equation}
 
 A procedure of parameters reestimation consists of the following two steps:
 \begin{description}
-  \item[E-Step] Compute $Q(\theta|\theta^{(p)})$;
-  \item[M-Step] Choose $\theta^{(p+1)}$ to be the value of $\theta$ that maximize $Q(\theta|\theta^{(p)})$.
+  \item[E-Step] Compute $Q(\lambda|\lambda^{(p)})$;
+  \item[M-Step] Choose $\lambda^{(p+1)}$ to be the value of $\lambda$ that maximize $Q(\lambda|\lambda^{(p)})$.
 \end{description}
 
-After each procedure it is assured that $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$. Therefore, if we start from an initial estimate $\theta^{(0)}$ and iteratively compute $\theta^{(1)},\theta^{(2)},\theta^{(3)},\dots$, we will get a sequence of estimates, which converges to a local maximum.
+After each procedure it is assured that $L(\lambda^{(p+1)};\mathbf{x}) \geq L(\lambda^{(p)};\mathbf{x})$. Therefore, if we start from an initial estimate $\lambda^{(0)}$ and iteratively compute $\lambda^{(1)},\lambda^{(2)},\lambda^{(3)},\dots$, we will get a sequence of estimates, which converges to a local maximum.
 
 The increase of likelihood function can be proved as follows: for any $\mathbf{z}$, we have
 \begin{equation}
-  \log P(\mathbf{x}|\theta) = \log P(\mathbf{x},\mathbf{z}|\theta) - \log P(\mathbf{z}|\mathbf{x},\theta). 
+  \log P(\mathbf{x}|\lambda) = \log P(\mathbf{x},\mathbf{z}|\lambda) - \log P(\mathbf{z}|\mathbf{x},\lambda). 
 \end{equation}
-For both sides, if we multiply $P(\mathbf{z}|\mathbf{x},\theta')$ and sum over all $\mathbf{z}$, we get
+For both sides, if we multiply $P(\mathbf{z}|\mathbf{x},\lambda')$ and sum over all $\mathbf{z}$, we get
 \begin{align}
-  \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{x}|\theta) 
-    &= \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{x},\mathbf{z}|\theta)
-    - \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{z}|\mathbf{x},\theta) \notag\\
-  \log P(\mathbf{x}|\theta) &= Q(\theta|\theta') + H(\theta|\theta')
+  \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\lambda') \log P(\mathbf{x}|\lambda) 
+    &= \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\lambda') \log P(\mathbf{x},\mathbf{z}|\lambda)
+    - \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\lambda') \log P(\mathbf{z}|\mathbf{x},\lambda) \notag\\
+  \log P(\mathbf{x}|\lambda) &= Q(\lambda|\lambda') + H(\lambda|\lambda')
   \label{eq:loglph}.
 \end{align}
-Here, $H(\theta|\theta')$ is defined as
+Here, $H(\lambda|\lambda')$ is defined as
 \begin{equation}
-  H(\theta|\theta') = - \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\theta') \log P(\mathbf{z}|\mathbf{x},\theta)
+  H(\lambda|\lambda') = - \sum_{\mathbf{z}} P(\mathbf{z}|\mathbf{x},\lambda') \log P(\mathbf{z}|\mathbf{x},\lambda)
 \end{equation}
-From Gibbs' inequality we know that, for any $\theta$ and $\theta'$
+From Gibbs' inequality we know that, for any $\lambda$ and $\lambda'$
 \begin{equation}
-  H(\theta|\theta') \geq H(\theta|\theta),
+  H(\lambda|\lambda') \geq H(\lambda|\lambda),
 \end{equation}
-with equality if and only if $\theta = \theta'$. Therefore, together with \cref{eq:loglph},
+with equality if and only if $\lambda = \lambda'$. Therefore, together with \cref{eq:loglph},
 \begin{align}
-  \log P(\mathbf{x}|\theta) - \log P(\mathbf{x}|\theta') &= Q(\theta|\theta') - Q(\theta'|\theta') + H(\theta|\theta') -  H(\theta|\theta) \notag\\
-  & \geq Q(\theta|\theta') - Q(\theta'|\theta')
+  \log P(\mathbf{x}|\lambda) - \log P(\mathbf{x}|\lambda') &= Q(\lambda|\lambda') - Q(\lambda'|\lambda') + H(\lambda|\lambda') -  H(\lambda|\lambda) \notag\\
+  & \geq Q(\lambda|\lambda') - Q(\lambda'|\lambda')
 \end{align}
 
-Since $\theta^{(p+1)}$ is a maximum of $Q(\theta|\theta^{(p)})$, $Q(\theta^{(p+1)}|\theta^{(p)}) - Q(\theta^{(p)}|\theta^{(p)}) \geq 0$. Therefore, $L(\theta^{(p+1)};\mathbf{x}) \geq L(\theta^{(p)};\mathbf{x})$.
+Since $\lambda^{(p+1)}$ is a maximum of $Q(\lambda|\lambda^{(p)})$, $Q(\lambda^{(p+1)}|\lambda^{(p)}) - Q(\lambda^{(p)}|\lambda^{(p)}) \geq 0$. Therefore, $L(\lambda^{(p+1)};\mathbf{x}) \geq L(\lambda^{(p)};\mathbf{x})$.
   
 It is important to note that although the EM algorithm converges to a maximum estimate, there is no guarantee that the estimate is a global maximum (thus not a MLE). The resulting estimate depends on the initial estimate. Therefore, additional heuristic methods should be chosen for application of the EM algorithm.
 
 \subsection{Baum-Welch Algorithm}
 We have shown that the EM algorithm can be used for parameter estimation for models with latent variables and HMMs are examples or such models. Thus, applying the EM algorithm to the HMM would result in a solution for the third problem we stated in \cref{sec:hmm}. This method is known as the Baum-Welch algorithm.
 
-Before we proceed to derive the reestimation formulas, we first define variables $\gamma_t(i) = P(q_t=i|\mathbf{x},\theta)$ and $\xi_t(i,j) = P(q_t=i,q_{t+1}=j|\mathbf{x},\theta)$, which can be computed as follows:
+Before we proceed to derive the reestimation formulas, we first define variables $\gamma_t(i) = P(q_t=i|\mathbf{x},\lambda)$ and $\xi_t(i,j) = P(q_t=i,q_{t+1}=j|\mathbf{x},\lambda)$, which can be computed as follows:
 \begin{align}
-  \gamma_t(i) &= \frac{P(\mathbf{x},q_t=i|\theta)}{P(\mathbf{x}|\theta)} \notag\\
-  &= \frac{\alpha_t(i)\beta_t(i)}{P(\mathbf{x}|\theta)} ,
+  \gamma_t(i) &= \frac{P(\mathbf{x},q_t=i|\lambda)}{P(\mathbf{x}|\lambda)} \notag\\
+  &= \frac{\alpha_t(i)\beta_t(i)}{P(\mathbf{x}|\lambda)} ,
   \label{eq:hmmgamma}
 \end{align}
 and
 \begin{align}
-  \xi_t(i,j) &= \frac{P(\mathbf{x},q_t=i,q_{t+1}=j|\theta)}{P(\mathbf{x}|\theta)} \notag\\
-  &=  \frac{\alpha_t(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)}{P(\mathbf{x}|\theta)} .
+  \xi_t(i,j) &= \frac{P(\mathbf{x},q_t=i,q_{t+1}=j|\lambda)}{P(\mathbf{x}|\lambda)} \notag\\
+  &=  \frac{\alpha_t(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)}{P(\mathbf{x}|\lambda)} .
   \label{eq:hmmxi}
 \end{align}
 
 Now, we put the HMM into the frame of the EM algorithm.
 
 \paragraph{E-step}
-Consider parameters $\theta=(A,B,\pi)$ and $\theta'=(A',B',\pi')$ 
+Consider parameters $\lambda=(A,B,\pi)$ and $\lambda'=(A',B',\pi')$ 
 \footnote{We use `` $'$ '' to indicate parameters or variables from the previous estimate.}
-, compute $Q(\theta|\theta')$:
+, compute $Q(\lambda|\lambda')$:
 \begin{align}
-  Q(\theta|\theta') &= \sum_{\mathbf{q}} P(\mathbf{q}|\mathbf{x},\theta') \log P(\mathbf{x},\mathbf{q}|\theta) \notag\\
-  &= \sum_{\mathbf{q}} \frac{P(\mathbf{x},\mathbf{q}|\theta')}{P(\mathbf{x}|\theta')} 
+  Q(\lambda|\lambda') &= \sum_{\mathbf{q}} P(\mathbf{q}|\mathbf{x},\lambda') \log P(\mathbf{x},\mathbf{q}|\lambda) \notag\\
+  &= \sum_{\mathbf{q}} \frac{P(\mathbf{x},\mathbf{q}|\lambda')}{P(\mathbf{x}|\lambda')} 
   (\log \pi_{q_1} + \sum_{t=1}^{T-1} \log a_{q_t q_{t+1}} + \sum_{t=1}^{T} \log b_{q_t}(x_t) ) \notag\\
-  &= \frac{1}{P(\mathbf{x}|\theta')} (Q_\pi(\pi|\theta') + Q_A(A|\theta') + Q_B(B|\theta'))
+  &= \frac{1}{P(\mathbf{x}|\lambda')} (Q_\pi(\pi|\lambda') + Q_A(A|\lambda') + Q_B(B|\lambda'))
   \label{eq:qhmmsep}
 \end{align}
 where
 \begin{align}
-  Q_\pi(\pi|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \log \pi_{q_1}  \notag\\
-  &= \sum_{i=1}^{N} p(\mathbf{x},q_1=i|\theta') \log \pi_{i} \notag\\
+  Q_\pi(\pi|\lambda') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\lambda') \log \pi_{q_1}  \notag\\
+  &= \sum_{i=1}^{N} p(\mathbf{x},q_1=i|\lambda') \log \pi_{i} \notag\\
   &= \sum_{i=1}^{N} \gamma'_1(i) \log \pi_{i},
 \end{align}
 \begin{align}
-  Q_A(A|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \sum_{t=1}^{T-1} \log a_{q_t q_{t+1}} \notag\\
-  &= \sum_{i=1}^{N} \sum_{j=1}^{N} \sum_{t=1}^{T-1} P(\mathbf{x},q_t=i,q_{t+1}=j|\theta') \log a_{ij} \notag\\
+  Q_A(A|\lambda') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\lambda') \sum_{t=1}^{T-1} \log a_{q_t q_{t+1}} \notag\\
+  &= \sum_{i=1}^{N} \sum_{j=1}^{N} \sum_{t=1}^{T-1} P(\mathbf{x},q_t=i,q_{t+1}=j|\lambda') \log a_{ij} \notag\\
   &= \sum_{i=1}^{N} \sum_{j=1}^{N} (\sum_{t=1}^{T-1} \xi'_t(i, j)) \log a_{ij}
 \end{align}
 and
 \begin{align}
-  Q_B(B|\theta') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\theta') \sum_{t=1}^{T} \log b_{q_t}(x_t) \notag\\
-  &= \sum_{i=1}^{N} \sum_{t=1}^{T} p(\mathbf{x},q_t=i|\theta') \log b_{i}(x_t) \notag\\
+  Q_B(B|\lambda') &= \sum_{\mathbf{q}} P(\mathbf{x},\mathbf{q}|\lambda') \sum_{t=1}^{T} \log b_{q_t}(x_t) \notag\\
+  &= \sum_{i=1}^{N} \sum_{t=1}^{T} p(\mathbf{x},q_t=i|\lambda') \log b_{i}(x_t) \notag\\
   &= \sum_{i=1}^{N} \sum_{t=1}^{T} \gamma'_t(i) \log b_{i}(x_t) .
   \label{eq:qhmmb}
 \end{align}
 
 \paragraph{M-step}
-For fixed $\mathbf{x}$ and $\theta'$, to maximize $Q(\theta|\theta')$, we can see from \cref{eq:qhmmsep} that we only need to find parameters $\pi$, $A$ and $B$ that maximize $Q_\pi(\pi|\theta')$, $Q_A(A|\theta')$ and $Q_B(B|\theta')$, individually.
+For fixed $\mathbf{x}$ and $\lambda'$, to maximize $Q(\lambda|\lambda')$, we can see from \cref{eq:qhmmsep} that we only need to find parameters $\pi$, $A$ and $B$ that maximize $Q_\pi(\pi|\lambda')$, $Q_A(A|\lambda')$ and $Q_B(B|\lambda')$, individually.
 
 In order to be a valid distribution, the parameters subjects to the following constraints
 \begin{align}
@@ -866,7 +866,7 @@ and
   \Sigma_{jk} = \frac{\sum_{t=1}^{T} \gamma'_t(j,k) (x_t-\mu'_{jk})(x_t-\mu'_{jk})^T}{\sum_{t=1}^{T} \gamma'_t(j,k)}
   \label{eq:hmmsigma}
 \end{equation}
-where $\gamma'_t(j,k)$ is the probability of being state $j$ at time $t$ with the $k$-th mixture component (under the condition of the previous estimate $\theta'$):
+where $\gamma'_t(j,k)$ is the probability of being state $j$ at time $t$ with the $k$-th mixture component (under the condition of the previous estimate $\lambda'$):
 \begin{equation}
   \gamma'_t(j,k) = \gamma'_t(j) \frac{c'_{jk} \mathcal{N}(x_t,\mu_{jk},\Sigma_{jk})} {b_j(x_t)} . \label{eq:hmmgamma2}
 \end{equation}
@@ -923,17 +923,24 @@ We choose the MFCCs as the audio feature, because the MFCCs have been commonly u
 
 The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
 
-\subsection{Choice of Model}
+\subsection{Classification with HMM}
+As our system requires a learning model which accounts for time series data, the HMM is a perfect candidate in this case, for its effective application in speech recognition and gesture recognition. Besides, the HMM, which is a statistical model, allows us to estimate the probability, which can be used for further inference in modality fusion.
+
+In our system, for each category, it is a binary classification problem. The classification is based on the posterior probability and a given threshold. Specifically, consider an category, the class of an instance can be either positive or negative ($c \in \{-1,+1\}$). Two models ($\lambda^{(-1)}$) are trained using the Baum-Welch algorithm, one with all positive instances and the other with all negative instances. Therefore, we can approximate the likelihood of a class with the trained models:
+\begin{equation}
+  P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c)
+\end{equation}
+By Bayesian theory, we have
+\begin{equation}
+  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|\lambda^c)P(c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|\lambda^c)P(c)}
+\end{equation}
+TODO
 
 \subsection{Methods for Bimodal Fusion}
 
-The models we use in our system for learning the categories are hidden Markov models with Gaussian Mixtures (HMM-GMM). For each category, we learn two models, one with the positive instances and the other with negative instances, using the Baum-Welch algorithm. The models by themselves cannot be used for classification, however, with some calculation we can get the posterior probability of an object being in the category and use this probability for classification:
+where $\lambda^+$ and $\lambda^-$ are the positive and negative models, $\mathbf{x}$ is the observation, $P(\cdot|\lambda^+)$ and $P(\cdot|\lambda^-)$ are the probability density functions, and $P(\lambda^+)$, $P(\lambda^-)$ are the prior probabilities. Since we will use shifting classification threshold to calculate the receiver operating characteristic (ROC) curve afterwards, the prior probabilities can be assumed to be equal, and result in
 \begin{equation}
-  P(\mathbf{x}|\theta^+) = \frac{P(\mathbf{x}|\theta^+)P(\theta^+)}{P(\mathbf{x}|\theta^+)P(\theta^+) + P(\mathbf{x}|\theta^-)P(\theta^-)}
-\end{equation}
-where $\theta^+$ and $\theta^-$ are the positive and negative models, $\mathbf{x}$ is the observation, $P(\cdot|\theta^+)$ and $P(\cdot|\theta^-)$ are the probability density functions, and $P(\theta^+)$, $P(\theta^-)$ are the prior probabilities. Since we will use shifting classification threshold to calculate the receiver operating characteristic (ROC) curve afterwards, the prior probabilities can be assumed to be equal, and result in
-\begin{equation}
-  P(\mathbf{x}|\theta^+) = \frac{P(\mathbf{x}|\theta^+)}{P(\mathbf{x}|\theta^+) + P(\mathbf{x}|\theta^-)} .
+  P(\mathbf{x}|\lambda^+) = \frac{P(\mathbf{x}|\lambda^+)}{P(\mathbf{x}|\lambda^+) + P(\mathbf{x}|\lambda^-)} .
 \end{equation}
 There are several parameters in HMM-GMM we can choose, which include the number of states, $n$, and the number of mixture components for each state, $k$. In our experiments, we tried the following four cases:
 \begin{enumerate}
