@@ -924,34 +924,35 @@ We choose the MFCCs as the audio feature, because the MFCCs have been commonly u
 The audio data are sampled at 8000 Hz. We first use shifting windows with window size of 1024 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, we calculate the Mel-frequency cepstrum coefficients (MFCCs) with 32 filter banks. Among all the coefficients, from the second to the 17th are taken, resulting in a 16-dimensional vector. In this way, we get a sequence of MFCCs as the audio feature.
 
 \subsection{Classification with HMM}
-As our system requires a learning model which accounts for time series data, the HMM is a perfect candidate in this case, for its effective application in speech recognition and gesture recognition. Besides, the HMM, which is a statistical model, allows us to estimate the probability, which can be used for further inference in modality fusion.
+As our system requires a learning model which accounts for time series data, the HMM is a perfect choice in this case, for its effective application in speech recognition and gesture recognition. Besides, the HMM, which is a statistical model, allows us to estimate the probability, which can be used for further inference in modality fusion.
 
-In our system, for each category, it is a binary classification problem. The classification is based on the posterior probability and a given threshold. Specifically, consider an category, the class of an instance can be either positive or negative ($c \in \{-1,+1\}$). Two models ($\lambda^{(-1)}$) are trained using the Baum-Welch algorithm, one with all positive instances and the other with all negative instances. Therefore, we can approximate the likelihood of a class with the trained models:
+In our system, the classification is carried out individually for each category. Thus, predicting whether an instance belongs to a certain category is a binary classification problem. The classification is based on the posterior probability and a given threshold. Specifically, for a certain category, the class of an instance can be either positive or negative ($c \in \{-1,+1\}$). Two HMMs ($\lambda^{(-1)}$ and $\lambda^{(+1)}$) are learned using the Baum-Welch algorithm, one with all positive instances and the other with all negative instances. Therefore, we can approximate the likelihood of a class with the learned models with
 \begin{equation}
-  P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c)
+  P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c) .
 \end{equation}
-By Bayesian theory, we have
-\begin{equation}
+From Bayesian theory, the posterior probability of a class given the observation is
+\begin{equation} \label{eq:posterior}
   P(c|\mathbf{x}) = \frac{P(\mathbf{x}|\lambda^c)P(c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|\lambda^c)P(c)}
 \end{equation}
-TODO
+in which $P(c)$ is the prior probability of the class. When given a new instance, the class is predicted by comparing the posterior probability with a threshold $\theta$:
+\begin{equation}
+  f(\mathbf{x}) = \left\{
+  \begin{array}{l l}
+    +1, & \quad P(c=+1|\mathbf{x}) > \theta; \\
+    -1, & \quad \text{otherwise.}
+  \end{array} \right.
+\end{equation}
+
+Considering the fact that randomly selecting objects as data set is not likely to be the same as randomly drawing a sample in a real world, the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, \cref{eq:posterior} can be rewrite as
+\begin{equation}
+  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|\lambda^c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|\lambda^c)}
+\end{equation}
+
+An important issue about HMM is selecting the model size and the observation distribution, i.e. the number states, the number of components for each state and the type of covariance matrix. For the number of states and the number of components, the larger the numbers are the more complex the model is. And the covariance matrix can be either a full matrix or a diagonal matrix. The diagonal matrix assumes the feature coefficients are not correlated, thus is simpler than full matrix.
+
+In general, complex models have larger hypothesis space, which also means more predictive power. However, since the Baum-Welch algorithm does not guarantee global optimum, more complex models are more likely to be subject to local optimum. Furthermore, it could also result in overfitting if the training set is not large enough. The choice of model should follow the principle of Occam's razor. Depending on different data, the best choice is the simplest model that can fit the data. The choice of model will be further discussed with our experimental results.
 
 \subsection{Methods for Bimodal Fusion}
-
-where $\lambda^+$ and $\lambda^-$ are the positive and negative models, $\mathbf{x}$ is the observation, $P(\cdot|\lambda^+)$ and $P(\cdot|\lambda^-)$ are the probability density functions, and $P(\lambda^+)$, $P(\lambda^-)$ are the prior probabilities. Since we will use shifting classification threshold to calculate the receiver operating characteristic (ROC) curve afterwards, the prior probabilities can be assumed to be equal, and result in
-\begin{equation}
-  P(\mathbf{x}|\lambda^+) = \frac{P(\mathbf{x}|\lambda^+)}{P(\mathbf{x}|\lambda^+) + P(\mathbf{x}|\lambda^-)} .
-\end{equation}
-There are several parameters in HMM-GMM we can choose, which include the number of states, $n$, and the number of mixture components for each state, $k$. In our experiments, we tried the following four cases:
-\begin{enumerate}
-  \item $n = 1$ and $k = 1$;
-  \item $n = 1$ and $k = 3$;
-  \item $n = 3$ and $k = 3$;
-  \item $n = 3$ and $k = 6$.
-\end{enumerate}
-The first two cases are degenerated forms of HMM-GMM, which are simply a Gaussian distribution and a Gaussian mixture model of three components, respectively. The parameters should be carefully chosen, for that small $n$ and $k$ may result in models that are too simple to learn the actual distribution, while large $n$ and $k$ may result in local optima or overfitting.
-
-
 
 \section{Implementation Issues}
 \subsection{Scaling}
