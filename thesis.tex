@@ -926,16 +926,17 @@ The audio data are sampled at 8000 Hz. We first use shifting windows with window
 \subsection{Classification with HMM}
 As our system requires a learning model which accounts for time series data, the HMM is a perfect choice in this case, for its effective application in speech recognition and gesture recognition. Besides, the HMM, which is a statistical model, allows us to estimate the probability, which can be used for further inference in modality fusion.
 
-In our system, the classification is carried out individually for each category. Thus, predicting whether an instance belongs to a certain category is a binary classification problem. The classification is based on the posterior probability and a given threshold. Specifically, for a certain category, the class of an instance can be either positive or negative ($c \in \{-1,+1\}$). Two HMMs ($\lambda^{(-1)}$ and $\lambda^{(+1)}$) are learned using the Baum-Welch algorithm, one with all positive instances and the other with all negative instances. Therefore, we can approximate the likelihood of a class with the learned models with
+In our system, the classification is carried out individually for each category. Thus, predicting whether an instance belongs to a certain category is a binary classification problem. The classification is based on the posterior probability and a given threshold. Specifically, for a certain category, the class of an instance can be either positive or negative ($c \in \{-1,+1\}$). Two HMMs ($\lambda^{(-1)}$ and $\lambda^{(+1)}$) are learned using the Baum-Welch algorithm, one with all positive instances and the other with all negative instances. Therefore, we can approximate the likelihood of a class with the learned models by
 \begin{equation}
   P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c) .
 \end{equation}
 From Bayesian theory, the posterior probability of a class given the observation is
 \begin{equation} \label{eq:posterior}
-  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|\lambda^c)P(c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|\lambda^c)P(c)}
+  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)P(c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)P(c)}
 \end{equation}
 in which $P(c)$ is the prior probability of the class. When given a new instance, the class is predicted by comparing the posterior probability with a threshold $\theta$:
 \begin{equation}
+  \label{eq:classif}
   f(\mathbf{x}) = \left\{
   \begin{array}{l l}
     +1, & \quad P(c=+1|\mathbf{x}) > \theta; \\
@@ -943,9 +944,10 @@ in which $P(c)$ is the prior probability of the class. When given a new instance
   \end{array} \right.
 \end{equation}
 
-Considering the fact that randomly selecting objects as data set is not likely to be the same as randomly drawing a sample in a real world, the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, \cref{eq:posterior} can be rewrite as
+Considering the fact that randomly selecting objects as data set is not likely to be the same as randomly drawing a sample in a real world, the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewrite as 
 \begin{equation}
-  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|\lambda^c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|\lambda^c)}
+  \label{eq:postsimp}
+  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)} .
 \end{equation}
 
 An important issue about HMM is selecting the model size and the observation distribution, i.e. the number states, the number of components for each state and the type of covariance matrix. For the number of states and the number of components, the larger the numbers are the more complex the model is. And the covariance matrix can be either a full matrix or a diagonal matrix. The diagonal matrix assumes the feature coefficients are not correlated, thus is simpler than full matrix.
@@ -953,6 +955,25 @@ An important issue about HMM is selecting the model size and the observation dis
 In general, complex models have larger hypothesis space, which also means more predictive power. However, since the Baum-Welch algorithm does not guarantee global optimum, more complex models are more likely to be subject to local optimum. Furthermore, it could also result in overfitting if the training set is not large enough. The choice of model should follow the principle of Occam's razor. Depending on different data, the best choice is the simplest model that can fit the data. The choice of model will be further discussed with our experimental results.
 
 \subsection{Methods for Bimodal Fusion}
+Having discussed how to extract feature vectors and how to make decision based on it, the final part of system design addresses the question of how multimodal signals are fused. The way to fuse the visual and audio information is essential to the object recognition system, that good method makes use of both modalities and avoid noises from unreliable signal.
+
+Multimodal fusion may be classified according to the level of fusion into feature level fusion, decision level fusion and hybrid fusion~\cite{atrey_multimodal_2010}. The feature level fusion or early fusion is the approach of combining the multimodal features before they are sent as input of a learning model. The decision level fusion or late fusion approach, on the other hand, analyzes each modality independently and then combines the individual decisions to a final result. The hybrid fusion is a combination of these two approaches.
+
+To ground our discussion, consider the situation of the binary classification using HMM with visual and audio features. The observation is a tuple of visual and audio features, $\mathbf{x} = (\mathbf{v}, \mathbf{a})$. To make a decision using \cref{eq:classif,eq:postsimp}, we need the to know the joint likelihood $P(\mathbf{v},\mathbf{a}|c)$.
+
+\begin{figure}[t]
+  \centering
+  \includetexfig{featuref}
+  \caption{The feature level fusion approach.}
+  \label{fig:featuref}
+\end{figure}
+
+A direct approach is simply learn HMMs with the features concatenated, therefore the joint likelihood will be 
+\begin{equation}
+  P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v},\mathbf{a}|\lambda_{va}^c)
+\end{equation}
+in which $\lambda_{va}^c$ are the bimodal HMM parameters. This is an approach of feature level fusion. A block diagram of such approach is shown in \cref{fig:featuref}.
+
 
 \section{Implementation Issues}
 \subsection{Scaling}
