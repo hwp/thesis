@@ -2,20 +2,30 @@
 
 \usetikzlibrary{shapes}
 
-\tikzstyle{data}=[draw,thick,rounded corners,minimum height=1.5cm,text width=2cm,align=center]
-\tikzstyle{process}=[rectangle,draw,thick,minimum height=1.5cm,text width=2cm,align=center]
+\tikzstyle{edata}=[draw,thick,rounded corners,minimum height=1cm,text width=2cm,align=center]
+\tikzstyle{data}=[above,text width=1.5cm,align=left]
+\tikzstyle{process}=[rectangle,draw,thick,minimum height=1cm,text width=2cm,align=center]
+\tikzstyle{fusion}=[rectangle,draw,thick,minimum height=3cm,text width=2cm,align=center]
+\tikzstyle{io}=[]
 
-\begin{tikzpicture}[]
-  \node[data] (iv) at (0,0) {Visual signal};
-  \node[process] (pv) at (3,0) {Visual Feature Extraction}
-    edge [<-] (iv);
-  \node[data] (ia) at (0,2) {Audio signal};
-  \node[process] (pa) at (3,2) {Audio Feature Extraction}
-    edge [<-] (ia);
-  \node[process] (ff) at (6,1) {Feature Fusion}
-    edge [<-] (pv)
-    edge [<-] (pa);
-  \node[data] (o) at (9,1) {}
-    edge [<-] (ff);
+\resizebox{\textwidth}{!}{
+\scriptsize
+\begin{tikzpicture}
+  \node[io] (iv) at (1,0) {};
+  \node[process] (pv) at (3,0) {Visual Feature Extraction};
+  \node[io] (ia) at (1,2) {};
+  \node[process] (pa) at (3,2) {Audio Feature Extraction};
+  \node[fusion] (ff) at (7,1) {Feature Fusion};
+  \node[process] (cl) at (11,1) {Probability Computation};
+  \node[edata] at (11, 2.3) {HMM for both modalities} edge[->] (cl);
+  \node[io] (o) at (13,1) {};
+
+  \draw[->] (iv) -- node[data] {Visual\\ signal} (pv);
+  \draw[->] (ia) -- node[data] {Audio\\ signal} (pa);
+  \draw[->] (pv) -- node[data] {Visual\\ feature} (pv -| ff.west);
+  \draw[->] (pa) -- node[data] {Audio\\ feature} (pa -| ff.west);
+  \draw[->] (ff) -- node[data] {Combined feature} (cl);
+  \draw[->] (cl) -- node[data,align=right] {Result} (o);
 \end{tikzpicture}
+}
 

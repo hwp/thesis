@@ -964,16 +964,32 @@ To ground our discussion, consider the situation of the binary classification us
 \begin{figure}[t]
   \centering
   \includetexfig{featuref}
-  \caption{The feature level fusion approach.}
+  \caption[Block diagram of the feature level fusion approach.]{Block diagram of the feature level fusion approach. Features of different modalities are first combined at the feature fusion module and then classified by the HMMs which are learned with the combined feature.}
   \label{fig:featuref}
 \end{figure}
 
-A direct approach is simply learn HMMs with the features concatenated, therefore the joint likelihood will be 
+A direct approach is simply learn HMMs with the features concatenated, therefore the joint likelihood can be approximated with 
 \begin{equation}
   P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v},\mathbf{a}|\lambda_{va}^c)
 \end{equation}
-in which $\lambda_{va}^c$ are the bimodal HMM parameters. This is an approach of feature level fusion. A block diagram of such approach is shown in \cref{fig:featuref}.
+in which $\lambda_{va}^c$ are the estimated bimodal HMM parameters. This is an approach of feature level fusion. A block diagram of such approach is shown in \cref{fig:featuref}.
 
+The advantage of feature level fusion is that it utilized the correlation between modalities. Theoretically, if the HMM are properly chosen and well trained, the feature level fusion approach can yields optimal estimation of the joint likelihood. However, with learning both modalities at the same time, it increases the hypothesis space and also increases the difficulty of estimating the optimal parameters of the HMM.
+
+\begin{figure}[t]
+  \centering
+  \includetexfig{decisionf}
+  \caption[Block diagram of the decision level fusion approach.]{Block diagram of the decision level fusion approach. Likelihood of different modalities are first computed individually and then combined at decision level.}
+  \label{fig:decisionf}
+\end{figure}
+
+An alternative approach is learning separate HMMs and combine the likelihood at decision level. If we assume the features of different modalities are conditionally independent given the class, the joint likelihood can be computed as
+\begin{equation}
+  P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v}|c) P(\mathbf{a}|c) = P(\mathbf{v}|\lambda_v^c) P(\mathbf{a}|\lambda_a^c)
+\end{equation}
+in which $\lambda_{v}^c$ and $\lambda_{a}^c$ are the estimated HMM parameters for visual and audio features, respectively. 
+
+TODO
 
 \section{Implementation Issues}
 \subsection{Scaling}

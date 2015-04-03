@@ -11,7 +11,7 @@ BIBS   = thesis.bib
 FIGS   = uhhLogoL.pdf
 GPSRC  = spec256 spec1024 spec64
 SVGSRC = hann hamming 
-TIKZS  = hmm vpipe apipe featuref
+TIKZS  = hmm vpipe apipe featuref decisionf
 
 # intermediate files
 TEXMID = $(foreach p, $(GPSRC), $(FIGDIR)/$(p).tex)
