@@ -474,26 +474,12 @@ The idea of STFT is that by using a sliding window, the signal at a short time i
 \end{equation}
 where $x$ is the signal, $w$ is the window function, $n$ is the index of time, $k$ is the index of frequency bin, and $N$ is the number of frequency bins. 
 
-Common window functions include the Hann window (\cref{fig:hann}):
+Common window functions include the Hann window:
 \begin{equation} w(n) = 0.5 (1 - \cos(\frac{2\pi n}{N-1})) \end{equation}
-and the Hamming window (\cref{fig:hamming}):
+and the Hamming window:
 \begin{equation} w(n) = \alpha - \beta \cos(\frac{2\pi n}{N-1}) \end{equation}
 where $\alpha = 0.54, \beta = 1 - \alpha = 0.46$ and $N$ is the window size.
 Since, most applications in practice use the fast Fourier transform to compute the STFT, the window size is selected to be an exponential of 2.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=.6\textwidth]{hann}
-  \caption{Hann window.}
-  \label{fig:hann}
-\end{figure}
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=.6\textwidth]{hamming}
-  \caption{Hamming window.}
-  \label{fig:hamming}
-\end{figure}
 
 The squared magnitude of the STFT yields the spectrogram:
 \[ \text{Spectrogram}(n, k) = \left|X(n,k)\right|^2 \]
@@ -972,12 +958,14 @@ As previously described in the Baum-Welch algorithm, the reestimation procedure 
 
 From our experience, the training process of the HMM parameters can take very long time. Our system incorporates parallel computation with OpenMP. The parallelization increases the speed up to 8 times of the original on a computer with a 8-core CPU.
 
-\section{Methods for Bimodal Fusion}
+\section{Methods for Multimodal Fusion}
 Having discussed how to extract feature vectors and how to make decision based on it, the final part of system design addresses the question of how multimodal signals are fused. The way to fuse the visual and audio information is essential to the object recognition system, that good method makes use of both modalities and avoid noises from unreliable signal.
 
 Multimodal fusion may be classified according to the level of fusion into feature level fusion, decision level fusion and hybrid fusion~\cite{atrey_multimodal_2010}. The feature level fusion or early fusion is the approach of combining the multimodal features before they are sent as input of a learning model. The decision level fusion or late fusion approach, on the other hand, analyzes each modality independently and then combines the individual decisions to a final result. The hybrid fusion is a combination of these two approaches.
 
-To ground our discussion, consider the situation of the binary classification using HMM with visual and audio features. The observation is a tuple of visual and audio features, $\mathbf{x} = (\mathbf{v}, \mathbf{a})$. To make a decision using \cref{eq:classif,eq:postsimp}, we need the to know the joint likelihood $P(\mathbf{v},\mathbf{a}|c)$.
+The system incorporates two different designs regarding the fusion method: one with feature level fusion and the other with decision level fusion. Such methods will be presented in the remaining of this section. The performance of these two methods will be further discussed with experimental results in later chapters.
+
+To ground our discussion, consider the problem of binary classification using HMM with visual and audio features. The observation is a combination of visual and audio features, $\mathbf{x} = (\mathbf{v}, \mathbf{a})$. To make a decision using \cref{eq:classif,eq:postsimp}, we need the to know the joint likelihood $P(\mathbf{v},\mathbf{a}|c)$.
 
 \subsection{Feature Level Fusion}
 \begin{figure}[t]
@@ -993,7 +981,7 @@ A direct approach is simply learn HMMs with the features concatenated, therefore
 \end{equation}
 in which $\lambda_{va}^c$ are the estimated bimodal HMM parameters. This is an approach of feature level fusion. A block diagram of such approach is shown in \cref{fig:featuref}.
 
-The advantage of feature level fusion is that it utilizes the correlation between modalities. Theoretically, if the HMM are properly chosen and well trained, the feature level fusion approach can yields optimal estimation of the joint likelihood. However, with learning both modalities at the same time, it increases the hypothesis space and also increases the difficulty of estimating the optimal parameters of the HMM.
+The advantage of feature level fusion is that it utilizes the correlation between modalities. Theoretically, if the HMM are properly chosen and well trained, the feature level fusion approach can yields optimal estimation of the joint likelihood. Learning both modalities at the same time increases the hypothesis space and also increases the difficulty of estimating the optimal parameters of the HMM.
 
 \subsection{Decision Level Fusion}
 \begin{figure}[t]
@@ -1021,9 +1009,16 @@ In this chapter, we have presented the design of a visual-audio object recogniti
 
 \cleardoublepage
 \chapter{Experiment and Results}
-\section{Experiment Setup}
+This chapter describes the experiment for evaluating the performance of the audio-visual object recognition system.
+
+\section{Dataset}
+The dataset is a collection of videos of interactions with different objects. The objects are 33 different household objects including boxes, mugs, bowls and bottles. The materials of the objects range from ceramic to glass, paper, wood, metal and plastic. The interactions include \emph{knocking with a stick}, \emph{pushing} and \emph{shaking}. Each combination of object and interaction are recorded 5 times from different view points.
+
+Each object is given a set of labels indicating whether this object belongs to a category. Six categories are studied in the experiment, including \emph{mugs}, \emph{bottles}, \emph{plastic objects}, \emph{metal objects}, \emph{fragile objects} and \emph{containers with content}.  
+A full list of objects with their categories can be found in \cref{app:dataset}. 
 
 \section{Evaluation}
+
 \section{Results}
 
 \cleardoublepage
@@ -1038,7 +1033,13 @@ In this chapter, we have presented the design of a visual-audio object recogniti
 \fancyhead[LO,RE]{}                      % Define the header style for the appendixpages
 
 \fancyhead[LE,RO]{\it Appendix}                %Adapt letter!
-\chapter{app}
+\chapter{Specification on the Dataset}
+\label{app:dataset}
+
+\cleardoublepage
+
+\chapter{Full List of Experiment Results}
+\label{app:results}
 
 \cleardoublepage
 
