@@ -20,7 +20,7 @@
   \node[fusion] (df) at (11,1.5) {Dececion Fusion};
   \node[edata] at (7, 1.3) {HMM for visual feature} edge[->] (cv);
   \node[edata] at (7, 4.3) {HMM for audio feature} edge[->] (ca);
-  \node[io] (o) at (13,1.5) {};
+  \node[io] (o) at (13.2,1.5) {};
 
   \draw[->] (iv) -- node[data] {Visual\\ signal} (pv);
   \draw[->] (ia) -- node[data] {Audio\\ signal} (pa);
@@ -28,7 +28,7 @@
   \draw[->] (pa) -- node[data] {Audio\\ feature} (ca);
   \draw[->] (cv) -- node[data] {Visual Likelihood} (cv -| df.west);
   \draw[->] (ca) -- node[data] {Audio Likelihood} (ca -| df.west);
-  \draw[->] (df) -- node[data,align=right] {Result} (o);
+  \draw[->] (df) -- node[data,pos=1] {Joint\\Likelihood} (o);
 \end{tikzpicture}
 }
 

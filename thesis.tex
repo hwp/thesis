@@ -971,11 +971,11 @@ To ground our discussion, consider the problem of binary classification using HM
 \begin{figure}[t]
   \centering
   \includetexfig{featuref}
-  \caption[Block diagram of the feature level fusion approach.]{Block diagram of the feature level fusion approach. Features of different modalities are first combined at the feature fusion module and then classified by the HMMs which are learned with the combined feature.}
+  \caption[Block diagram of the feature level fusion approach.]{Block diagram of the feature level fusion approach. Features of different modalities are first combined at the feature fusion module and then the joint probability is computed directly with the HMM which is learned with the combined feature.}
   \label{fig:featuref}
 \end{figure}
 
-A direct approach is simply learn HMMs with the features concatenated, therefore the joint likelihood can be approximated with 
+A direct approach is simply learn the HMM with the concatenated features, therefore the joint likelihood can be approximated with 
 \begin{equation}
   P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v},\mathbf{a}|\lambda_{va}^c)
 \end{equation}
@@ -987,7 +987,7 @@ The advantage of feature level fusion is that it utilizes the correlation betwee
 \begin{figure}[t]
   \centering
   \includetexfig{decisionf}
-  \caption[Block diagram of the decision level fusion approach.]{Block diagram of the decision level fusion approach. Likelihood of different modalities are first computed individually and then combined at decision level.}
+  \caption[Block diagram of the decision level fusion approach.]{Block diagram of the decision level fusion approach. Likelihood of different modalities are first computed individually and then combined at the decision level under the conditional independence assumption.}
   \label{fig:decisionf}
 \end{figure}
 
@@ -1012,7 +1012,11 @@ In this chapter, we have presented the design of a visual-audio object recogniti
 This chapter describes the experiment for evaluating the performance of the audio-visual object recognition system.
 
 \section{Dataset}
-The dataset is a collection of videos of interactions with different objects. The objects are 33 different household objects including boxes, mugs, bowls and bottles. The materials of the objects range from ceramic to glass, paper, wood, metal and plastic. The interactions include \emph{knocking with a stick}, \emph{pushing} and \emph{shaking}. Each combination of object and interaction are recorded 5 times from different view points.
+The dataset consists of videos of interactions with 33 different objects. The objects include household objects such as boxes, mugs, bowls and bottles. The materials of the objects range from ceramic to glass, paper, wood, metal and plastic. Some of the containers also have content inside.
+
+The videos were taken from a webcam at a resolution of $640 \times 480$ pixels and frame rate of 10 frames per second. The sound was recorded from the microphone on the webcam at 16000 Hz. When recording, the object was place in the center of the view and take up a dominant part of the image. There was a few objects in the background.
+
+Three different interactions, including \emph{knocking with a stick}, \emph{pushing} and \emph{shaking}, were performed by the experimenter. Some of the interaction produced sound, while the others did not. Each combination of object and interaction are recorded five times from different view points. 
 
 Each object is given a set of labels indicating whether this object belongs to a category. Six categories are studied in the experiment, including \emph{mugs}, \emph{bottles}, \emph{plastic objects}, \emph{metal objects}, \emph{fragile objects} and \emph{containers with content}.  
 A full list of objects with their categories can be found in \cref{app:dataset}. 

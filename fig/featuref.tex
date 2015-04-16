@@ -18,14 +18,14 @@
   \node[fusion] (ff) at (7,1) {Feature Fusion};
   \node[process] (cl) at (11,1) {Probability Computation};
   \node[edata] at (11, 2.3) {HMM for both modalities} edge[->] (cl);
-  \node[io] (o) at (13,1) {};
+  \node[io] (o) at (13.2,1) {};
 
   \draw[->] (iv) -- node[data] {Visual\\ signal} (pv);
   \draw[->] (ia) -- node[data] {Audio\\ signal} (pa);
   \draw[->] (pv) -- node[data] {Visual\\ feature} (pv -| ff.west);
   \draw[->] (pa) -- node[data] {Audio\\ feature} (pa -| ff.west);
   \draw[->] (ff) -- node[data] {Combined feature} (cl);
-  \draw[->] (cl) -- node[data,align=right] {Result} (o);
+  \draw[->] (cl) -- node[data, pos=1] {Joint\\Likelihood} (o);
 \end{tikzpicture}
 }
 
