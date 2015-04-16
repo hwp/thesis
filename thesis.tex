@@ -168,7 +168,7 @@
 % it is recommented to define complex terms as expression/newcommand and use the expression in the tex instead.
 
 %%%% added by hwp %%%%
-\usepackage[labelfont=bf,width=.8\textwidth]{caption}
+\usepackage[labelfont=bf,width=.8\textwidth,font={small,it}]{caption}
 \usepackage{subcaption}
 \usepackage[symbol*]{footmisc}
 \usepackage[capitalize]{cleveref}
@@ -1009,7 +1009,7 @@ In this chapter, we have presented the design of a visual-audio object recogniti
 
 \cleardoublepage
 \chapter{Experiment and Results}
-This chapter describes the experiment for evaluating the performance of the audio-visual object recognition system.
+This chapter describes the experiment for evaluating the performance of the audio-visual object recognition system. 
 
 \section{Dataset}
 The dataset consists of videos of interactions with 33 different objects. The objects include household objects such as boxes, mugs, bowls and bottles. The materials of the objects range from ceramic to glass, paper, wood, metal and plastic. Some of the containers also have content inside.
@@ -1022,6 +1022,9 @@ Each object is given a set of labels indicating whether this object belongs to a
 A full list of objects with their categories can be found in \cref{app:dataset}. 
 
 \section{Evaluation}
+The performances are evaluated with two different criteria for the two tasks. 
+For the specific object recognition, we use evaluate the \emph{accuracy} of the 
+
 
 \section{Results}
 
