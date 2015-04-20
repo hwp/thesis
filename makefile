@@ -1,5 +1,6 @@
 # programs 
 TEX    = latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode --shell-escape" 
+XETEX    = latexmk -pdf -pdflatex="xelatex -interaction=nonstopmode --shell-escape" 
 PLTEPS = gnuplot -e 'set term epslatex size 5,3'
 
 # figure directory
@@ -9,7 +10,7 @@ FIGDIR = fig
 PAPER  = thesis
 SLIDES = pres
 PAPER_PRE = common.sty thesis.sty
-SLIDES_PRE = common.sty beamerthemethesis.sty
+SLIDES_PRE = common.sty pres.sty
 BIBS   = thesis.bib
 FIGS   = uhhLogoL.pdf
 GPSRC  = spec256 spec1024 spec64
@@ -47,7 +48,7 @@ $(PAPER).pdf : $(PAPER).tex $(PAPER_PRE) $(BIBS) $(FIGALL)
 slides : $(SLIDES).pdf
 
 $(SLIDES).pdf : $(SLIDES).tex $(SLIDES_PRE) $(BIBS) $(FIGALL)
-	$(TEX) $(SLIDES)
+	$(XETEX) $(SLIDES)
 
 .PHONY : clean
 clean :
