@@ -1,0 +1,55 @@
+\documentclass{beamer}
+
+\title{Sound Source Localization and Separation}
+\author{Weipeng He}
+
+\usetheme{bjeldbak}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\frame{
+	\frametitle{Outline}
+	\tableofcontents
+}
+
+\section{Introduction}
+\begin{frame}
+  \frametitle{Result of Last Semester}
+  
+  \begin{itemize}
+    \item Sound source localization using HARK~\cite{rabiner_fundamentals_1993}.
+      \begin{itemize}
+        \item No significant correct result:
+        \item Noise from the environment;
+        \item Distance between the microphone is short.
+      \end{itemize}
+    ~
+
+    \item Sound source separation using HARK.
+      \begin{itemize}
+        \item Depends on the result of localization.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\frame[c]{
+  \frametitle{The End}
+\begin{center}
+  Thank you for your attention.\\[1ex]
+  Any question?\\[5ex]
+\end{center}
+}
+
+\section*{References}
+\begin{frame}[allowframebreaks]
+  \frametitle{References}
+  {\footnotesize
+  \bibliography{thesis}
+  \bibliographystyle{plain}  
+  }
+\end{frame}
+
+\end{document}
+
