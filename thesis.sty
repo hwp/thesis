@@ -1,0 +1,152 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some credits:
+% The template initially was created by Prof. Dr. Holger Karl/Uni Paderborn '2006
+% and was expanded and updated by Dipl.-Inform. Stefan Heinrich/Uni Paderborn/Uni Hamburg since 2008.
+% Suggestions for changes are always welcome.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{thesis}
+\RequirePackage{common}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bind packages:
+\usepackage{acronym}                    % Acronyms
+\usepackage{algorithmic}                % Algorithms and Pseudocode
+\usepackage{algorithm}                  % Algorithms and Pseudocode
+\usepackage{amsfonts}                   % AMS Math Packet (Fonts)
+\usepackage{amsmath}                    % AMS Math Packet
+\usepackage{amssymb}                    % Additional mathematical symbols
+\usepackage{amsthm}
+\usepackage{booktabs}                   % Nicer tables
+%\usepackage[font=small,labelfont=bf]{caption} % Numbered captions for figures
+\usepackage{color}                      % Enables defining of colours via \definecolor
+\definecolor{uhhRed}{RGB}{226,0,26}     % Official Uni Hamburg Red
+\definecolor{uhhGrey}{RGB}{136,136,136} % Official Uni Hamburg Grey
+\definecolor{uhhLightGrey}{RGB}{220, 220, 220}
+\usepackage{fancybox}                   % Put equations in a frame
+\usepackage{fancyhdr}                   % Packet for nicer headers
+%\usepackage{fancyheadings}             % Nicer numbering of headlines
+\usepackage[body={5.8in,9in}]{geometry} % Type area (size, margins...)
+
+%\geometry{a4paper,outer=3.35cm}        % !!!Release version (Normal margins)
+%\geometry{a4paper,outer=2.5cm}         % !!!Print version (Additional margin on the left for the binding)
+%\geometry{a4paper}                     % !!!Proofread version (Additional margin on the right for corrections)
+\geometry{a4paper,outer=3.15cm}         % !!!Draft version (Same margins on left and right)
+%\geometry{paperheight=10.0in,paperwidth=6.4in,top=0.51in,left=0.3in}  % !!!Developer version (Minimal margins)
+
+%\usepackage{latexsym}                  % Special symbols
+\usepackage{longtable}                  % Allow tables over several parges
+\usepackage{listings}                   % Nicer source code listings
+\usepackage{multicol}                   % Content of a table over several columns
+\usepackage{multirow}                   % Content of a table over several rows
+\usepackage{rotating}                   % Allows to rotate text and objects
+\usepackage{tabularx}                   % Tables with fixed width but variable rows
+\usepackage{url,xspace,boxedminipage}   % Accurate display of URLs
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PDF Information und Definitions:
+\author{\trauthor}
+
+\ifx\pdftexversion\undefined
+\usepackage{hyperref}
+\else
+\usepackage[colorlinks=false,           % link is colores (true) or has colored frame (false)
+            linkcolor=uhhRed,           % case colorlinks=true: define color.
+            urlcolor=uhhRed,
+            citecolor=uhhRed,
+            bookmarks,                  % Place bookmarks erstellen
+            bookmarksopen=true,         % Bookmarks will be shown at start (true/false)
+            pdfpagemode=UseOutlines,    
+            bookmarksopenlevel=1,       % Define the depth of shown links
+            bookmarksnumbered,          % Numbers of chapers in Bookmarks
+            pdftitle={\trtitle},
+            pdfsubject={\trtype},
+            pdfkeywords={\trkeywords},
+            pdfauthor={\trauthor},
+            plainpages=false
+            ]{hyperref}
+\fi
+
+\ifx\pdftexversion\undefined
+\else
+\pdfoutput=1                            % Disable PDF-Output
+\pdfimageresolution=1200
+\pdfcompresslevel=2                     % 0 = no compression, 9 = strongest compression
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configurationen:
+
+\hyphenation{whe-ther}                  % Manually use: "\-" in a word: Staats\-ver\-trag
+
+%\lstloadlanguages{C}                   % Set the default language for listings
+\pagestyle{fancy}                       % Use nicer header and footer
+
+% Redefine the environments for floating objects:
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{0.9}        %Standard: 0.7
+\renewcommand{\bottomfraction}{0.5}     %Standard: 0.3
+\renewcommand{\textfraction}{0.1}       %Standard: 0.2
+\renewcommand{\floatpagefraction}{0.8}  %Standard: 0.5
+
+% Tables with a nicer padding:
+\renewcommand{\arraystretch}{1.2}
+
+% Chapter and Sections will not be written in capitals
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername \ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Additional 'theorem' and 'definition' blocks:
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+%\newtheorem{theorem}{Satz}[chapter]    % Wenn in Deutsch geschrieben wird.
+\newtheorem{axiom}{Axiom}[chapter]     
+%\newtheorem{axiom}{Fakt}[chapter]      % Wenn in Deutsch geschrieben wird.
+%Usage:%\begin{axiom}[optional description]%Main part%\end{fakt}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+
+%Additional types of axioms:
+\newtheorem{lemma}[axiom]{Lemma}
+\newtheorem{observation}[axiom]{Observation}
+
+%Additional types of definitions:
+\theoremstyle{remark}
+%\newtheorem{remark}[definition]{Bemerkung} % Wenn in Deutsch geschrieben wird.
+\newtheorem{remark}[definition]{Remark} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Provides TODOs within the margin:
+\newcommand{\TODO}[1]{\marginpar{\emph{\small{{\bf TODO: } #1}}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abbreviations and mathematical symbols
+\newcommand{\modd}{\text{ mod }}
+\newcommand{\RS}{\mathbb{R}}
+\newcommand{\NS}{\mathbb{N}}
+\newcommand{\ZS}{\mathbb{Z}}
+\newcommand{\dnormal}{\mathit{N}}
+\newcommand{\duniform}{\mathit{U}}
+
+\newcommand{\erdos}{Erd\H{o}s}
+\newcommand{\renyi}{-R\'{e}nyi}
+% it is recommented to define complex terms as expression/newcommand and use the expression in the tex instead.
+
+%%%% added by hwp %%%%
+\usepackage[labelfont=bf,width=.8\textwidth,font={small,it}]{caption}
+\usepackage{subcaption}
+\usepackage[symbol*]{footmisc}
+\newcommand{\crefrangeconjunction}{--}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\usepackage[capitalize]{cleveref}
+
+%%%% end of added by hwp %%%%
+
+

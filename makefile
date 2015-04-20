@@ -8,6 +8,8 @@ FIGDIR = fig
 # sources
 PAPER  = thesis
 SLIDES = pres
+PAPER_PRE = common.sty thesis.sty
+SLIDES_PRE = common.sty beamerthemethesis.sty
 BIBS   = thesis.bib
 FIGS   = uhhLogoL.pdf
 GPSRC  = spec256 spec1024 spec64
@@ -39,12 +41,12 @@ all : pdf slides
 
 pdf : $(PAPER).pdf
 
-$(PAPER).pdf : $(PAPER).tex $(BIBS) $(FIGALL)
+$(PAPER).pdf : $(PAPER).tex $(PAPER_PRE) $(BIBS) $(FIGALL)
 	$(TEX) $(PAPER)
 
 slides : $(SLIDES).pdf
 
-$(SLIDES).pdf : $(SLIDES).tex $(BIBS) $(FIGALL) beamerthemebjeldbak.sty
+$(SLIDES).pdf : $(SLIDES).tex $(SLIDES_PRE) $(BIBS) $(FIGALL)
 	$(TEX) $(SLIDES)
 
 .PHONY : clean
