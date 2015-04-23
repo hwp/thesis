@@ -1,4 +1,4 @@
-set term epslatex size 5,2
+set terminal tikz size 10,4
 set style line 11 lc rgb '#808080' lt 1
 set border 3 front ls 11
 set tics nomirror out scale 0.75
