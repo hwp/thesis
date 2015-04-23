@@ -389,7 +389,7 @@ The hidden Markov models (HMM) are statistical models for time series data, whic
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
 \section{Definition of HMM} \label{sec:hmm}
-A hidden Markov model describes a probability distribution of a stationary discrete-time stochastic process under certain assumptions. These assumptions include that there is an unobserved or hidden state associated with every observation at each time and the states transition meets the Markov property (i.e. Markov assumption). More precisely, for one observed sequence, $\mathbf{x}=(x_t, t \in \mathbb{N})$, and its associated state sequence, $\mathbf{q}=(q_t, t \in \mathbb{N})$, the following properties hold:
+A hidden Markov model describes a probability distribution of a stationary discrete-time stochastic process under certain assumptions. These assumptions include that there is an unobserved or hidden state associated with every observation at each time and the states transition meets the Markov property (i.e. Markov assumption). More precisely, for one observed sequence, $\mathbf{x} = x_1 x_2 \dots x_T$, and its associated state sequence, $\mathbf{q} = q_1 q_2 \dots q_T$, the following properties hold:
 
 \begin{enumerate}
   \item The conditional distribution of present observation (at a certain time $t$) depends only upon the present hidden state:
@@ -406,7 +406,7 @@ A hidden Markov model describes a probability distribution of a stationary discr
 
 \begin{figure}[t]
   \centering
-  \includetexfig{hmm}
+  \includegraphics{hmm.tikz}
   \caption[HMM as a Bayesian network.]{HMM as a Bayesian network. The directed edges indicate conditional dependencies. Each state variable is only conditional dependent of its previous state and each observation is only conditional dependent of the state at that time.}
   \label{fig:hmm}
 \end{figure}
@@ -712,7 +712,7 @@ As mentioned in \cref{ch:visual}, the bag-of-words models with SIFT descriptors 
 
 \begin{figure}[t]
   \centering
-  \includetexfig{vpipe}
+  \includegraphics{vpipe.tikz}
   \caption{The visual processing pipeline.}
   \label{fig:vpipe}
 \end{figure}
@@ -724,7 +724,7 @@ We choose the MFCCs as the audio feature, because the MFCCs have been commonly u
 
 \begin{figure}[t]
   \centering
-  \includetexfig{apipe}
+  \includegraphics{apipe.tikz}
   \caption{The audio processing pipeline.}
   \label{fig:apipe}
 \end{figure}
@@ -790,7 +790,7 @@ To ground our discussion, consider the problem of binary classification using HM
 \subsection{Feature Level Fusion}
 \begin{figure}[t]
   \centering
-  \includetexfig{featuref}
+  \includegraphics{featuref.tikz}
   \caption[Block diagram of the feature level fusion approach.]{Block diagram of the feature level fusion approach. Features of different modalities are first combined at the feature fusion module and then the joint probability is computed directly with the HMM which is learned with the combined feature.}
   \label{fig:featuref}
 \end{figure}
@@ -806,7 +806,7 @@ The advantage of feature level fusion is that it utilizes the correlation betwee
 \subsection{Decision Level Fusion}
 \begin{figure}[t]
   \centering
-  \includetexfig{decisionf}
+  \includegraphics{decisionf.tikz}
   \caption[Block diagram of the decision level fusion approach.]{Block diagram of the decision level fusion approach. Likelihood of different modalities are first computed individually and then combined at the decision level under the conditional independence assumption.}
   \label{fig:decisionf}
 \end{figure}

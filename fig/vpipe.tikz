@@ -1,0 +1,17 @@
+% a tikz figure for visual processing pipeline
+
+\begin{tikzpicture}
+  \node[io] (i) at (0,0) {};
+  \node[process] (p1) at (3,0) {DoG keypoints detection};
+  \node[process] (p2) at (6,0) {SIFT descriptor}
+    edge [<-] (p1);
+  \node[process] (p3) at (9,0) {BoW model}
+    edge [<-] (p2);
+  \node[io] (o) at (12,0) {};
+  \node[edata] at (9,2) {Codebook}
+    edge [->] (p3);
+
+  \draw[->] (i) -- node[data,text width=2.8cm,pos=0] {Sequence of image frames} (p1);
+  \draw[->] (p3) -- node[data,text width=3cm,pos=1] {Sequence of feature vectors} (o);
+\end{tikzpicture}
+

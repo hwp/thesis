@@ -2,8 +2,9 @@
 
 \usepackage{pres}
 
-\title{\trtitle}
-\author{\trauthor}
+\title{\trtitle \\ \vspace{5pt} \footnotesize \trtype}
+\author{\trauthor \\ \vspace{5pt} \footnotesize \trfach}
+\date{28 April, 2015}
 
 \begin{document}
 
@@ -19,15 +20,61 @@
   \frametitle{Motivation}
 
   \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
+    \item Difficulties of visual object recognition:
       \begin{itemize}
-        \item bla; 
+        \item Sensitive to image transformations. 
+        \item Transparent objects.
       \end{itemize}
       ~
 
-    \item bla.
+    \item Sound provides complementary information.
       \begin{itemize}
-        \item bla.
+        \item Make sound via interactions.
+        \item Information about material. 
+        \item Category by function: objects that make sound.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Related Work}
+
+  \begin{itemize}
+    \item Sinapov and his colleagues~\cite{sinapov_interactive_2009,sinapov_object_2011}: 
+      \begin{itemize}
+        \item Audio and haptic information.
+        \item Relational learning.
+
+          ~
+        \item No visual information.
+      \end{itemize}
+      ~
+
+    \item Nakamura and his colleagues~\cite{nakamura_multimodal_2007,nakamura_bag_2012}:
+      \begin{itemize}
+        \item Visual, audio and haptic information.
+        \item Multimodal pLSA.
+
+          ~
+        \item Unsupervised categorization.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Objective}
+
+  \begin{itemize}
+    \item Build a object recognition system based on visual and audio information.
+      \begin{itemize}
+        \item What kind of features?
+        \item How to make classification?
+        \item How to combine multimodal information?
+      \end{itemize}
+    \item Two tasks:
+      \begin{itemize}
+        \item Specific object recognition.
+        \item Generic category recognition.
       \end{itemize}
   \end{itemize}
 \end{frame}
@@ -37,16 +84,33 @@
   \frametitle{Bag-of-Words Model with SIFT Descriptors}
 
   \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
+    \item SIFT Descriptor~\cite{lowe_object_1999}. 
       \begin{itemize}
-        \item bla; 
+        \item Local feature descriptor invariant to several image transforms.
+        \item Standard for object recognition in robotics.
+
+          ~
+        \item Does not describe the whole image/object.
+        \item Does not encode general features of a category.
       \end{itemize}
       ~
+  \end{itemize}
+\end{frame}
 
-    \item bla.
+\begin{frame}
+  \frametitle{Bag-of-Words Model with SIFT Descriptors}
+
+  \begin{itemize}
+    \item Bag-of-words model~\cite{csurka_visual_2004}. 
       \begin{itemize}
-        \item bla.
+        \item A document : a collection of words.
+        \item Count occurrences and ignore order. 
+
+          ~
+        \item An image : a collection of local features.
+        \item Vector quantization with codebook.
       \end{itemize}
+      ~
   \end{itemize}
 \end{frame}
 
@@ -54,16 +118,8 @@
   \frametitle{Mel-frequency Cepstrum Coefficients}
 
   \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
-
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
+    \item DCT of log power spectrum at mel-scale.
+    \item MFCCs are common features for audio processing, such as speech recognition and speaker recognition.
   \end{itemize}
 \end{frame}
 
@@ -72,16 +128,36 @@
   \frametitle{Hidden Markov Models}
 
   \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
+    \item HMM describes a distribution of a stochastic process~\cite{rabiner_fundamentals_1993}.
       \begin{itemize}
-        \item bla; 
+        \item Applications in speech recognition and gesture recognition. 
+        \item Images and sound change over time during interaction.
       \end{itemize}
       ~
 
-    \item bla.
+    \item HMM assumes there is a hidden state variable associated with the observation at each time.
       \begin{itemize}
-        \item bla.
+        \item Observation sequence: \[ \mathbf{x} = x_1 x_2 \dots x_T . \]
+        \item State sequence: \[ \mathbf{q} = q_1 q_2 \dots q_T . \]
       \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two assumptions}
+
+  \centering
+  \includegraphics[width=.5\textwidth]{hmm.tikz}
+
+  \begin{itemize}
+    \item The present observation (at a certain time $t$) depends only upon the present hidden state:
+      \[
+        P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1},x_{t+1},\dots,x_T) = P(x_t|q_t), \quad t \in \mathbb{N} 
+      \]
+    \item (Markov property) The future hidden state depends only upon the present state:
+      \[
+        P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t),\quad t \in \mathbb{N}
+      \]
   \end{itemize}
 \end{frame}
 
@@ -253,9 +329,9 @@
 \section*{References}
 \begin{frame}[allowframebreaks]
   \frametitle{References}
-  {\footnotesize
+  {\scriptsize
     \bibliography{thesis}
-    \bibliographystyle{plain}  
+    \bibliographystyle{unsrt}  
   }
 \end{frame}
 

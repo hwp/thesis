@@ -26,7 +26,7 @@ MIDALL = $(TEXMID) $(EPSMID) $(PDFMID)
 
 # all figures 
 FIGALL = $(TEXMID) $(PDFMID) \
-				 $(foreach p, $(TIKZS), $(FIGDIR)/$(p).tex) \
+				 $(foreach p, $(TIKZS), $(FIGDIR)/$(p).tikz) \
 				 $(foreach p, $(FIGS), $(FIGDIR)/$(p))
 
 # rules

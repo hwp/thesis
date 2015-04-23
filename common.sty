@@ -26,15 +26,27 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Packages:
 \usepackage{graphicx}                   % Inclusion of graphics
-\DeclareGraphicsExtensions{.pdf,.jpg,.png,.eps} % first try pdf, then eps, png and jpg
+\DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg} 
 \graphicspath{{./fig/}}                 % Path to a folder where all pictures are located
-
-\usepackage{tikz}
-\newcommand{\includetexfig}[1]{\input{fig/#1.tex}}
-%\newcommand{\includesvg}[1]{\def\svgwidth{.6\textwidth}\footnotesize\input{fig/#1.eps_tex}}
 
 \usepackage{color}                      % Enables defining of colours via \definecolor
 \definecolor{uhhRed}{RGB}{226,0,26}     % Official Uni Hamburg Red
 \definecolor{uhhGrey}{RGB}{136,136,136} % Official Uni Hamburg Grey
 \definecolor{uhhLightGrey}{RGB}{220, 220, 220}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usepackage{tikzscale}
+\newcommand{\includetexfig}[1]{\input{fig/#1.tex}}
+%\newcommand{\includesvg}[1]{\def\svgwidth{.6\textwidth}\footnotesize\input{fig/#1.eps_tex}}
+
+\usetikzlibrary{shapes}
+
+\tikzstyle{state}=[circle,draw,thick]
+\tikzstyle{observation}=[regular polygon,regular polygon sides=4,inner sep=1pt,draw,thick]
+
+\tikzstyle{edata}=[draw,thick,rounded corners,minimum height=1cm,text width=2cm,align=center]
+\tikzstyle{data}=[above,text width=1.5cm,align=left]
+\tikzstyle{process}=[rectangle,draw,thick,minimum height=1cm,text width=2cm,align=center]
+\tikzstyle{io}=[]
 
