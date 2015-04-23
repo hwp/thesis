@@ -152,188 +152,263 @@
   \begin{itemize}
     \item The present observation (at a certain time $t$) depends only upon the present hidden state:
       \[
-        P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1},x_{t+1},\dots,x_T) = P(x_t|q_t), \quad t \in \mathbb{N} 
+        P(x_t|q_1, \dots, q_t, x_1, \dots, x_{t-1},x_{t+1},\dots,x_T) = P(x_t|q_t) .
       \]
     \item (Markov property) The future hidden state depends only upon the present state:
       \[
-        P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t),\quad t \in \mathbb{N}
+        P(q_{t+1}|q_1, \dots, q_t, x_1, \dots, x_t) = P(q_{t+1}|q_t) .
       \]
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Probability Evaluation}
+  \frametitle{Parameters of HMM}
 
   \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
+    \item $ \lambda = (A, B, \pi) $
+    \item Transition probability : $A = \{a_{ij}\}$, in which 
+      \[ a_{ij} = P(q_{t+1} = j | q_t = i) \]
+    \item Observation distribution, $B = \{b_j(x)\}$, in which
+      \[ b_j(x) = P(x_t = x | q_t = j) \]
+      PDF of GMM:
+      \[ b_j(x) = \sum_{k=1}^M c_{jk} \mathcal{N}(x, \mu_{jk}, \Sigma_{jk}) \]
+    \item Initial state distribution, $\pi = \{\pi_j\}$, in which
+      \[ \pi_j = P(q_1 = j) \]
+  \end{itemize}
+\end{frame}
 
-    \item bla.
+\begin{frame}
+  \frametitle{Basic Problems of HMM}
+
+  \begin{itemize}
+    \item Probability evaluation: $ P(\mathbf{x}|\lambda) $.
       \begin{itemize}
-        \item bla.
+        \item Forward/backward procedure. 
+      \end{itemize}
+
+    \item Most likely state sequences: $ \argmax_{\mathbf{q}} P(\mathbf{x}|\mathbf{q},\lambda) $.
+      \begin{itemize}
+        \item Viterbi algorithm.
+      \end{itemize}
+
+    \item Parameter estimation: $ \argmax_{\lambda} P(\mathbf{x}|\lambda) $.
+      \begin{itemize}
+        \item Baum-Welch Algorithm (EM Algorithm).
+        \item Note: MLE is not assured.
       \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Parameter Estimation}
+  \frametitle{Choices of HMM}
 
   \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
-
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
+    \item \# of states, $N$: \hfill small <=> large.
+    \item \# of mixture components $M$: \hfill small <=> large.
+    \item Covariance matrix: \hfill diagonal <=> full.
   \end{itemize}
-\end{frame}
-
-\section{Bimodal Object Recognition}
-\begin{frame}
-  \frametitle{Modality Fusion Methods}
-
-  \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
+  ~
+  \begin{columns}
+    \begin{column}{.4\textwidth}
+    \centering simple
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \centering <=>
+    \end{column}
+    \begin{column}{.4\textwidth}
+    \centering complex
+    \end{column}
+  \end{columns}
+  \begin{columns}
+    \begin{column}{.5\textwidth}
       \begin{itemize}
-        \item bla; 
+        \item Smaller hypothesis space.
+        \item Easy to learn.
+        \item Biased result.
+        \item Underfitting.
       \end{itemize}
-      ~
-
-    \item bla.
+    \end{column}
+    \begin{column}{.5\textwidth}
       \begin{itemize}
-        \item bla.
+        \item Larger hypothesis space.
+        \item Hard to learn.
+        \item More approximate result.
+        \item Overfitting.
       \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Feature Fusion}
-
-  \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
-
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
-  \end{itemize}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Decision Fusion}
+  \frametitle{Classification with HMM}
 
   \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
+    \item Estimate $\lambda^c$ with all data of class $c$.
+    \item Approximate likelihood with learned model:
+      \[ P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c) . \]
+    \item Specific object recognition (multiclass classification):
+      \[ f(\mathbf{x}) = \argmax_{c} P(\mathbf{x}|c) \]
+    \item Generic category recognition (binary classification):
+      \[ 
+        f(\mathbf{x}) = \left\{
+          \begin{array}{l l}
+            +1, & \quad P(c=+1|\mathbf{x}) > \theta; \\
+            -1, & \quad \text{otherwise.}
+          \end{array} \right.
+        \]
+        where
+        \[ P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)P(c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)P(c)} . \]
+    \end{itemize}
+  \end{frame}
 
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
-  \end{itemize}
-\end{frame}
+  \section{Bimodal Object Recognition}
+  \begin{frame}
+    \frametitle{Modality Fusion Methods}
 
-\section{Experiment}
-\begin{frame}
-  \frametitle{Experiment Setup}
+    \begin{itemize}
+      \item $\mathbf{x} = (\mathbf{v},\mathbf{a})$.
+      \item The goal is to compute the joint likelihood:
+        \[ P(\mathbf{v},\mathbf{a}|c) \]
 
-  \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
+        ~
+      \item Two approaches:
+        \begin{itemize}
+          \item Feature Fusion.
+          \item Decision Fusion.
+        \end{itemize}
+    \end{itemize}
+  \end{frame}
 
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
-  \end{itemize}
-\end{frame}
+  \begin{frame}
+    \frametitle{Feature Fusion}
 
-\begin{frame}
-  \frametitle{Experiment Result}
+    \centering
+    \includegraphics{featurefs.tikz}
 
-  \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
+    \begin{itemize}
+      \item Directly learn the joint likelihood with concatenated features:
+        \[ P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v},\mathbf{a}|\lambda_{va}^c) \]
+    \end{itemize}
+  \end{frame}
 
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
-  \end{itemize}
-\end{frame}
+  \begin{frame}
+    \frametitle{Decision Fusion}
 
-\section{Conclusion}
-\begin{frame}
-  \frametitle{Conclusion}
+    \centering
+    \includegraphics{decisionfs.tikz}
 
-  \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
+    \begin{itemize}
+      \item Learn separate models and combine them under conditional independence assumption:
+        \[ P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v}|\lambda_v^c) P(\mathbf{a}|\lambda_a^c) \]
+    \end{itemize}
+  \end{frame}
 
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
-  \end{itemize}
-\end{frame}
+  \section{Experiment}
+  \begin{frame}
+    \frametitle{Experiment Setup}
 
-\begin{frame}
-  \frametitle{Future Work}
+    \begin{itemize}
+      \item 33 household objects.
+    \end{itemize}
 
-  \begin{itemize}
-    \item Bla~\cite{rabiner_fundamentals_1993}.
-      \begin{itemize}
-        \item bla; 
-      \end{itemize}
-      ~
+    \begin{columns}
+      \begin{column}{.45\textwidth}
+        \begin{itemize}
+          \item Interactions:
+            \begin{itemize}
+              \item Knock with a stick.
+              \item Push.
+              \item Shake.
+            \end{itemize}
+        \end{itemize}
+      \end{column}
+      \begin{column}{.45\textwidth}
+        \begin{itemize}
+          \item Categories:
+            \begin{itemize}
+              \item Mugs.
+              \item Bottles.
+              \item Plastic objects.
+              \item Metal objects.
+              \item Fragile objects.
+              \item Containers with content.
+            \end{itemize}
+        \end{itemize}
+      \end{column}
+    \end{columns}
+  \end{frame}
 
-    \item bla.
-      \begin{itemize}
-        \item bla.
-      \end{itemize}
-  \end{itemize}
-\end{frame}
+  \begin{frame}
+    \frametitle{Specific Object Recognition Result}
 
-\frame[c]{
-  \frametitle{The End}
-  \begin{center}
-    Thank you for your attention.\\[1ex]
-    Any question?\\[5ex]
-  \end{center}
-}
+    \centering
+    \begin{tabular}[h]{c|c}
+      \hline
+      Method & Accuracy \\ \hline \hline
+      Feature Fusion & \textbf{95.8\%} \\ \hline
+      Decision Fusion  & 95.7\% \\ \hline
+      Visual Only & 86.7\% \\ \hline
+      Audio Only & 83.6\% \\ \hline
+    \end{tabular}
+    ~
+    \begin{itemize}
+      \item 5-fold cross validation.
+      \item HMM with 2 states, 6 mixture components and diagonal covariance matrix.
+    \end{itemize}
+  \end{frame}
 
-\appendix
-\section*{References}
-\begin{frame}[allowframebreaks]
-  \frametitle{References}
-  {\scriptsize
-    \bibliography{thesis}
-    \bibliographystyle{unsrt}  
+  \section{Conclusion}
+  \begin{frame}
+    \frametitle{Conclusion}
+
+    \begin{itemize}
+      \item Bla~\cite{rabiner_fundamentals_1993}.
+        \begin{itemize}
+          \item bla; 
+        \end{itemize}
+        ~
+
+      \item bla.
+        \begin{itemize}
+          \item bla.
+        \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Future Work}
+
+    \begin{itemize}
+      \item Bla~\cite{rabiner_fundamentals_1993}.
+        \begin{itemize}
+          \item bla; 
+        \end{itemize}
+        ~
+
+      \item bla.
+        \begin{itemize}
+          \item bla.
+        \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \frame[c]{
+    \frametitle{The End}
+    \begin{center}
+      Thank you for your attention.\\[1ex]
+      Any question?\\[5ex]
+    \end{center}
   }
-\end{frame}
 
-\end{document}
+  \appendix
+  \section*{References}
+  \begin{frame}[allowframebreaks]
+    \frametitle{References}
+    {\scriptsize
+      \bibliography{thesis}
+      \bibliographystyle{unsrt}  
+    }
+  \end{frame}
+
+  \end{document}
 
