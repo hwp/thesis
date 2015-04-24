@@ -13,7 +13,8 @@ PAPER_PRE = common.sty thesis.sty
 SLIDES_PRE = common.sty pres.sty
 BIBS   = thesis.bib
 FIGS   = uhhLogoL.pdf
-GPSRC  = spec256 spec1024 spec64 mug bottle plastic metal fragile nonempty
+GPSRC  = spec256 spec1024 spec64 roc \
+				 mug bottle plastic metal fragile nonempty
 SVGSRC = 
 TIKZS  = hmm vpipe apipe featuref decisionf featurefs decisionfs
 				 

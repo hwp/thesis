@@ -350,16 +350,48 @@
       Visual Only & 86.7\% \\ \hline
       Audio Only & 83.6\% \\ \hline
     \end{tabular}
+    
     ~
     \begin{itemize}
       \item 5-fold cross validation.
       \item HMM with 2 states, 6 mixture components and diagonal covariance matrix.
     \end{itemize}
+    \vfill
+    {\scriptsize
+      \[ \text{accuracy} =  \frac{\text{\# correctly classified}}{\text{\# total}} \]
+    }
   \end{frame}
 
   \begin{frame}
-    \frametitle{Generic Category Recognition Result: Mug}
+    \frametitle{Generic Category Recognition Result}
     
+    \begin{columns}
+      \begin{column}{.5\textwidth}
+        \centering
+        \scriptsize
+        \includegraphics[width=\columnwidth]{roc.tikz}
+      \end{column}
+      \begin{column}{.5\textwidth}
+        \begin{itemize}
+          \item Object-based cross validation.
+          \item Receiver operating characteristic (ROC).
+          \item Area under the curve (AUC).
+            \begin{itemize}
+              \item 0.5 => Random
+              \item 1.0 => Perfect 
+            \end{itemize}
+        \end{itemize}
+      \end{column}
+    \end{columns}
+    {\scriptsize
+      \[ \text{true positive rate} =  \frac{\text{\# true positive}}{\text{\# conditional positive}} \]
+      \[ \text{false positive rate} =  \frac{\text{\# false positive}}{\text{\# conditional negative}} \]
+    }
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Generic Category Recognition Result}
+
     \begin{columns}
       \begin{column}{.6\textwidth}
         \centering
@@ -367,22 +399,27 @@
         \includegraphics[width=\columnwidth]{mug.tikz}
       \end{column}
       \begin{column}{.4\textwidth}
+        \begin{itemize}
+          \item Mugs
+        \end{itemize}
+        ~
+
         \footnotesize
         \begin{tabular}[h]{c|c}
           \hline
           Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
+          Feature Fusion & 0.750 \\ \hline
+          Decision Fusion  & \textbf{0.771} \\ \hline
+          Visual Only & 0.763 \\ \hline
+          Audio Only & 0.642 \\ \hline
         \end{tabular}
       \end{column}
     \end{columns}
   \end{frame}
 
   \begin{frame}
-    \frametitle{Generic Category Recognition Result: Bottle}
-    
+    \frametitle{Generic Category Recognition Result}
+
     \begin{columns}
       \begin{column}{.6\textwidth}
         \centering
@@ -390,22 +427,27 @@
         \includegraphics[width=\columnwidth]{bottle.tikz}
       \end{column}
       \begin{column}{.4\textwidth}
+        \begin{itemize}
+          \item Bottles
+        \end{itemize}
+        ~
+
         \footnotesize
         \begin{tabular}[h]{c|c}
           \hline
           Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
+          Feature Fusion & \textbf{0.802} \\ \hline
+          Decision Fusion  & 0.798 \\ \hline
+          Visual Only & 0.778 \\ \hline
+          Audio Only & 0.707 \\ \hline
         \end{tabular}
       \end{column}
     \end{columns}
   \end{frame}
 
   \begin{frame}
-    \frametitle{Generic Category Recognition Result: Plastic}
-    
+    \frametitle{Generic Category Recognition Result}
+
     \begin{columns}
       \begin{column}{.6\textwidth}
         \centering
@@ -413,22 +455,26 @@
         \includegraphics[width=\columnwidth]{plastic.tikz}
       \end{column}
       \begin{column}{.4\textwidth}
+        \begin{itemize}
+          \item Plastic objects
+        \end{itemize}
+        ~
+
         \footnotesize
         \begin{tabular}[h]{c|c}
           \hline
           Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
+          Feature Fusion & 0.820 \\ \hline
+          Decision Fusion & \textbf{0.839} \\ \hline
+          Visual Only & 0.813 \\ \hline
+          Audio Only & 0.732 \\ \hline
         \end{tabular}
       \end{column}
     \end{columns}
   \end{frame}
-
   \begin{frame}
-    \frametitle{Generic Category Recognition Result: Metal}
-    
+    \frametitle{Generic Category Recognition Result}
+
     \begin{columns}
       \begin{column}{.6\textwidth}
         \centering
@@ -436,22 +482,26 @@
         \includegraphics[width=\columnwidth]{metal.tikz}
       \end{column}
       \begin{column}{.4\textwidth}
+        \begin{itemize}
+          \item Metal objects
+        \end{itemize}
+        ~
+
         \footnotesize
         \begin{tabular}[h]{c|c}
           \hline
           Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
+          Feature Fusion & 0.830 \\ \hline
+          Decision Fusion  & 0.870 \\ \hline
+          Visual Only & \textbf{0.877} \\ \hline
+          Audio Only & 0.772 \\ \hline
         \end{tabular}
       \end{column}
     \end{columns}
   \end{frame}
-
   \begin{frame}
-    \frametitle{Generic Category Recognition Result: Fragile}
-    
+    \frametitle{Generic Category Recognition Result}
+
     \begin{columns}
       \begin{column}{.6\textwidth}
         \centering
@@ -459,22 +509,26 @@
         \includegraphics[width=\columnwidth]{fragile.tikz}
       \end{column}
       \begin{column}{.4\textwidth}
+        \begin{itemize}
+          \item Fragile objects
+        \end{itemize}
+        ~
+
         \footnotesize
         \begin{tabular}[h]{c|c}
           \hline
           Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
+          Feature Fusion & 0.711 \\ \hline
+          Decision Fusion  & 0.697 \\ \hline
+          Visual Only & 0.590 \\ \hline
+          Audio Only & \textbf{0.819} \\ \hline
         \end{tabular}
       \end{column}
     \end{columns}
   \end{frame}
-
   \begin{frame}
-    \frametitle{Generic Category Recognition Result: Containers}
-    
+    \frametitle{Generic Category Recognition Result}
+
     \begin{columns}
       \begin{column}{.6\textwidth}
         \centering
@@ -482,60 +536,19 @@
         \includegraphics[width=\columnwidth]{nonempty.tikz}
       \end{column}
       \begin{column}{.4\textwidth}
-        \footnotesize
-        \begin{tabular}[h]{c|c}
-          \hline
-          Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
-        \end{tabular}
-      \end{column}
-    \end{columns}
-  \end{frame}
+        \begin{itemize}
+          \item Containers with contents
+        \end{itemize}
+        ~
 
-  \begin{frame}
-    \frametitle{Generic Category Recognition Result}
-    
-    \begin{columns}
-      \begin{column}{.6\textwidth}
-        \centering
-        \footnotesize
-        \includegraphics[width=\columnwidth]{plastic.tikz}
-      \end{column}
-      \begin{column}{.4\textwidth}
         \footnotesize
         \begin{tabular}[h]{c|c}
           \hline
           Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
-        \end{tabular}
-      \end{column}
-    \end{columns}
-  \end{frame}
-
-  \begin{frame}
-    \frametitle{Generic Category Recognition Result}
-    
-    \begin{columns}
-      \begin{column}{.6\textwidth}
-        \centering
-        \footnotesize
-        \includegraphics[width=\columnwidth]{plastic.tikz}
-      \end{column}
-      \begin{column}{.4\textwidth}
-        \footnotesize
-        \begin{tabular}[h]{c|c}
-          \hline
-          Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{95.8\%} \\ \hline
-          Decision Fusion  & 95.7\% \\ \hline
-          Visual Only & 86.7\% \\ \hline
-          Audio Only & 83.6\% \\ \hline
+          Feature Fusion & 0.671 \\ \hline
+          Decision Fusion  & \textbf{0.675} \\ \hline
+          Visual Only & 0.567 \\ \hline
+          Audio Only & 0.620 \\ \hline
         \end{tabular}
       \end{column}
     \end{columns}
@@ -546,16 +559,17 @@
     \frametitle{Conclusion}
 
     \begin{itemize}
-      \item Bla~\cite{rabiner_fundamentals_1993}.
-        \begin{itemize}
-          \item bla; 
-        \end{itemize}
-        ~
+      \item For specific object recognition, both fusion methods increased the accuracy for about 10\%, comparing to unimodal methods.
 
-      \item bla.
-        \begin{itemize}
-          \item bla.
-        \end{itemize}
+        ~
+      \item For generic category recognition, both fusion methods increased the performance under the condition of neither of the modality is noise.
+
+        ~
+      \item There is no significant difference in performance between the two fusion methods.
+         \begin{itemize}
+           \item Visual and audio signals are independent under the condition of being in one category.
+           \item Visual and audio signals are congruent in our dataset.
+         \end{itemize}
     \end{itemize}
   \end{frame}
 
@@ -563,15 +577,21 @@
     \frametitle{Future Work}
 
     \begin{itemize}
-      \item Bla~\cite{rabiner_fundamentals_1993}.
+      \item Real-time recognition.
         \begin{itemize}
-          \item bla; 
+          \item SIFT => SURF.
         \end{itemize}
-        ~
 
-      \item bla.
+      \item Increase dataset.
         \begin{itemize}
-          \item bla.
+          \item Collect data by robots.
+          \item From Internet sources.
+        \end{itemize}
+
+      \item Learn good features using multimodal signals.
+        \begin{itemize}
+          \item Congruency as a heuristic.
+          \item Using deep learning neural networks~\cite{ngiam_multimodal_2011}.
         \end{itemize}
     \end{itemize}
   \end{frame}
