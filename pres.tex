@@ -155,10 +155,10 @@
   \frametitle{Hidden Markov Models}
 
   \begin{itemize}
+    \item During interactions images and sound change over time.
     \item HMM describes a distribution of a stochastic process~\cite{rabiner_fundamentals_1993}.
       \begin{itemize}
         \item Applications in speech recognition and gesture recognition. 
-        \item Images and sound change over time during interaction.
       \end{itemize}
       ~
 
@@ -234,43 +234,34 @@
     \item \# of mixture components $M$: \hfill small <=> large.
     \item Covariance matrix: \hfill diagonal <=> full.
   \end{itemize}
+
   ~
-  \begin{columns}
-    \begin{column}{.4\textwidth}
-      \centering simple
-    \end{column}
-    \begin{column}{.2\textwidth}
-      \centering <=>
-    \end{column}
-    \begin{column}{.4\textwidth}
-      \centering complex
-    \end{column}
-  \end{columns}
-  \begin{columns}
-    \begin{column}{.5\textwidth}
+
+  \centering
+    \begin{tabular}{p{.42\textwidth}|p{.42\textwidth}}
+      \hline
+      \multicolumn{1}{c|}{\bfseries Simple Models} & \multicolumn{1}{c}{\bfseries Complex Models} \\ \hline
+    Smaller hypothesis space. & Larger hypothesis space. \\
+    Easy to learn. & Hard to learn. \\
+    Underfitting. & Overfitting. \\ \hline
+  \end{tabular}
+
+  ~
+
+  \begin{itemize}
+    \item How to choose?
       \begin{itemize}
-        \item Smaller hypothesis space.
-        \item Easy to learn.
-        \item Biased result.
-        \item Underfitting.
+        \item Occam's Razor: Choose the simplest model that fits the data.
       \end{itemize}
-    \end{column}
-    \begin{column}{.5\textwidth}
-      \begin{itemize}
-        \item Larger hypothesis space.
-        \item Hard to learn.
-        \item More approximate result.
-        \item Overfitting.
-      \end{itemize}
-    \end{column}
-  \end{columns}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Classification with HMM}
 
   \begin{itemize}
-    \item Estimate $\lambda^c$ with all data of class $c$.
+    \item Estimate $\lambda^c$ with all data of class $c$:
+     
     \item Approximate likelihood with learned model:
       \[ P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c) . \]
     \item Specific object recognition (multiclass classification):
@@ -328,6 +319,20 @@
       \item Learn separate models and combine them under conditional independence assumption:
         \[ P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v}|c) P(\mathbf{a}|c) = P(\mathbf{v}|\lambda_v^c) P(\mathbf{a}|\lambda_a^c) \]
     \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Comparison of Fusion Methods}
+
+    \centering
+    \begin{tabular}{p{.42\textwidth}|p{.42\textwidth}}
+      \hline
+      \multicolumn{1}{c|}{\bfseries Feature Fusion} & \multicolumn{1}{c}{\bfseries Decision Fusion} \\ \hline
+      Theoretically correct. & Independent assumption needs to be hold. \\
+      Models are complex. & Models are simple. \\
+      Synchronization is \mbox{necessary}. & Synchronization is not necessary. \\ \hline
+    \end{tabular}
+
   \end{frame}
 
   \section{Experiment}

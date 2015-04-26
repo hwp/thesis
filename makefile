@@ -12,7 +12,8 @@ SLIDES = pres
 PAPER_PRE = common.sty thesis.sty
 SLIDES_PRE = common.sty pres.sty
 BIBS   = thesis.bib
-FIGS   = uhhLogoL.pdf
+FIGS   = uhhLogoL.pdf mug1.jpg mug2.jpg mug3.jpg mug3.jpg \
+				 mug4.jpg box1.jpg glass1.jpg mug2v2.jpg mug2m.jpg
 GPSRC  = spec256 spec1024 spec64 roc \
 				 mug bottle plastic metal fragile nonempty
 SVGSRC = 
