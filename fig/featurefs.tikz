@@ -6,12 +6,12 @@
   \node[io] (pa) at (4,2) {};
   \node[process,minimum height=3cm] (ff) at (7,1) {Feature Fusion};
   \node[process] (cl) at (11,1) {Probability Computation};
-  \node[edata] at (11, 2.3) {HMM for both modalities} edge[->] (cl);
+  \node[edata] at (11, 2.3) {HMM for both Modalities} edge[->] (cl);
   \node[io] (o) at (13.2,1) {};
 
-  \draw[->] (pv) -- node[data] {Visual\\ feature} (pv -| ff.west);
-  \draw[->] (pa) -- node[data] {Audio\\ feature} (pa -| ff.west);
-  \draw[->] (ff) -- node[data] {Combined feature} (cl);
+  \draw[->] (pv) -- node[data] {Visual\\ Feature} (pv -| ff.west);
+  \draw[->] (pa) -- node[data] {Audio\\ Feature} (pa -| ff.west);
+  \draw[->] (ff) -- node[data] {Combined Feature} (cl);
   \draw[->] (cl) -- node[data, pos=1] {Joint\\Likelihood} (o);
 \end{tikzpicture}
 
