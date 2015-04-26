@@ -20,13 +20,15 @@
   \frametitle{Motivation}
 
   \begin{itemize}
+    \item Human use multiple sensory information to recognize objects.
+
+      ~
     \item Difficulties of visual object recognition:
       \begin{itemize}
         \item Sensitive to image transformations. 
-        \item Transparent objects.
       \end{itemize}
-      ~
 
+      ~
     \item Sound provides complementary information.
       \begin{itemize}
         \item Make sound via interactions.
@@ -48,8 +50,8 @@
           ~
         \item No visual information.
       \end{itemize}
-      ~
 
+      ~
     \item Nakamura and his colleagues~\cite{nakamura_multimodal_2007,nakamura_bag_2012}:
       \begin{itemize}
         \item Visual, audio and haptic information.
@@ -66,16 +68,39 @@
 
   \begin{itemize}
     \item Build a object recognition system based on visual and audio information.
+
+      ~
       \begin{itemize}
         \item What kind of features?
+
+          ~
         \item How to make classification?
+
+          ~
         \item How to combine multimodal information?
       \end{itemize}
-    \item Two tasks:
-      \begin{itemize}
-        \item Specific object recognition.
-        \item Generic category recognition.
-      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two Tasks of Object Recognition}
+
+  \begin{itemize}
+    \item Specific object recognition.
+      \begin{tabular}{cccc|c}
+        \multicolumn{4}{c}{Train} & Test \\
+        \includegraphics[width=.14\textwidth]{mug1} & \includegraphics[width=.14\textwidth]{mug2} & \includegraphics[width=.14\textwidth]{glass1} & \includegraphics[width=.14\textwidth]{box1} & \includegraphics[width=.14\textwidth]{mug2v2} \\
+        mug \#1 & mug \#2 & glass \#1 & box \#1 & mug \#2 \\
+      \end{tabular}
+
+      ~
+    \item Generic category recognition.
+      \begin{tabular}{cccc|c}
+        \multicolumn{4}{c}{Train} & Test \\
+        \includegraphics[width=.14\textwidth]{mug1} & \includegraphics[width=.14\textwidth]{mug2} & \includegraphics[width=.14\textwidth]{mug3} & \includegraphics[width=.14\textwidth]{box1} & \includegraphics[width=.14\textwidth]{mug4} \\
+        mug & mug & mug & not mug & mug \\
+      \end{tabular}
+
   \end{itemize}
 \end{frame}
 
@@ -93,8 +118,10 @@
         \item Does not describe the whole image/object.
         \item Does not encode general features of a category.
       \end{itemize}
-      ~
   \end{itemize}
+
+  \centering
+  \includegraphics[width=.7\textwidth]{mug2m}
 \end{frame}
 
 \begin{frame}
@@ -144,7 +171,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Two assumptions}
+  \frametitle{Two Properties}
 
   \centering
   \includegraphics[width=.5\textwidth]{hmm.tikz}
@@ -210,13 +237,13 @@
   ~
   \begin{columns}
     \begin{column}{.4\textwidth}
-    \centering simple
+      \centering simple
     \end{column}
     \begin{column}{.2\textwidth}
-    \centering <=>
+      \centering <=>
     \end{column}
     \begin{column}{.4\textwidth}
-    \centering complex
+      \centering complex
     \end{column}
   \end{columns}
   \begin{columns}
@@ -263,7 +290,7 @@
 
   \section{Bimodal Object Recognition}
   \begin{frame}
-    \frametitle{Modality Fusion Methods}
+    \frametitle{Multimodal Fusion Methods}
 
     \begin{itemize}
       \item $\mathbf{x} = (\mathbf{v},\mathbf{a})$.
@@ -299,7 +326,7 @@
 
     \begin{itemize}
       \item Learn separate models and combine them under conditional independence assumption:
-        \[ P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v}|\lambda_v^c) P(\mathbf{a}|\lambda_a^c) \]
+        \[ P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v}|c) P(\mathbf{a}|c) = P(\mathbf{v}|\lambda_v^c) P(\mathbf{a}|\lambda_a^c) \]
     \end{itemize}
   \end{frame}
 
@@ -345,12 +372,12 @@
     \begin{tabular}[h]{c|c}
       \hline
       Method & Accuracy \\ \hline \hline
-      Feature Fusion & \textbf{95.8\%} \\ \hline
+      Feature Fusion & \underline{95.8\%} \\ \hline
       Decision Fusion  & 95.7\% \\ \hline
       Visual Only & 86.7\% \\ \hline
       Audio Only & 83.6\% \\ \hline
     \end{tabular}
-    
+
     ~
     \begin{itemize}
       \item 5-fold cross validation.
@@ -364,7 +391,7 @@
 
   \begin{frame}
     \frametitle{Generic Category Recognition Result}
-    
+
     \begin{columns}
       \begin{column}{.5\textwidth}
         \centering
@@ -409,7 +436,7 @@
           \hline
           Method & AUC \\ \hline \hline
           Feature Fusion & 0.750 \\ \hline
-          Decision Fusion  & \textbf{0.771} \\ \hline
+          Decision Fusion  & \underline{0.771} \\ \hline
           Visual Only & 0.763 \\ \hline
           Audio Only & 0.642 \\ \hline
         \end{tabular}
@@ -436,7 +463,7 @@
         \begin{tabular}[h]{c|c}
           \hline
           Method & AUC \\ \hline \hline
-          Feature Fusion & \textbf{0.802} \\ \hline
+          Feature Fusion & \underline{0.802} \\ \hline
           Decision Fusion  & 0.798 \\ \hline
           Visual Only & 0.778 \\ \hline
           Audio Only & 0.707 \\ \hline
@@ -465,7 +492,7 @@
           \hline
           Method & AUC \\ \hline \hline
           Feature Fusion & 0.820 \\ \hline
-          Decision Fusion & \textbf{0.839} \\ \hline
+          Decision Fusion & \underline{0.839} \\ \hline
           Visual Only & 0.813 \\ \hline
           Audio Only & 0.732 \\ \hline
         \end{tabular}
@@ -493,7 +520,7 @@
           Method & AUC \\ \hline \hline
           Feature Fusion & 0.830 \\ \hline
           Decision Fusion  & 0.870 \\ \hline
-          Visual Only & \textbf{0.877} \\ \hline
+          Visual Only & \underline{0.877} \\ \hline
           Audio Only & 0.772 \\ \hline
         \end{tabular}
       \end{column}
@@ -521,7 +548,7 @@
           Feature Fusion & 0.711 \\ \hline
           Decision Fusion  & 0.697 \\ \hline
           Visual Only & 0.590 \\ \hline
-          Audio Only & \textbf{0.819} \\ \hline
+          Audio Only & \underline{0.819} \\ \hline
         \end{tabular}
       \end{column}
     \end{columns}
@@ -546,7 +573,7 @@
           \hline
           Method & AUC \\ \hline \hline
           Feature Fusion & 0.671 \\ \hline
-          Decision Fusion  & \textbf{0.675} \\ \hline
+          Decision Fusion  & \underline{0.675} \\ \hline
           Visual Only & 0.567 \\ \hline
           Audio Only & 0.620 \\ \hline
         \end{tabular}
@@ -566,10 +593,10 @@
 
         ~
       \item There is no significant difference in performance between the two fusion methods.
-         \begin{itemize}
-           \item Visual and audio signals are independent under the condition of being in one category.
-           \item Visual and audio signals are congruent in our dataset.
-         \end{itemize}
+        \begin{itemize}
+          \item Visual and audio signals are independent under the condition of being in one category.
+          \item Visual and audio signals are congruent in our dataset.
+        \end{itemize}
     \end{itemize}
   \end{frame}
 
@@ -584,8 +611,8 @@
 
       \item Increase dataset.
         \begin{itemize}
-          \item Collect data by robots.
-          \item From Internet sources.
+          \item Collect data by robots or from Internet sources.
+          \item More data make it possible to use discriminant methods to learn combination rules.
         \end{itemize}
 
       \item Learn good features using multimodal signals.
