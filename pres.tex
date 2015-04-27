@@ -127,18 +127,49 @@
 \begin{frame}
   \frametitle{Bag-of-Words Model with SIFT Descriptors}
 
-  \begin{itemize}
-    \item Bag-of-words model~\cite{csurka_visual_2004}. 
+  \begin{columns}
+    \begin{column}{.46\textwidth}
+      \begin{itemize}
+        \item Bag-of-words model~\cite{csurka_visual_2004}. 
+      \end{itemize}
+
       \begin{itemize}
         \item A document : a collection of words.
-        \item Count occurrences and ignore order. 
-
-          ~
-        \item An image : a collection of local features.
-        \item Vector quantization with codebook.
+        \item Tom likes playing football. Mary likes playing the piano.
+          \begin{itemize}
+            \item Tom : 1
+            \item likes : 2
+            \item playing : 2
+            \item football : 1
+            \item \ldots
+          \end{itemize}
       \end{itemize}
-      ~
-  \end{itemize}
+    \end{column}
+    \begin{column}{.46\textwidth}
+      \centering
+      \includegraphics[width=.5\columnwidth]{mug2k}
+      \begin{itemize}
+        \item An image : a collection of local features.
+        \item Vector quantization with a codebook.
+          \begin{itemize}
+            \item
+              \includegraphics[width=.1\columnwidth]{mug2v11}~ : 1
+            \item
+              \includegraphics[width=.1\columnwidth]{mug2v21}~
+              \includegraphics[width=.1\columnwidth]{mug2v22}~
+              \includegraphics[width=.1\columnwidth]{mug2v23}~ : 3
+            \item
+              \includegraphics[width=.1\columnwidth]{mug2v31}~
+              \includegraphics[width=.1\columnwidth]{mug2v32}~
+              \includegraphics[width=.1\columnwidth]{mug2v33}~ : 3
+            \item
+              \includegraphics[width=.1\columnwidth]{mug2v41}~
+              \includegraphics[width=.1\columnwidth]{mug2v42}~ : 2
+            \item \ldots
+          \end{itemize}
+      \end{itemize}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
@@ -146,7 +177,9 @@
 
   \begin{itemize}
     \item DCT of log power spectrum at mel-scale.
-    \item MFCCs are common features for audio processing, such as speech recognition and speaker recognition.
+
+      ~
+    \item MFCCs are common acoustic features for audio processing, such as speech recognition and speaker recognition.
   \end{itemize}
 \end{frame}
 
@@ -197,7 +230,7 @@
       \[ a_{ij} = P(q_{t+1} = j | q_t = i) \]
     \item Observation distribution, $B = \{b_j(x)\}$, in which
       \[ b_j(x) = P(x_t = x | q_t = j) \]
-      PDF of GMM:
+      PDF of a Gaussian mixture model (GMM):
       \[ b_j(x) = \sum_{k=1}^M c_{jk} \mathcal{N}(x, \mu_{jk}, \Sigma_{jk}) \]
     \item Initial state distribution, $\pi = \{\pi_j\}$, in which
       \[ \pi_j = P(q_1 = j) \]
@@ -213,15 +246,17 @@
         \item Forward/backward procedure. 
       \end{itemize}
 
+      ~
     \item Most likely state sequences: $ \argmax_{\mathbf{q}} P(\mathbf{x}|\mathbf{q},\lambda) $.
       \begin{itemize}
         \item Viterbi algorithm.
       \end{itemize}
 
+      ~
     \item Parameter estimation: $ \argmax_{\lambda} P(\mathbf{x}|\lambda) $.
       \begin{itemize}
         \item Baum-Welch Algorithm (EM Algorithm).
-        \item Note: MLE is not assured.
+        \item Note: Maximum likelihood estimate (MLE) is not assured.
       \end{itemize}
   \end{itemize}
 \end{frame}
@@ -238,9 +273,9 @@
   ~
 
   \centering
-    \begin{tabular}{p{.42\textwidth}|p{.42\textwidth}}
-      \hline
-      \multicolumn{1}{c|}{\bfseries Simple Models} & \multicolumn{1}{c}{\bfseries Complex Models} \\ \hline
+  \begin{tabular}{p{.42\textwidth}|p{.42\textwidth}}
+    \hline
+    \multicolumn{1}{c|}{\bfseries Simple Models} & \multicolumn{1}{c}{\bfseries Complex Models} \\ \hline
     Smaller hypothesis space. & Larger hypothesis space. \\
     Easy to learn. & Hard to learn. \\
     Underfitting. & Overfitting. \\ \hline
@@ -260,8 +295,8 @@
   \frametitle{Classification with HMM}
 
   \begin{itemize}
-    \item Estimate $\lambda^c$ with all data of class $c$:
-     
+    \item Estimate $\lambda^c$ with all data of class $c$.
+
     \item Approximate likelihood with learned model:
       \[ P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c) . \]
     \item Specific object recognition (multiclass classification):
@@ -329,7 +364,9 @@
       \hline
       \multicolumn{1}{c|}{\bfseries Feature Fusion} & \multicolumn{1}{c}{\bfseries Decision Fusion} \\ \hline
       Theoretically correct. & Independent assumption needs to be hold. \\
+      \\
       Models are complex. & Models are simple. \\
+      \\
       Synchronization is \mbox{necessary}. & Synchronization is not necessary. \\ \hline
     \end{tabular}
 
