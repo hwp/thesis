@@ -82,7 +82,11 @@
 \section*{Abstract}\label{sec:abstract}
 %\fancyhead[LE,RO]{\it Abstract}
 %\addcontentsline{toc}{chapter}{\numberline{}Abstract}
-Your English abstract here (mandatory if written in English and recommended otherwise).
+Comparing to traditional visual object recognition, multimodal object recognition is advantageous in that different modalities provide complementary information. This work aims to implement a system for object recognition given videos of interactions with objects and investigate different modality fusion methods.
+
+The bag-of-words model with SIFT descriptors and the MFCC are used as visual and audio features. The system classify objects by computing the probability with learned hidden Markov models. The system incorporates two different fusion methods: feature level fusion and decision level fusion. The former method learns a joint probability distributions with one HMM, while the latter method learns two separate probability distribution with two HMMs and combine them under the conditional independence assumption.
+
+Experiments based on a dataset of 33 different household objects are carried out to evaluate the performance of these two fusion methods as well as single modality approaches. The result shows that both fusion methods improved the performance over single modality methods, while these two methods are mostly comparable. 
 
 \fancyhead[LE,RO]{\it Abstract}
 
