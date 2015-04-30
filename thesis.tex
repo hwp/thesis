@@ -738,15 +738,21 @@ The audio data are sampled at 8000 Hz. We first use shifting windows with window
 \section{Classification with HMM}
 As our system requires a learning model which accounts for time series data, the HMM is a perfect choice in this case, for its effective application in speech recognition and gesture recognition. Besides, the HMM, which is a statistical model, allows us to estimate the probability, which can be used for further inference in modality fusion.
 
-In our system, the classification is carried out individually for each category. Thus, predicting whether an instance belongs to a certain category is a binary classification problem. The classification is based on the posterior probability and a given threshold. Specifically, for a certain category, the class of an instance can be either positive or negative ($c \in \{-1,+1\}$). Two HMMs ($\lambda^{(-1)}$ and $\lambda^{(+1)}$) are learned using the Baum-Welch algorithm, one with all positive instances and the other with all negative instances. Therefore, we can approximate the likelihood of a class with the learned models by
+Classification using HMM required one model to be learned for each class $c$. The model for class $c$ is learned to describe the distribution of all the instances of this class, that is:
+\begin{equation}
+  \lambda^c = \argmax_{\lambda} \prod_{\mathbf{x} \in D^c} P(\mathbf{x}|\lambda^c)
+\end{equation}
+in which $D^c$ is the set of data instances of which the labels are $c$. The models are learned with the Baum-Welch algorithm. Then, when given a new instance of observation sequence, we can approximate the likelihood of a class with the learned model by
 \begin{equation}
   P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c) .
 \end{equation}
-From Bayesian theory, the posterior probability of a class given the observation is
-\begin{equation} \label{eq:posterior}
-  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)P(c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)P(c)}
+
+For specific category recognition, which is a multiclass classification problem, the prediction of a new instance is carried out by choosing the class with the maximum likelihood:
+\begin{equation}
+  f(\mathbf{x}) = \argmax_{c} P(\mathbf{x}|c) .
 \end{equation}
-in which $P(c)$ is the prior probability of the class. When given a new instance, the class is predicted by comparing the posterior probability with a threshold $\theta$:
+
+For generic category recognition, the classification is carried out individually for each category. Thus, predicting whether an instance belongs to a certain category is a binary classification problem. The classification is based on comparing the posterior probability to a given threshold $\theta$:
 \begin{equation}
   \label{eq:classif}
   f(\mathbf{x}) = \left\{
@@ -756,6 +762,12 @@ in which $P(c)$ is the prior probability of the class. When given a new instance
   \end{array} \right.
 \end{equation}
 
+From Bayesian theory, the posterior probability of a class given the observation is
+\begin{equation} \label{eq:posterior}
+  P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)P(c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)P(c)}
+\end{equation}
+in which $P(c)$ is the prior probability of the class.
+
 Considering the fact that randomly selecting objects as data set is not likely to be the same as randomly drawing a sample in a real world, the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewrite as 
 \begin{equation}
   \label{eq:postsimp}
@@ -763,9 +775,26 @@ Considering the fact that randomly selecting objects as data set is not likely t
 \end{equation}
 
 \subsection{Model Selection}
-An important issue about HMM is selecting the model size and the observation distribution, i.e. the number states, the number of components for each state and the type of covariance matrix. For the number of states and the number of components, the larger the numbers are the more complex the model is. And the covariance matrix can be either a full matrix or a diagonal matrix. The diagonal matrix assumes the feature coefficients are not correlated, thus is simpler than full matrix.
+An important issue about HMM is selecting the model size and the observation distribution, i.e. the number states, the number of components for each state and the type of covariance matrix. The choice of models can have a dramatic impact on the result.
 
-In general, complex models have larger hypothesis space, which also means more predictive power. However, since the Baum-Welch algorithm does not guarantee global optimum, more complex models are more likely to be subject to local optimum. Furthermore, it could also result in overfitting if the training set is not large enough. The choice of model should follow the principle of Occam's razor. Depending on different data, the best choice is the simplest model that can fit the data. The choice of model will be further discussed with our experimental results.
+For the number of states and the number of components, the larger the numbers are the more complex the model is. And the covariance matrix can be either a full matrix or a diagonal matrix. The diagonal matrix assumes the feature coefficients are not correlated, thus is simpler than full matrix.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{p{.42\textwidth}|p{.42\textwidth}}
+    \hline
+    \multicolumn{1}{c|}{\bfseries Simple Models} & \multicolumn{1}{c}{\bfseries Complex Models} \\ \hline
+    Smaller hypothesis space. & Larger hypothesis space. \\
+    Easy to learn. & Hard to learn. \\
+    Underfitting. & Overfitting. \\ \hline
+  \end{tabular}
+  \caption{Comparison of simple and complex models.}
+  \label{tab:model}
+\end{table}
+
+In general, complex models have larger hypothesis space, which also means more predictive power. However, since the Baum-Welch algorithm does not guarantee global optimum, more complex models are more prone to local optima. Furthermore, it could also result in overfitting if the training set is not large enough. The comparison of simple and complex models are listed in \cref{tab:model}.
+
+Making decision for the model choice should follow the principle of Occam's razor. Depending on different data, the best choice is the simplest model that can fit the data.
 
 \subsection{Implementation Issues}
 Several implementation issues are addressed in the following part.
@@ -827,7 +856,7 @@ Rather than learning a complex HMM model, the decision level fusion approach lea
 In this chapter, we have presented the design of a visual-audio object recognition system based on HMMs. The key points include:
 \begin{itemize}
   \item The system uses bag-of-words model with SIFT descriptors as the visual feature and the Mel-frequency cepstrum coefficients as the audio feature.
-  \item The system uses HMM to estimate probabilities. Classification is carried out by comparing the posterior probability with a threshold. The model selection plays an crucial role to the system. Different model choices will be compared in the experiment.
+  \item The system uses HMM to estimate probabilities. For specific object recognition, instances are classified by selecting the class with maximum likelihood. For generic category recognition, classification is carried out by comparing the posterior probability with a threshold. The model selection plays a crucial role to the system.
   \item The system incorporates two types of multimodal fusion methods. The feature level fusion method is to learn HMM with concatenated features and directly estimate the joint likelihood. The decision level fusion methods is to learn two HMMs for individual modalities and compute the joint likelihood with the conditional independence assumption. Such two methods will be compared in the experiment.
 \end{itemize}
 
@@ -893,7 +922,7 @@ The accuracy of each method for the specific object recognition task is shown in
 \subsection{Generic Category Recognition Results}
 The results of generic category recognition is shown in \cref{tab:cateory} and \cref{fig:catroc}. For the recognition of mugs (\cref{fig:rocmug}), the decision fusion method has the best performance, followed closely by the visual only method and feature fusion method. For the recognition of bottles and plastic objects (\cref{fig:rocbottle,fig:rocplastic}), both fusion methods are better than the unimodal methods. For the recognition of metal objects (\cref{fig:rocmetal}), the visual only method is the best and the fusion methods are slightly worse. For the recognition of fragile objects (\cref{fig:rocfragile}), the audio only method have rather good performance while the visual only method is nearly random. In this case, the performance of both fusion methods are hurt by the visual signals. For the recognition of containers with contents (\cref{fig:rocnonempty}), although all the methods performed poorly, there are improvements with the fusion methods.
 
-On average, the decision fusion method has the best performance. And what is interesting in these results is that the ROC curves of the feature fusion and decision fusion methods are very close in all the cases.
+On average, both fusion methods are better than the unimodal methods. What is interesting is that the two fusion methods are not only similar in AUC scores, but also their ROC curves appear close to each other. This indicates that they have similar classification results.
 
 \begin{table}
   \centering
@@ -924,7 +953,7 @@ On average, the decision fusion method has the best performance. And what is int
     \caption{Bottles}
     \label{fig:rocbottle}
   \end{subfigure}
-  
+
   \begin{subfigure}[b]{.45\textwidth}
     \includegraphics[width=\textwidth]{plastic.tikz}
     \caption{Plastic Objects}
@@ -937,7 +966,7 @@ On average, the decision fusion method has the best performance. And what is int
     \caption{Metal Objects}
     \label{fig:rocmetal}
   \end{subfigure}
-  
+
   \begin{subfigure}[b]{.45\textwidth}
     \includegraphics[width=\textwidth]{fragile.tikz}
     \caption{Fragile Objects}
@@ -954,10 +983,33 @@ On average, the decision fusion method has the best performance. And what is int
   \label{fig:catroc}
 \end{figure}
 
-
 \cleardoublepage
-\chapter{Discussion and Conclusions}
+\chapter{Conclusion}
+In this study, we have presented the design and implementation of a visual-audio object recognition system with hidden Markov models. The system has two different modality fusion methods: feature fusion and decision fusion. Experiments were carried out to evaluated the performance of these to methods and unimodal methods.
 
+The results show that, for specific object recognition, both fusion methods increased the accuracy for about 10\%, comparing to unimodal methods. For generic category recognition, both fusion methods increased the performance for most of the categories. Only if one of the input signals is too noisy, the result of the fusion methods will be worse than the result of the good signal. 
+
+The results of the experiment also show that, there is no significant difference between the two fusion methods. One possible explanation for this might be that the visual and audio signals are independent under the condition of being in one category.
+
+
+    \begin{itemize}
+      \item Real-time recognition.
+        \begin{itemize}
+          \item SIFT => SURF.
+        \end{itemize}
+
+      \item Increase dataset.
+        \begin{itemize}
+          \item Collect data by robots or from Internet sources.
+          \item More data make it possible to use discriminant methods to learn combination rules.
+        \end{itemize}
+
+      \item Learn good features using multimodal signals.
+        \begin{itemize}
+          \item Congruency as a heuristic.
+          \item Using deep learning neural networks~\cite{ngiam_multimodal_2011}.
+        \end{itemize}
+    \end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices:
 % these are optional! For most Bachelor-theses and some Master-thesis none of them is needed. 
@@ -969,11 +1021,6 @@ On average, the decision fusion method has the best performance. And what is int
 \fancyhead[LE,RO]{\it Appendix}                %Adapt letter!
 \chapter{Specification on the Dataset}
 \label{app:dataset}
-
-\cleardoublepage
-
-\chapter{Full List of Experiment Results}
-\label{app:results}
 
 \cleardoublepage
 
