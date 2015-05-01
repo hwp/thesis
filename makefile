@@ -20,7 +20,7 @@ FIGS   = uhhLogoL.pdf mug1.jpg mug2.jpg mug3.jpg mug3.jpg \
 GPSRC  = spec256 spec1024 spec64 roc \
 				 mug bottle plastic metal fragile nonempty
 SVGSRC = 
-TIKZS  = hmm vpipe apipe featuref decisionf featurefs decisionfs
+TIKZS  = hmm vpipe apipe featuref decisionf featurefs decisionfs specific generic
 				 
 # intermediate files
 TIKZMI = $(foreach p, $(GPSRC), $(FIGDIR)/$(p).tikz)

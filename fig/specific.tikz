@@ -1,0 +1,19 @@
+% graph for example of special object recognition
+
+\begin{tikzpicture}
+\node (n1) at (0,0) {\includegraphics[width=.16\textwidth]{mug1}};
+\node (n2) at (3,0) {\includegraphics[width=.16\textwidth]{mug2}};
+\node (n3) at (6,0) {\includegraphics[width=.16\textwidth]{glass1}};
+\node (n4) at (9,0) {\includegraphics[width=.16\textwidth]{box1}};
+\node (n5) at (13,0) {\includegraphics[width=.16\textwidth]{mug2v2}};
+\node (l1) at (0,-2) {mug \#1};
+\node (l2) at (3,-2) {mug \#2};
+\node (l3) at (6,-2) {glass \#1};
+\node (l4) at (9,-2) {box \#1};
+\node (l5) at (13,-2) {mug \#2};
+\node (x1) at (0, 2.5) {\textbf{Train}};
+\node (x2) at (13, 2.5) {\textbf{Test}};
+\node[draw, thick, rounded corners, fit=(n1)(n2)(n3)(n4)(l1)(l2)(l3)(l4)(x1)] {};
+\node[draw, thick, rounded corners, fit=(n5)(l5)(x2)] {};
+\end{tikzpicture}
+
