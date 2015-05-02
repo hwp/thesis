@@ -1,11 +1,11 @@
 % graph for example of generic category recognition
 
 \begin{tikzpicture}
-\node (n1) at (0,0) {\includegraphics[width=.16\textwidth]{object2}};
-\node (n2) at (3,0) {\includegraphics[width=.16\textwidth]{object3}};
-\node (n3) at (6,0) {\includegraphics[width=.16\textwidth]{object6}};
-\node (n4) at (9,0) {\includegraphics[width=.16\textwidth]{object18}};
-\node (n5) at (13,0) {\includegraphics[width=.16\textwidth]{object23}};
+\node (n1) at (0,0) {\includegraphics[width=.16\linewidth]{object2}};
+\node (n2) at (3,0) {\includegraphics[width=.16\linewidth]{object3}};
+\node (n3) at (6,0) {\includegraphics[width=.16\linewidth]{object6}};
+\node (n4) at (9,0) {\includegraphics[width=.16\linewidth]{object18}};
+\node (n5) at (13,0) {\includegraphics[width=.16\linewidth]{object23}};
 \node (l1) at (0,-2) {mug};
 \node (l2) at (3,-2) {mug};
 \node (l3) at (6,-2) {mug};
