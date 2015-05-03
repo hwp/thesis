@@ -1,0 +1,32 @@
+% an example of representation using bag of words
+
+\begin{tikzpicture}[node distance=.3]
+
+\node (b1) at (0,0) {\includegraphics[width=.25\linewidth]{mug2k}};
+\node (b2) at (0,1.2) {\textbf{Image}};
+\node (c1) at (4,1.2) {\textbf{Representation}};
+\node (c2) at (4,0) {
+  \begin{tabular}{ll}
+  \includegraphics[width=.05\linewidth]{mug2v11} &  : 1 \\
+  \includegraphics[width=.05\linewidth]{mug2v21} \hspace{-3pt}
+  \includegraphics[width=.05\linewidth]{mug2v22} \hspace{-3pt}
+  \includegraphics[width=.05\linewidth]{mug2v23} & : 3 \\
+  \includegraphics[width=.05\linewidth]{mug2v31} \hspace{-3pt}
+  \includegraphics[width=.05\linewidth]{mug2v32} \hspace{-3pt}
+  \includegraphics[width=.05\linewidth]{mug2v33} & : 3 \\
+  \includegraphics[width=.05\linewidth]{mug2v41} \hspace{-3pt}
+  \includegraphics[width=.05\linewidth]{mug2v42} & : 2 \\
+  \end{tabular}
+};
+
+\node[draw, thick, rounded corners, fit=(b1)(b2)] (b) {};
+\node[draw, thick, rounded corners, fit=(c1)(c2)] (c) {};
+
+\draw[->] (b) -- node[inner sep=0,minimum size=0](f) {} (b -| c.west);
+
+\node[draw, thick, rounded corners, above=of f] {\textbf{Codebook}} edge[->] (f);
+
+
+
+\end{tikzpicture}
+

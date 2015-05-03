@@ -228,10 +228,27 @@ The SIFT descriptor describes a keypoint as histograms of gradient orientations.
 
 The rotation invariance is achieved by the selecting the dominant orientation in the first step and the illumination invariance is achieved by the normalization in the last step.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=.7\linewidth]{mug2m}
+  \caption{Example of feature matching with SIFT descriptors.}
+  \label{fig:match}
+\end{figure}
+
+An example of feature matching with SIFT descriptors is shown in \cref{fig:match}. Two images of an object is taken from different view points and under different lighting condition. The identical keypoints from the two images are detected with SIFT descriptors.
+
 \section{The Bag-of-Words Model}
 While specific object recognition can be solved as matching of local features, the local feature representation cannot be directly applied to object category recognition. Local features are adequate in characterizing an exact part of a particular object. However, different objects in the same category are not identical in appearance. Thus, in this case, a valid representations should capture the common characteristics of different instances in the same class. One of the solution is the bag-of-words model~\cite{csurka_visual_2004}.
 
-The bag-of-words model is first used in nature language processing. Its idea is considering a document as a multiset consisting of words, namely counting the number of occurrences and disregarding the sequence or position of the words. Therefore, a document can be represented as a histogram of distinctive words. The bag-of-words model has been successfully applied to a number of nature language processing and information retrieval tasks, such as text classification.
+The bag-of-words model has been originally used in nature language processing. The idea is considering a document as a multiset consisting of words, that is counting the number of occurrences and disregarding the order of the words. Therefore, a document can be represented as a histogram of distinctive words. The bag-of-words model has been successfully applied to a number of nature language processing and information retrieval tasks, such as text classification.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=.8\textwidth]{bow.tikz}
+  \caption{Example of bag-of-words model.}
+  \label{fig:bow}
+\end{figure}
+
 
 Analogous to natural text, an image, which contains a collection of keypoints (or local feature descriptors), can also regarded as an document. And, this is the idea of the bag-of-words model for computer vision. In this case, the model is also referred as bag of visual words, bag of feature or bag of keypoints. 
 
@@ -953,7 +970,7 @@ On average, both fusion methods are better than the unimodal methods. What is in
     \caption{Containers with content}
     \label{fig:rocnonempty}
   \end{subfigure}
-  \caption{ROC curves of generic category recognition.}
+  \caption{ROC curves of generic category recognition results.}
   \label{fig:catroc}
 \end{figure}
 
@@ -1074,7 +1091,7 @@ Ich versichere an Eides statt, dass ich die \trtype{} im Studiengang \trcourseof
 \vspace{2cm}
 \chapter*{Erkl\"arung zur Ver\"offentlichung}
 \fancyhead[LE]{\it Erkl\"arung der Ver\"offentlichung}
-Ich erkl\"are mein Einverst"andnis mit der Einstellung dieser \trtype{} in den Bestand der Bibliothek.
+Ich erkl\"are mein Einverst\"andnis mit der Einstellung dieser \trtype{} in den Bestand der Bibliothek.
 
 \vspace{4cm}
 \noindent Ort, Datum \hfill Unterschrift
