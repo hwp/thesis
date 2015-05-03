@@ -245,14 +245,13 @@ The bag-of-words model has been originally used in nature language processing. T
 \begin{figure}[t]
   \centering
   \includegraphics[width=.8\textwidth]{bow.tikz}
-  \caption{Example of bag-of-words model.}
+  \caption[Example of the bag-of-words model.]{Example of the bag-of-words model. The keypoints in the image are first detected and described using SIFT descriptors. The keypoints are then mapped to a cluster in a given codebook. Finally, the histogram of keypoints in each cluster is used as the representation of the image.}
   \label{fig:bow}
 \end{figure}
 
-
 Analogous to natural text, an image, which contains a collection of keypoints (or local feature descriptors), can also regarded as an document. And, this is the idea of the bag-of-words model for computer vision. In this case, the model is also referred as bag of visual words, bag of feature or bag of keypoints. 
 
-However, there is an essential difference between a word and a local feature descriptor, which is that a word is a nominal value while a descriptor is a real vector. Thus, a vector quantization step is carried out to map a descriptor to a visual ``word''. In most of the applications, the descriptors are quantized by matching to the nearest neighbor in a vocabulary, which is constructed in advance by clustering, such as k-means. Another benefit from quantization is that the different but similar descriptors are put into the same class. Therefore, the representation is more robust to variations between objects in the same category.
+However, there is an essential difference between a word and a local feature descriptor, which is that a word is a nominal value while a descriptor is a real vector. Thus, a vector quantization step is required to map a descriptor to a visual ``word''. The descriptors are quantized by matching to the nearest neighbor in a vocabulary or codebook, which is constructed in advance by clustering, such as k-means algorithm. Another benefit from quantization is that the different but similar descriptors are put into the same class. Therefore, the representation is more robust to variations between objects in the same category. An example of the bag-of-words models is shown in \Cref{fig:bow}.
 
 Similar to that in nature language processing, images represented by bag-of-words model can be used for further learning. These applications includes supervised classification using support vector machine or na\"ive Bayes~\cite{csurka_visual_2004} and unsupervised categorization using probabilistic latent semantic analysis or latent Dirichlet allocation~\cite{sivic_discovering_2005}.
 
