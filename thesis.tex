@@ -85,7 +85,7 @@
 %\addcontentsline{toc}{chapter}{\numberline{}Abstract}
 Comparing to traditional visual object recognition, multimodal object recognition is advantageous in that different modalities provide complementary information. This work aims to implement a system for object recognition given videos of interactions with objects and investigate different modality fusion methods.
 
-The bag-of-words model with SIFT descriptors and the MFCC are used as visual and audio features. The system classify objects by computing the probability with learned hidden Markov models. The system incorporates two different fusion methods: feature fusion and decision fusion. The former method learns a joint probability distributions with one HMM, while the latter method learns two separate probability distribution with two HMMs and combine them under the conditional independence assumption.
+The bag-of-words model with SIFT descriptors and the MFCC are used as visual and audio features. The system classify objects by computing the probabilities with learned hidden Markov models. The system incorporates two different fusion methods: feature fusion and decision fusion. The former method learns a joint probability distributions with one HMM, while the latter method learns two separate probability distribution for each modality and combine them under the conditional independence assumption.
 
 Experiments based on a dataset of 33 different household objects are carried out to evaluate the performance of these two fusion methods as well as single modality approaches. The result shows that both fusion methods improved the performance over single modality methods, while these two methods are mostly comparable. 
 
@@ -118,7 +118,7 @@ Experiments based on a dataset of 33 different household objects are carried out
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-Considering how humans recognize objects, we use not only our vision, but also perceptions of other modalities, such as auditory, haptic and olfactory perceptions. These extra perceptions provide complementary information. This idea of multimodal object recognition can also be applied to robotic systems.
+Humans not only use vision for object recognition, but also perceptions of other modalities, such as auditory, haptic and olfactory perceptions. These extra perceptions provide complementary information. This idea of multimodal object recognition can also be applied to robotic systems.
 
 Traditional object recognition systems, which are exclusively based on visual information, are limited in several ways. They are sensitive to a number of image transformations such as view point change, occlusion and lighting variation. There are also cases, where the visual information alone is not sufficient to distinguish an object. For example, a paper cup might have the same appearance as a ceramic cup, and it is difficult to distinguish them only with vision. However, if we strike or touch them, we can get auditory or haptic feedback, from which it is possible to tell the difference.
 
@@ -168,12 +168,12 @@ It is important to note that, concerning object recognition, there are two types
 Unlike the specific case, generic category recognition deal with classifying an instance to a category. \Cref{fig:generic} shows an example of generic category recognition. For training, the system is given a set of objects, some of which belongs to a category (positive instances) and some of which does not (negative instances). For testing, the system need to tell whether an unseen object belongs to this category or not. The generic category recognition is more challenging since the objects belongs to the same category vary in appearance.
 
 \section{Thesis Outline}
-The rest of the thesis will answer aforementioned basic questions.
-\Cref{ch:visual} will present the bag-of-words model with SIFT descriptors, which is suitable use as the visual feature for our application.
-\Cref{ch:audio} will present how to extract MFCCs as the audio feature.  
+The rest of the thesis will answer the aforementioned basic questions.
+In \Cref{ch:visual}, we will present the bag-of-words model with SIFT descriptors, which is suitable to be used as the visual feature for our application.
+In \Cref{ch:audio}, we will present MFCCs as the audio feature.  
 In \Cref{ch:hmm}, we will introduce the theories of hidden Markov models.  
 In \Cref{ch:bimodal}, we will describe the design of our bimodal object recognition system. Two modality fusion methods will be discussed.  
-\Cref{ch:experiment} will address how experiments are carried out and show the experiment results.  
+In \Cref{ch:experiment}, we will address how experiments are carried out and show the experiment results.  
 Finally in \Cref{ch:conclusion}, our findings from the experiment will be discussed and suggested future work will be addressed.
 
 \cleardoublepage
@@ -186,11 +186,11 @@ Visual object recognition has been extensively studied in the recent decade. Vis
 In this chapter, we will present the state-of-the-art representation of object images using local features and the bag-of-words model.
 
 \section{Local Features}
-Thinking of representing an object in an image, one method is extracting patterns that describe the whole picture, such as using the intensities of pixels. These methods are the global image representations. However, since the structures of most object appearances are very complex and the images are also subject to lighting variations, scaling, rotations, translations as well as occlusions, such global image representations can hardly generate robust results. 
+Methods of representing an object in an image can be categorized as global image representation and local feature representation. The global image representation is the method of extracting patterns that describe the whole picture, such as using the intensities of pixels. However, since the structures of most object appearances are very complex and the images are also subject to lighting variations, scaling, rotations, translations as well as occlusions, such global image representations can hardly generate robust results. 
 
 In contrast to global representations, the local feature representation uses features of a local patches or regions to describe the image. These representations are designed to be invariant to a range of image transformations, such as scaling, rotation, translation and affine deformation. The development of such local features in the past decade has made it possible to implement robust and efficient object recognition applications.
 
-A local feature extraction consists of the following two steps: 
+The extraction of local features consists of the following two steps: 
 \begin{description}
   \item[Keypoint detection] Detect a set of points of interest (i.e. keypoints) and the regions around it. The detection is carried out in a scale- or affine-invariant manner. Examples of keypoints detection methods include the Laplacian-of-Gaussian (LoG) detector~\cite{lindeberg_feature_1998}, the difference-of-Gaussian (DoG) detector~\cite{lowe_object_1999}, Harris affine detector~\cite{mikolajczyk_scale_2004} and maximally stable external regions (MSER)~\cite{matas_robust_2004}. 
   \item[Feature description] For each keypoint, compute its descriptor, which is a feature vector that describe the local region. Examples of feature description methods include the scale invariant feature transform (SIFT)~\cite{lowe_object_1999} and ``speed-up'' robust features (SURF)~\cite{bay_speeded-up_2008}.
@@ -207,7 +207,7 @@ Given an image $I(x)$, the DoG detector finds the position $x$ and the scale $\s
 \begin{equation}
   D(x,\sigma) = (G(x,k\sigma) - G(x,\sigma)) * I(x)
 \end{equation}
-where $G(x,\sigma)$ is the Gaussian convolution mask, $k$ is a constant and $*$ is convolution. An efficient way to calculating the DoG is first smoothing (convoluting) the image with Gaussian mask at different scale, and then subtracting the results with the adjacent scales. Local maxima are located in several layers of DoG filtered images (each at different scales), such that $D(x,\sigma)$ is larger than the eight neighbors in same layer and the nine neighbors on each of the adjacent layers.
+where $G(x,\sigma)$ is the Gaussian convolution mask, $k$ is a constant and $*$ is convolution. An efficient way to calculate the DoG is first smoothing (convoluting) the image with Gaussian mask at different scale, and then subtracting the results with the adjacent scales. Local maxima are located in several layers of DoG filtered images (each at different scales), such that $D(x,\sigma)$ is larger than the eight neighbors in same layer and the nine neighbors on each of the adjacent layers.
 
 After the local maxima are found, an additional filtering step is added, in order to remove the points on edges. This is accomplished by evaluating the Hessian matrix at the points.
 
@@ -217,14 +217,14 @@ At the end, the selected points with the regions surrounding them (typically, $r
 The scale invariant feature transform (SIFT) descriptor is one of the state-of-the-art features that are used for visual object recognition. SIFT was originally published in papers by Lowe~\cite{lowe_object_1999,lowe_distinctive_2004}. 
 Although in the original papers, the SIFT descriptor is designed with the DoG detector, it can also be combined with other detection methods~\cite{mikolajczyk_performance_2005}.
 
-Once keypoints are located, the feature description of the keypoints should be in the way that it is invariant to many image transformations. What the keypoints detectors, such as DoG detector, has already achieved is scale and translation invariance. In addition to that, the SIFT descriptor provides features that are invariant to rotation and illumination variation.
+Once keypoints are located, the feature description of the keypoints should be in the way that it is invariant to many image transformations. The keypoints detectors, such as DoG detector, fulfills the scale and translation invariance. In addition to that, the SIFT descriptor provides features that are invariant to rotation and illumination variation.
 
 The SIFT descriptor describes a keypoint as histograms of gradient orientations. Specifically, it is computed via the following steps:
 \begin{enumerate}
-  \item Normalize the size and orientation of the region around the keypoint according the scale, which is the result of scale invariant detector, and the dominant orientation.
+  \item Normalize the size and orientation of the region around the keypoint according the scale and the dominant orientation.
   \item The region is divided to a $16 \times 16$ regular grid. For each location, the gradient orientation is computed.
   \item These locations are again divide into a $4 \times 4$ regular grid. For each cell, the gradient orientation histogram with 8 orientation bins is computed according to the gradient magnitudes applied with a Gaussian window.
-  \item Combining the $16$ histograms will result in a $16 \times 8 = 128$ dimensional vector. Normalize this vector and the result is the SIFT descriptor.
+  \item Combining the $16$ histograms will result in a $128$ ($16 \times 8$) dimensional vector. Normalize this vector and the result is the SIFT descriptor.
 \end{enumerate}
 
 The rotation invariance is achieved by the selecting the dominant orientation in the first step and the illumination invariance is achieved by the normalization in the last step.
@@ -239,7 +239,7 @@ The rotation invariance is achieved by the selecting the dominant orientation in
 An example of feature matching with SIFT descriptors is shown in \Cref{fig:match}. Two images of an object is taken from different view points and under different lighting condition. The identical keypoints from the two images are detected with SIFT descriptors.
 
 \section{The Bag-of-Words Model}
-While specific object recognition can be solved as matching of local features, the local feature representation cannot be directly applied to generic category recognition. Local features are adequate in characterizing an exact part of a particular object. However, different objects in the same category are not identical in appearance. Thus, in this case, a valid representations should capture the common characteristics of different instances in the same class. One of the solution is the bag-of-words model~\cite{csurka_visual_2004}.
+While specific object recognition can be solved as matching of local features, the local feature representation cannot be directly applied to generic category recognition. Local features are adequate in characterizing an exact part of a particular object. However, they do not describe the whole image. In addition, different objects in the same category are not identical in appearance. Thus, in this case, a valid representations should capture the common characteristics of different instances in the same class. One of the solution is the bag-of-words model~\cite{csurka_visual_2004}.
 
 The bag-of-words model has been originally used in nature language processing. The idea is considering a document as a multiset consisting of words, that is counting the number of occurrences and disregarding the order of the words. Therefore, a document can be represented as a histogram of distinctive words. The bag-of-words model has been successfully applied to a number of nature language processing and information retrieval tasks, such as text classification.
 
@@ -252,7 +252,7 @@ The bag-of-words model has been originally used in nature language processing. T
 
 Analogous to text document, an image, which contains a collection of keypoints (or local feature descriptors), can also regarded as an document. And, this is the idea of the bag-of-words model for computer vision. In this case, the model is also referred as bag of visual words, bag of feature or bag of keypoints. 
 
-However, there is an essential difference between a word and a local feature descriptor, which is that a word is a nominal value while a descriptor is a real vector. Thus, a vector quantization step is required to map a descriptor to a visual ``word''. The descriptors are quantized by matching to the nearest neighbor in a vocabulary or codebook, which is constructed in advance by clustering, such as k-means algorithm. Another benefit from quantization is that the different but similar descriptors are put into the same class. Therefore, the representation is more robust to variations between objects in the same category. An example of the bag-of-words models is shown in \Cref{fig:bow}.
+However, there is an essential difference between a word and a local feature descriptor, which is that a word is a nominal value while a descriptor is a real vector. Thus, a vector quantization step is required to map a descriptor to a visual ``word''. The descriptors are quantized by matching to the nearest neighbor in a vocabulary or codebook, which is constructed in advance by clustering, such as k-means algorithm. Another benefit from quantization is that similar descriptors are put into the same class. Therefore, the representation is more robust to variations between objects in the same category. An example of the bag-of-words models is shown in \Cref{fig:bow}.
 
 Similar to that in nature language processing, images represented by bag-of-words model can be used for further learning. These applications includes supervised classification using support vector machine or na\"ive Bayes classifier~\cite{csurka_visual_2004} and unsupervised categorization using probabilistic latent semantic analysis or latent Dirichlet allocation~\cite{sivic_discovering_2005}.
 
@@ -262,13 +262,13 @@ In this chapter, we have presented the local features and the bag-of-words model
   \item The local feature representation is one of the state-of-art technique for computer vision. The representation is computed via keypoint detection and feature description. The results are a number of descriptors of the points of interest in the image. 
   \item The DoG detector is invariant to scaling.
   \item The SIFT descriptors are invariant to rotation and illumination variation.
-  \item The Bag-of-words model, which is based on local features, is a more general representation of a image. 
+  \item The Bag-of-words model based on local features, is a high-level representation, which encodes the categorical information of an image. 
 \end{itemize}
 
 \cleardoublepage
 \chapter{Audio Features}
 \label{ch:audio}
-Audio signal processing has been one of the most important fields of digital signal processing. Many different audio features have been proposed to represent the audio signal. As for any system, how the data is represented affects the performance of the system dramatically. And, so is for our system. In terms of good audio features, we want to find features such that, similar sounds that human perceive also appear similar (closer) in the feature space and the number of dimensions of the feature space should be small so that it can be applied to the subsequent learning algorithms. In other words, the feature should be simple and corresponds to human perception.
+Audio signal processing is one of the most important fields of digital signal processing. Many different audio features have been proposed to represent the audio signal. As for any system, how the data is represented affects the performance of the system dramatically. In terms of good audio features, we want to find features such that, similar sounds that human perceive also appear similar (closer) in the feature space and the number of dimensions of the feature space should be small so that it can be applied to the subsequent learning algorithms. In other words, the feature should be simple and corresponds to human perception.
 
 Although audio features for object recognition have not been systematically studied, there has been extensive studies on audio features for speech recognition. The mel-frequency cepstrum coefficients (MFCCs) is one of the most commonly used audio features in speech recognition. Therefore, we choose MFCCs as the audio feature in our system.
 
@@ -279,7 +279,7 @@ The raw audio data are represented as the altitudes of the pressure changing ove
 
 The power spectrum, i.e. the squared magnitude of the Fourier transform, shows how the energy is distributed in different frequency bin, but it does not show how the signal varies over time. That means it cannot specify the local information at a certain time. The solution to this problem is the short time Fourier transform (STFT), which transform the signal to the time-frequency domain.
 
-The idea of STFT is that by using a sliding window, the signal at a short time is taken, and then applying the Fourier transform. More specifically, the STFT is defined as follows:
+The idea of STFT is that by using a sliding window, the signals during a short time is taken, and then applied with the Fourier transform. More specifically, the STFT is defined as follows:
 \begin{equation}
   X(n, k) = \sum_{m = -\infty}^{\infty} x[m]w[m-n]e^{-j \frac{2\pi k}{N} m}
 \end{equation}
@@ -299,10 +299,10 @@ From the spectrogram we can clearly visualize the different frequency components
 Note that because the time-domain signal is real, at any time, the result of the DFT has the following properties:
 \begin{itemize}
   \item $X(n,0)$ and $X[n, \frac{N}{2}]$ are real;
-  \item $X(n,k) = X^*(n,N-k), k \neq 0, \frac{N}{2}$, here $^*$ is the complex conjugate.
+  \item $X(n,k) = X^*(n,N-k), k \neq 0, \frac{N}{2}$, where $^*$ is the complex conjugate.
 \end{itemize}
 
-Therefore, only the first half (index from $0$ to $\frac{N}{2}$) of the DFT contains information, while the other half is redundant. From theories of Fourier analysis, we know that the $k$th frequency bin represents the component at frequency $\frac{kf_s}{N}$, with $f_s$ being the sampling rate. The component with the highest frequency is the bin with index $\frac{N}{2}$ and its frequency is $\frac{N}{2} \times \frac{f_s}{N} = \frac{f_s}{2}$. This is, in fact, the Nyquist frequency.
+Therefore, only the first half (index from $0$ to $\frac{N}{2}$) of the DFT contains necessary information, while the other half is redundant. From theories of Fourier analysis, we know that the $k$th frequency bin represents the component at frequency $\frac{kf_s}{N}$, with $f_s$ being the sampling rate. The component with the highest frequency is the bin with index $\frac{N}{2}$ and its frequency is $\frac{N}{2} \times \frac{f_s}{N} = \frac{f_s}{2}$. This is, in fact, the Nyquist frequency.
 
 \begin{figure}[t]
   \centering
@@ -327,13 +327,13 @@ Therefore, only the first half (index from $0$ to $\frac{N}{2}$) of the DFT cont
   \caption[Spectrograms with different window sizes]{Spectrograms of audio ``Hello World'' with different window sizes ($N$). (a) When the window size is $1024$, the spectrogram shows high frequency resolution, yet low time resolution.
     (b) When the window size is $256$, the spectrogram shows moderate frequency resolution and time resolution.
     (c) When the window size is $64$, the spectrogram shows low frequency resolution and high time resolution.
-  The STFT is calculated with a shift size of half window size. }
+  The STFT is calculated with a shift size equal to half of the window size. }
   \label{fig:spec}
 \end{figure}
 
 One shortcoming for STFT is that the frequency resolution and time resolution is mutually limited. This limit is known as the Gabor limit. The difference of two consecutive frequency bin is $\frac{f_s}{N}$. And, one STFT is a DFT of a neighborhood of $N$ samples, i.e. $N \times \frac{1}{f_s}$ time interval. That means the time resolution is $\frac{N}{f_s}$. Therefore, the product of the two resolutions, $\frac{f_s}{N} \times \frac{N}{f_s} = 1$, is constant. 
 
-Selecting the windows size involves trade-off between the frequency resolution and time resolution. With large window size, we can have good frequency resolution, while it can be difficult to catch the change in a short time. Vice versa, with a small windows size, we can have high time resolution. However, the frequency resolution would be low. \Cref{fig:spec} illustrates these difference.
+Selecting the windows size involves trade-off between the frequency resolution and time resolution. With large window size, we can have good frequency resolution, while it can be difficult to catch the change in a short time. Vice versa, with a small windows size, we can have high time resolution. However, the frequency resolution would be low. \Cref{fig:spec} illustrates the spectrograms with different window sizes.
 
 \section{Mel-frequency Cepstrum Coefficients}
 Despite the fact that the STFT gives information how the audio signal distributed at different frequencies over time, the frequency (i.e. pitch) is not the only characteristic human hear from a sound. Thus, the STFT itself is not a desired feature. However, the spectral information derived from the STFT can be further analyzed, which results in several spectral features. Among these features, the mel-frequency cepstrum coefficients (MFCCs) are commonly used for speech recognition.
@@ -341,10 +341,10 @@ The MFCCs are the coefficients of a cepstrum with frequency bands on the mel sca
 
 The mel scale is the scale of frequencies based on human perception of the distance in pitches. Classic study shows that human perceive the pitches in a non-linear scale~\cite{stevens_scale_1937}, which is usually formulated as~\cite{oshaughnessy_speech_1987}
 \begin{equation}
-  \text{mel} = 1127 \log (1 + \frac{f}{700})
+  \text{mel} = 1127 \log (1 + \frac{f}{700}) .
 \end{equation}
 
-A cepstrum is a ``spectrum'' of log spectrum. The term cepstrum is a result of reversing the first four letters in spectrum. The idea of using a ``spectrum'' of log spectrum was prompted by detecting echo in signals~\cite{oppenheim_frequency_2004}. Consider a signal with a simple echo
+A cepstrum is a ``spectrum'' of log spectrum. The term cepstrum is a result of reversing the first four letters in spectrum. The idea of using a ``spectrum'' of log spectrum was prompted by detecting echos in signals~\cite{oppenheim_frequency_2004}. Consider a signal with a simple echo
 \begin{equation}
   x(t) = s(t) + \alpha s(t - \tau),
 \end{equation}
@@ -356,7 +356,7 @@ and the log spectrum is
 \begin{equation}
   C(f) = \log \left| X(f) \right|^2 = \log \left| S(f) \right|^2 + \log (1 + \alpha^2 + 2 \alpha \cos(2 \pi f \tau)).
 \end{equation}
-Consider $C(f)$ as a signal of $f$, it has an additive periodic component due to the present of the $\cos$ term and its ``fundamental frequency'' is the echo delay $\tau$. Therefore, taking the Fourier transform of $C(f)$, the ``spectrum'' shows a peak at the ``fundamental frequency''. 
+Consider $C(f)$ as a signal of $f$, it has an additive periodic component due to the present of the cosine term and its ``fundamental frequency'' is the echo delay $\tau$. Therefore, taking the Fourier transform of $C(f)$, the ``spectrum'' shows a peak at the ``fundamental frequency''. 
 
 The computation of MFCCs consists of the following steps:
 \begin{enumerate}
@@ -369,14 +369,14 @@ The computation of MFCCs consists of the following steps:
 \section{Summary}
 In this chapter, we have presented some of the features for audio processing. The key points include:
 \begin{itemize}
-  \item The STFT is one of the basic preprocessing of audio signal, which transform time-domain signals to the time-frequency domain.
-  \item The MFCC is a audio feature that gives interpretation of sounds that is similar to human perception. It also captures information such as echo in the signal.
+  \item The STFT is one of the basic preprocessing of audio signal, which transforms time-domain signals to the time-frequency domain.
+  \item The MFCC is an audio feature that encodes interpretation of sounds similar to human perception. It also captures information such as echo in the signal.
 \end{itemize}
 
 \cleardoublepage
 \chapter{Theories of Hidden Markov Model}
 \label{ch:hmm}
-The hidden Markov models (HMM) are statistical models for time series data, which have been well-known and widely used by researchers~\cite{rabiner_tutorial_1989, rabiner_fundamentals_1993}. Theories of HMM are initially published by Baum and his colleagues~\cite{baum_statistical_1966, baum_maximization_1970}. They have been successfully applied to a number of research fields, including speech processing~\cite{baker_dragon_1975, rabiner_fundamentals_1993}, image processing~\cite{chen_off-line_1994}, gesture recognition~\cite{mitra_gesture_2007}, bioinformatics~\cite{koski_hidden_2001}, finance~\cite{bhar_hidden_2004}, etc.
+The hidden Markov models (HMM) are statistical models for time series data, which have been well-known and widely used by researchers~\cite{rabiner_tutorial_1989, rabiner_fundamentals_1993}. Theories of HMM are initially published by Baum and his colleagues~\cite{baum_statistical_1966, baum_maximization_1970}. The HMMs have been successfully applied to a number of research fields, including speech processing~\cite{baker_dragon_1975, rabiner_fundamentals_1993}, image processing~\cite{chen_off-line_1994}, gesture recognition~\cite{mitra_gesture_2007}, bioinformatics~\cite{koski_hidden_2001}, finance~\cite{bhar_hidden_2004}, etc.
 
 In this chapter, we will first introduce the formal definition of the HMM and then present the algorithms for evaluating probability and estimating the model parameters.
 
@@ -405,7 +405,7 @@ A hidden Markov model describes a probability distribution of a stationary discr
 
 These conditional dependencies can be shown as a Bayesian network by unfolding the variables over time (see \Cref{fig:hmm}).
 
-Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$, with $N$ being the number of states). Since our features are in continuous space, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is called HMM-GMM.
+Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$, with $N$ being the number of states). Since our features are in continuous space, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is also called HMM-GMM.
 
 Given the aforementioned assumptions, one HMM can be specified with the following parameters:
 \[ \lambda = (A, B, \pi) \]
@@ -421,7 +421,7 @@ such that
 
 As for HMM-GMM, each $b_j(x)$, more specifically, is a probability density function (pdf) of a GMM:
 \[ b_j(x) = \sum_{k=1}^M c_{jk} \mathcal{N}(x, \mu_{jk}, \Sigma_{jk}) \]
-where $c_{jk}$ is the mixture weight (coefficient), $\mu_{jk}$ is the mean and $\Sigma_{jk}$ is the covariance matrix, each of the $k$-th component in state $j$ and $\mathcal{N}$ is the pdf of the Gaussian distribution. 
+where $c_{jk}$ is the mixture weight, $\mu_{jk}$ is the mean and $\Sigma_{jk}$ is the covariance matrix, each of the $k$-th component in state $j$ and $\mathcal{N}$ is the pdf of the Gaussian distribution. 
 
 With the formal definition of HMM, there are still three problems of interest to be solved, in order to use HMM for real-world applications. These problems are:
 \begin{enumerate}
@@ -433,7 +433,7 @@ With the formal definition of HMM, there are still three problems of interest to
 In the following section, we will show that the first and third problem can be solved using the forward/backward procedure and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm~\cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
 
 \section{Probability Evaluation}
-Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, we wish to calculate the probability, $P(\mathbf{x}|\lambda)$. A na\"ive solution to this is enumerating all possible state sequences and applying law of total probability, that is
+Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, we wish to calculate the probability, $P(\mathbf{x}|\lambda)$. A na\"ive solution to this problem is enumerating all possible state sequences and applying law of total probability, that is
 \begin{equation}
   P(\mathbf{x}|\lambda) = \sum_{\text{all } \mathbf{q}} P(\mathbf{x}|\mathbf{q},\lambda) P(\mathbf{q}|\lambda) .
 \end{equation}
@@ -738,12 +738,13 @@ in which $D^c$ is the set of data instances of which the labels are $c$. The mod
 
 For specific category recognition, which is a multiclass classification problem, the prediction of a new instance is carried out by choosing the class with the maximum likelihood:
 \begin{equation}
+  \label{eq:classif_s}
   f(\mathbf{x}) = \argmax_{c} P(\mathbf{x}|c) .
 \end{equation}
 
 For generic category recognition, the classification is carried out individually for each category. Thus, predicting whether an instance belongs to a certain category is a binary classification problem. The classification is based on comparing the posterior probability to a given threshold $\theta$:
 \begin{equation}
-  \label{eq:classif}
+  \label{eq:classif_g}
   f(\mathbf{x}) = 
   \left\{ \begin{array}{l l} +1, & \quad P(c=+1|\mathbf{x}) > \theta; \\ -1, & \quad \text{otherwise.}
   \end{array} \right.
@@ -755,11 +756,13 @@ From Bayesian theory, the posterior probability of a class given the observation
 \end{equation}
 in which $P(c)$ is the prior probability of the class.
 
-Considering the fact that randomly selecting objects as data set is not likely to be the same as randomly drawing a sample in a real world, the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewrite as 
+Considering the fact that randomly selecting objects as data set is not likely to be the same as randomly drawing a sample in a real world, we notice that the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewrite as 
 \begin{equation}
   \label{eq:postsimp}
   P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)} .
 \end{equation}
+
+As seen from \cref{eq:classif_s,eq:classif_g}, the key for both object recognition tasks is to know the likelihood.
 
 \subsection{Model Selection}
 An important issue about HMM is selecting the model size and the observation distribution, i.e. the number states, the number of components for each state and the type of covariance matrix. The choice of models can have a dramatic impact on the result.
@@ -780,7 +783,9 @@ For the number of states and the number of components, the larger the numbers ar
   \end{tabular}
 \end{table}
 
-In general, complex models have larger hypothesis space, hence can better approximate the target distribution. However, since the Baum-Welch algorithm does not guarantee MLE, more complex models are more prone to local optima. Furthermore, it could also result in overfitting if the training set is not large enough. The comparison of simple and complex models are listed in \cref{tab:model}.
+In general, simple models have smaller hypothesis space, which means it is it is easy to learn. However, smaller hypothesis space is less likely to contain target distribution, thus problems of underfitting can occur.
+
+On the other hand, complex models have larger hypothesis space, hence can better approximate the target distribution. However, since the Baum-Welch algorithm does not guarantee MLE, more complex models are more prone to local optima. Furthermore, it could also result in overfitting if the training set is not large enough. The comparison of simple and complex models are listed in \cref{tab:model}.
 
 Making decision for the model choice should follow the principle of Occam's razor. Depending on different data, the best choice is the simplest model that can fit the data.
 
@@ -789,7 +794,7 @@ Several implementation issues are addressed in the following part.
 
 \subsubsection{Underflow and overflow}
 
-When probabilities accumulate through the data sequence, the values can be significantly larger or smaller than $1$. Such values exceed the precision range of machines. To avoid such underflow and overflow problems, the computation is perform with the logarithmic values of each variable. 
+When probabilities accumulate through the data sequence, the values can be significantly larger or smaller than $1$. Such values exceed the precision range of machines. To avoid such underflow and overflow problems, the computation is performed with the logarithmic values of each variable. 
 
 \subsubsection{Insufficient training data}
 
@@ -800,13 +805,13 @@ As previously described in the Baum-Welch algorithm, the reestimation procedure 
 From our experience, the training process of the HMM parameters can take very long time. Our system incorporates parallel computation with OpenMP. The parallelization increases the speed up to 8 times of the original on a computer with an 8-core CPU.
 
 \section{Methods of Multimodal Fusion}
-Having discussed how to extract feature vectors and how to make decision based on it, the final part of system design addresses the question of how multimodal signals are fused. The way to fuse the visual and audio information is essential to the object recognition system, that good method makes use of both modalities and avoid noises from unreliable signal.
+Having discussed how to extract feature vectors and how to make decision based on it, we now move on to the final part of system design addresses the question of how multimodal signals are fused. The way to fuse the visual and audio information is essential to the object recognition system, that good method makes use of both modalities and avoid noises from unreliable signal.
 
-Multimodal fusion may be classified according to the level of fusion into feature fusion, decision fusion and hybrid fusion~\cite{atrey_multimodal_2010}. The feature fusion or early fusion is the approach of combining the multimodal features before they are sent as input of a learning model. The decision fusion or late fusion approach, on the other hand, analyzes each modality independently and then combines the individual decisions to a final result. The hybrid fusion is a combination of these two approaches.
+Multimodal fusion methods may be classified according to the level of fusion into feature fusion, decision fusion and hybrid fusion~\cite{atrey_multimodal_2010}. The feature fusion or early fusion is the approach of combining the multimodal features before they are sent as input of a learning model. The decision fusion or late fusion approach, on the other hand, analyzes each modality independently and then combines the individual decisions to a final result. The hybrid fusion is a combination of these two approaches.
 
 The system incorporates two different designs regarding the fusion method: one with feature fusion and the other with decision fusion. Such methods will be presented in the remaining of this section. The performance of these two methods will be further discussed with experimental results in later chapters.
 
-To ground our discussion, consider the problem of binary classification using HMM with visual and audio features. The observation is a combination of visual and audio features, $\mathbf{x} = (\mathbf{v}, \mathbf{a})$. To make a decision using \cref{eq:classif,eq:postsimp}, we need the to know the joint likelihood $P(\mathbf{v},\mathbf{a}|c)$.
+To ground our discussion, consider the problem of classification using HMM with visual and audio features. The observation is a combination of visual and audio features, $\mathbf{x} = (\mathbf{v}, \mathbf{a})$. To make a decision using \cref{eq:classif_s,eq:classif_g}, we need the to know the joint likelihood $P(\mathbf{v},\mathbf{a}|c)$.
 
 \subsection{Feature Fusion}
 \begin{figure}[t]
@@ -816,13 +821,13 @@ To ground our discussion, consider the problem of binary classification using HM
   \label{fig:featuref}
 \end{figure}
 
-A direct approach is simply learn the HMM with the concatenated features, therefore the joint likelihood can be approximated with 
+The feature fusion is a direct approach that the system learns the HMM with the concatenated features. Therefore the joint likelihood can be approximated with 
 \begin{equation}
   P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v},\mathbf{a}|\lambda_{va}^c)
 \end{equation}
-in which $\lambda_{va}^c$ are the estimated bimodal HMM parameters. This is an approach of feature fusion. A block diagram of such approach is shown in \Cref{fig:featuref}.
+in which $\lambda_{va}^c$ are the estimated bimodal HMM parameters. A block diagram of such approach is shown in \Cref{fig:featuref}.
 
-The advantage of feature fusion is that it utilizes the correlation between modalities. Theoretically, if the HMM are properly chosen and well trained, the feature fusion approach can yields optimal estimation of the joint likelihood. Learning both modalities at the same time increases the hypothesis space and also increases the difficulty of estimating the optimal parameters of the HMM.
+The advantage of feature fusion is that it utilizes the correlation between modalities. Theoretically, if the HMM are properly chosen and well trained, the feature fusion approach can yields optimal estimation of the joint likelihood. However, learning both modalities at the same time increases the hypothesis space and also increases the difficulty of estimating the optimal parameters of the HMM.
 
 \subsection{Decision Fusion}
 \begin{figure}[t]
@@ -832,20 +837,20 @@ The advantage of feature fusion is that it utilizes the correlation between moda
   \label{fig:decisionf}
 \end{figure}
 
-An alternative approach is learning separate HMMs and combine the likelihood at decision level. If we assume the features of different modalities are conditionally independent given the class, the joint likelihood can be computed as
+An alternative approach, which is the decision fusion, is learning separate HMMs and combine the likelihood at decision level. If we assume the features of different modalities are conditionally independent given the class, the joint likelihood can be computed as
 \begin{equation}
   P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v}|c) P(\mathbf{a}|c) = P(\mathbf{v}|\lambda_v^c) P(\mathbf{a}|\lambda_a^c)
 \end{equation}
 in which $\lambda_{v}^c$ and $\lambda_{a}^c$ are the estimated HMM parameters for visual and audio features, respectively. A block diagram of such approach is shown in \Cref{fig:decisionf}.
 
-Rather than learning a complex HMM model, the decision fusion approach learns two simple models. Therefore it is more likely to get a optimal estimation of the HMM parameters. However, the fusion is based on the assumption of conditional independence, which usually does not hold in reality. In this case, the joint likelihood estimation will be biased.
+Rather than learning a complex HMM model, the decision fusion approach learns two simple models. Therefore it is more likely to get a optimal estimation of the HMM parameters. However, the fusion is based on the assumption of conditional independence, which sometimes does not hold in reality. In this case, the joint likelihood estimation will be biased.
 
 \section{Summary}
 In this chapter, we have presented the design of a visual-audio object recognition system based on HMMs. The key points include:
 \begin{itemize}
   \item The system uses bag-of-words model with SIFT descriptors as the visual feature and the Mel-frequency cepstrum coefficients as the audio feature.
   \item The system uses HMM to estimate probabilities. For specific object recognition, instances are classified by selecting the class with maximum likelihood. For generic category recognition, classification is carried out by comparing the posterior probability with a threshold. The model selection plays a crucial role to the system.
-  \item The system incorporates two types of multimodal fusion methods. The feature fusion method is to learn HMM with concatenated features and directly estimate the joint likelihood. The decision fusion methods is to learn two HMMs for individual modalities and compute the joint likelihood with the conditional independence assumption. Such two methods will be compared in the experiment.
+  \item The system incorporates two types of multimodal fusion methods. The feature fusion method is to learn HMM with concatenated features and directly estimate the joint likelihood. The decision fusion method is to learn two HMMs for individual modalities and compute the joint likelihood with the conditional independence assumption. Such two methods will be compared in the experiment.
 \end{itemize}
 
 \cleardoublepage
@@ -977,7 +982,7 @@ On average, both fusion methods are better than the unimodal methods. What is in
 \cleardoublepage
 \chapter{Conclusion and Future Work}
 \label{ch:conclusion}
-In this study, we have presented the design and implementation of a visual-audio object recognition system with hidden Markov models. The system has two different modality fusion methods: feature fusion and decision fusion. Experiments were carried out to evaluated the performance of these to methods and unimodal methods.
+In this study, we have presented the design and implementation of a visual-audio object recognition system with hidden Markov models. The system has two different modality fusion methods: feature fusion and decision fusion. Experiments were carried out to evaluated the performance of these two methods and unimodal methods.
 
 The results show that, for specific object recognition, both fusion methods increased the accuracy for about 10\%, comparing to unimodal methods. For generic category recognition, both fusion methods increased the performance for most of the categories. Only if one of the input signals is too noisy, the result of the fusion methods will be worse than the result of the good signal. 
 
@@ -989,7 +994,7 @@ The current system cannot perform real-time recognition, for that the extraction
 
 The size of the dataset is critical to the system. With large dataset it is possible to use discriminative methods to learn combination rules. For example, the reliabilities of the modalities can be estimated using a validation set taken from the training set. The reliabilities can be further used for modifying the influence of each signal. To increase the size of the dataset, it is possible to implement robotic systems to automatically collect data or acquire unlabeled data from Internet sources.
 
-Although the performance of a multimodal object recognition system can be improved by finding the optimal combination rule, the upper bound of the performance is decided by the quality of the features. On the hand, thinking of the properties of multimodal signals, for example that the signals appear at the same time contain congruent semantic information, the properties can be served as a heuristic for learning good representation.
+Although the performance of a multimodal object recognition system can be improved by finding the optimal combination rule, the upper bound of the performance is decided by the quality of the features. On the hand, thinking of the properties of multimodal signals, for example that the signals appear at the same time contain congruent semantic information, we can actually use the properties as a heuristic for learning good representation.
 % There is some related study in this topic by using deep neural networks~\cite{ngiam_multimodal_2011}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
