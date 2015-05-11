@@ -827,7 +827,7 @@ The feature fusion is a direct approach that the system learns the HMM with the 
 \end{equation}
 in which $\lambda_{va}^c$ are the estimated bimodal HMM parameters. A block diagram of such approach is shown in \Cref{fig:featuref}.
 
-The advantage of feature fusion is that it utilizes the correlation between modalities. Theoretically, if the HMM are properly chosen and well trained, the feature fusion approach can yields optimal estimation of the joint likelihood. However, learning both modalities at the same time increases the hypothesis space and also increases the difficulty of estimating the optimal parameters of the HMM.
+The advantage of feature fusion is that it utilizes the correlation between modalities. Theoretically, if the HMM are properly chosen and well trained, the feature fusion approach can yields optimal estimation of the joint likelihood. However, learning both modalities at the same time increases the hypothesis space and also increases the difficulty of estimating the optimal parameters of the HMM. Furthermore, the video and audio features are required to be synchronized in order to get meaningful combined feature.
 
 \subsection{Decision Fusion}
 \begin{figure}[t]
@@ -850,8 +850,22 @@ In this chapter, we have presented the design of a visual-audio object recogniti
 \begin{itemize}
   \item The system uses bag-of-words model with SIFT descriptors as the visual feature and the Mel-frequency cepstrum coefficients as the audio feature.
   \item The system uses HMM to estimate probabilities. For specific object recognition, instances are classified by selecting the class with maximum likelihood. For generic category recognition, classification is carried out by comparing the posterior probability with a threshold. The model selection plays a crucial role to the system.
-  \item The system incorporates two types of multimodal fusion methods. The feature fusion method is to learn HMM with concatenated features and directly estimate the joint likelihood. The decision fusion method is to learn two HMMs for individual modalities and compute the joint likelihood with the conditional independence assumption. Such two methods will be compared in the experiment.
+  \item The system incorporates two types of multimodal fusion methods. The feature fusion method is to learn HMM with concatenated features and directly estimate the joint likelihood. The decision fusion method is to learn two HMMs for individual modalities and compute the joint likelihood with the conditional independence assumption. The difference of the two methods is summarized in \Cref{tab:fusion}. Such two methods will be compared in the experiment.
 \end{itemize}
+
+\begin{table}[t]
+  \caption{Comparison of feature fusion and decision fusion.}
+  \label{tab:fusion}
+  \centering
+  \begin{tabular}{p{.42\textwidth}p{.42\textwidth}}
+    \toprule
+    \multicolumn{1}{c}{\bfseries Feature Fusion} & \multicolumn{1}{c}{\bfseries Decision Fusion} \\ \midrule
+    Correlation between modalities is utilized. & Independent assumption needs to be hold. \\
+    Models are complex. & Models are simple. \\
+    Synchronization is necessary. & Synchronization is not necessary. \\ 
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \cleardoublepage
 \chapter{Experiment and Results}
@@ -1058,92 +1072,92 @@ Although the performance of a multimodal object recognition system can be improv
 \toprule
 & & \multicolumn{6}{c}{Categories} \\ \cmidrule(r){3-8}
 \multicolumn{1}{l}{Object ID} & Picture & \rotatebox{55}{Mug} & \rotatebox{55}{Bottle} & \rotatebox{55}{Plastic Object} & \rotatebox{55}{Metal Object} & \rotatebox{55}{Fragile Object} & \rotatebox{55}{\parbox{2.8cm}{Container with Contents}} \\ \midrule
-\endhead
+        \endhead
 
-\bottomrule \multicolumn{8}{r}{(Continued on next page\ldots)} \\
-\endfoot
+        \bottomrule \multicolumn{8}{r}{(Continued on next page\ldots)} \\
+      \endfoot
 
-\bottomrule
-\endlastfoot
+      \bottomrule
+    \endlastfoot
 
-1 & \includegraphics[width=.12\linewidth]{object1} & No & No & No & No & Yes & No \\ 
-2 & \includegraphics[width=.12\linewidth]{object2} & Yes & No & No & No & Yes & No \\ 
-3 & \includegraphics[width=.12\linewidth]{object3} & Yes & No & No & No & Yes & No \\ 
-4 & \includegraphics[width=.12\linewidth]{object4} & No & No & No & No & No & No \\ 
-5 & \includegraphics[width=.12\linewidth]{object5} & No & No & No & No & No & No \\ 
-6 & \includegraphics[width=.12\linewidth]{object6} & Yes & No & No & No & Yes & No \\ 
-7 & \includegraphics[width=.12\linewidth]{object7} & No & No & No & No & Yes & No \\ 
-8 & \includegraphics[width=.12\linewidth]{object9} & No & No & No & Yes & No & No \\ 
-9 & \includegraphics[width=.12\linewidth]{object10} & No & No & No & Yes & No & No \\ 
-10 & \includegraphics[width=.12\linewidth]{object11} & No & No & No & Yes & No & No \\ 
-11 & \includegraphics[width=.12\linewidth]{object12} & No & No & No & Yes & No & No \\ 
-12 & \includegraphics[width=.12\linewidth]{object13} & No & No & No & No & Yes & No \\ 
-13 & \includegraphics[width=.12\linewidth]{object14} & No & No & No & Yes & No & No \\ 
-14 & \includegraphics[width=.12\linewidth]{object16} & No & Yes & Yes & No & No & No \\ 
-15 & \includegraphics[width=.12\linewidth]{object17} & No & No & Yes & No & No & Yes \\ 
-16 & \includegraphics[width=.12\linewidth]{object18} & No & No & No & No & No & No \\ 
-17 & \includegraphics[width=.12\linewidth]{object19} & No & Yes & No & No & Yes & Yes \\ 
-18 & \includegraphics[width=.12\linewidth]{object20} & No & Yes & No & No & Yes & No \\ 
-19 & \includegraphics[width=.12\linewidth]{object21} & No & Yes & No & No & Yes & No \\ 
-20 & \includegraphics[width=.12\linewidth]{object22} & No & Yes & No & No & Yes & No \\ 
-21 & \includegraphics[width=.12\linewidth]{object23} & Yes & No & No & No & Yes & No \\ 
-22 & \includegraphics[width=.12\linewidth]{object24} & No & Yes & Yes & No & No & Yes \\ 
-23 & \includegraphics[width=.12\linewidth]{object25} & No & No & No & No & Yes & No \\ 
-24 & \includegraphics[width=.12\linewidth]{object26} & No & No & No & No & No & Yes \\ 
-25 & \includegraphics[width=.12\linewidth]{object27} & No & No & No & No & Yes & No \\ 
-26 & \includegraphics[width=.12\linewidth]{object28} & No & No & No & No & No & No \\ 
-27 & \includegraphics[width=.12\linewidth]{object29} & No & No & Yes & No & No & Yes \\ 
-28 & \includegraphics[width=.12\linewidth]{object30} & Yes & No & No & No & Yes & No \\ 
-29 & \includegraphics[width=.12\linewidth]{object31} & No & No & Yes & No & No & No \\ 
-30 & \includegraphics[width=.12\linewidth]{object32} & No & Yes & No & No & Yes & No \\ 
-31 & \includegraphics[width=.12\linewidth]{object33} & No & No & Yes & No & No & No \\ 
-32 & \includegraphics[width=.12\linewidth]{object34} & No & No & Yes & No & No & No \\ 
-33 & \includegraphics[width=.12\linewidth]{object35} & No & No & Yes & No & No & Yes \\ 
-\end{longtable}
+    1 & \includegraphics[width=.12\linewidth]{object1} & No & No & No & No & Yes & No \\ 
+    2 & \includegraphics[width=.12\linewidth]{object2} & Yes & No & No & No & Yes & No \\ 
+    3 & \includegraphics[width=.12\linewidth]{object3} & Yes & No & No & No & Yes & No \\ 
+    4 & \includegraphics[width=.12\linewidth]{object4} & No & No & No & No & No & No \\ 
+    5 & \includegraphics[width=.12\linewidth]{object5} & No & No & No & No & No & No \\ 
+    6 & \includegraphics[width=.12\linewidth]{object6} & Yes & No & No & No & Yes & No \\ 
+    7 & \includegraphics[width=.12\linewidth]{object7} & No & No & No & No & Yes & No \\ 
+    8 & \includegraphics[width=.12\linewidth]{object9} & No & No & No & Yes & No & No \\ 
+    9 & \includegraphics[width=.12\linewidth]{object10} & No & No & No & Yes & No & No \\ 
+    10 & \includegraphics[width=.12\linewidth]{object11} & No & No & No & Yes & No & No \\ 
+    11 & \includegraphics[width=.12\linewidth]{object12} & No & No & No & Yes & No & No \\ 
+    12 & \includegraphics[width=.12\linewidth]{object13} & No & No & No & No & Yes & No \\ 
+    13 & \includegraphics[width=.12\linewidth]{object14} & No & No & No & Yes & No & No \\ 
+    14 & \includegraphics[width=.12\linewidth]{object16} & No & Yes & Yes & No & No & No \\ 
+    15 & \includegraphics[width=.12\linewidth]{object17} & No & No & Yes & No & No & Yes \\ 
+    16 & \includegraphics[width=.12\linewidth]{object18} & No & No & No & No & No & No \\ 
+    17 & \includegraphics[width=.12\linewidth]{object19} & No & Yes & No & No & Yes & Yes \\ 
+    18 & \includegraphics[width=.12\linewidth]{object20} & No & Yes & No & No & Yes & No \\ 
+    19 & \includegraphics[width=.12\linewidth]{object21} & No & Yes & No & No & Yes & No \\ 
+    20 & \includegraphics[width=.12\linewidth]{object22} & No & Yes & No & No & Yes & No \\ 
+    21 & \includegraphics[width=.12\linewidth]{object23} & Yes & No & No & No & Yes & No \\ 
+    22 & \includegraphics[width=.12\linewidth]{object24} & No & Yes & Yes & No & No & Yes \\ 
+    23 & \includegraphics[width=.12\linewidth]{object25} & No & No & No & No & Yes & No \\ 
+    24 & \includegraphics[width=.12\linewidth]{object26} & No & No & No & No & No & Yes \\ 
+    25 & \includegraphics[width=.12\linewidth]{object27} & No & No & No & No & Yes & No \\ 
+    26 & \includegraphics[width=.12\linewidth]{object28} & No & No & No & No & No & No \\ 
+    27 & \includegraphics[width=.12\linewidth]{object29} & No & No & Yes & No & No & Yes \\ 
+    28 & \includegraphics[width=.12\linewidth]{object30} & Yes & No & No & No & Yes & No \\ 
+    29 & \includegraphics[width=.12\linewidth]{object31} & No & No & Yes & No & No & No \\ 
+    30 & \includegraphics[width=.12\linewidth]{object32} & No & Yes & No & No & Yes & No \\ 
+    31 & \includegraphics[width=.12\linewidth]{object33} & No & No & Yes & No & No & No \\ 
+    32 & \includegraphics[width=.12\linewidth]{object34} & No & No & Yes & No & No & No \\ 
+    33 & \includegraphics[width=.12\linewidth]{object35} & No & No & Yes & No & No & Yes \\ 
+  \end{longtable}
 
-\cleardoublepage
+  \cleardoublepage
 
 % ... add as much appendices as you need (one can also add source code, for example)
 
 %\chapter{}
 
-\fancyhead[LE,RO]{\it Bibliography}          % A bibliography never have a letter or numbering!
-\bibliographystyle{abbrv}                    % Style for presenting the literature
-\addcontentsline{toc}{chapter}{Bibliography} % Add to the TOC
-\bibliography{thesis}
-\cleardoublepage
+  \fancyhead[LE,RO]{\it Bibliography}          % A bibliography never have a letter or numbering!
+  \bibliographystyle{abbrv}                    % Style for presenting the literature
+  \addcontentsline{toc}{chapter}{Bibliography} % Add to the TOC
+  \bibliography{thesis}
+  \cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Formal page 1
-\vspace{2cm}
-\chapter*{Erkl\"arung der Urheberschaft}
-\fancyhead[LE]{\it Erkl\"arung der Urheberschaft}
-Ich versichere an Eides statt, dass ich die \trtype{} im Studiengang \trcourseofstudies{} selbstst\"andig verfasst und keine anderen als die angegebenen Hilfsmittel -- insbesondere keine im Quellenverzeichnis nicht benannten Internet-Quellen -- benutzt habe. Alle Stellen, die w\"ortlich oder sinngem\"a{\ss} aus Ver\"offentlichungen entnommen wurden, sind als solche kenntlich gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem anderen Pr\"ufungsverfahren eingereicht habe und die eingereichte schriftliche Fassung der auf dem elektronischen Speichermedium entspricht.
+  \vspace{2cm}
+  \chapter*{Erkl\"arung der Urheberschaft}
+  \fancyhead[LE]{\it Erkl\"arung der Urheberschaft}
+  Ich versichere an Eides statt, dass ich die \trtype{} im Studiengang \trcourseofstudies{} selbstst\"andig verfasst und keine anderen als die angegebenen Hilfsmittel -- insbesondere keine im Quellenverzeichnis nicht benannten Internet-Quellen -- benutzt habe. Alle Stellen, die w\"ortlich oder sinngem\"a{\ss} aus Ver\"offentlichungen entnommen wurden, sind als solche kenntlich gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem anderen Pr\"ufungsverfahren eingereicht habe und die eingereichte schriftliche Fassung der auf dem elektronischen Speichermedium entspricht.
 
-\vspace{4cm}
-\noindent Ort, Datum \hfill Unterschrift
+  \vspace{4cm}
+  \noindent Ort, Datum \hfill Unterschrift
 
 %The backcover is always empty
-\newpage
-\thispagestyle{empty}
-\hspace{1cm}
-\newpage
+  \newpage
+  \thispagestyle{empty}
+  \hspace{1cm}
+  \newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Formal page 2
-\vspace{2cm}
-\chapter*{Erkl\"arung zur Ver\"offentlichung}
-\fancyhead[LE]{\it Erkl\"arung der Ver\"offentlichung}
-Ich erkl\"are mein Einverst\"andnis mit der Einstellung dieser \trtype{} in den Bestand der Bibliothek.
+  \vspace{2cm}
+  \chapter*{Erkl\"arung zur Ver\"offentlichung}
+  \fancyhead[LE]{\it Erkl\"arung der Ver\"offentlichung}
+  Ich erkl\"are mein Einverst\"andnis mit der Einstellung dieser \trtype{} in den Bestand der Bibliothek.
 
-\vspace{4cm}
-\noindent Ort, Datum \hfill Unterschrift
+  \vspace{4cm}
+  \noindent Ort, Datum \hfill Unterschrift
 
 %The backcover is always empty
-\newpage
-\thispagestyle{empty}
-\hspace{1cm}
-\newpage
+  \newpage
+  \thispagestyle{empty}
+  \hspace{1cm}
+  \newpage
 
-\end{document}
+  \end{document}
 
