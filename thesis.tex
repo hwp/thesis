@@ -85,7 +85,7 @@
 %\addcontentsline{toc}{chapter}{\numberline{}Abstract}
 Comparing to traditional visual object recognition, multimodal object recognition is advantageous in that different modalities provide complementary information. This work aims to implement a system for object recognition given videos of interactions with objects and investigate different modality fusion methods.
 
-The bag-of-words model with SIFT descriptors and the MFCC are used as visual and audio features. The system classify objects by computing the probabilities with learned hidden Markov models. The system incorporates two different fusion methods: feature fusion and decision fusion. The former method learns a joint probability distributions with one HMM, while the latter method learns two separate probability distribution for each modality and combine them under the conditional independence assumption.
+The bag-of-words model with SIFT descriptors and the MFCC are used as visual and audio features. The system classify objects by computing the probabilities with learned hidden Markov models. The system incorporates two different fusion methods: feature fusion and decision fusion. The former method learns a joint probability distribution with one HMM, while the latter method learns two separate distributions for each modality and combine them under the conditional independence assumption.
 
 Experiments based on a dataset of 33 different household objects are carried out to evaluate the performance of these two fusion methods as well as single modality approaches. The result shows that both fusion methods improved the performance over single modality methods, while these two methods are mostly comparable. 
 
@@ -120,7 +120,7 @@ Experiments based on a dataset of 33 different household objects are carried out
 \chapter{Introduction}
 Humans not only use vision for object recognition, but also perceptions of other modalities, such as auditory, haptic and olfactory perceptions. These extra perceptions provide complementary information. This idea of multimodal object recognition can also be applied to robotic systems.
 
-Traditional object recognition systems, which are exclusively based on visual information, are limited in several ways. They are sensitive to a number of image transformations such as view point change, occlusion and lighting variation. There are also cases, where the visual information alone is not sufficient to distinguish an object. For example, a paper cup might have the same appearance as a ceramic cup, and it is difficult to distinguish them only with vision. However, if we strike or touch them, we can get auditory or haptic feedback, from which it is possible to tell the difference.
+Traditional object recognition systems, which are exclusively based on visual information, are limited in several ways. They are sensitive to a number of image transformations such as view point change, occlusion and lighting variation. There are also cases where the visual information alone is not sufficient to distinguish an object. For example, a paper cup might have the same appearance as a ceramic cup, and it is difficult to distinguish them only with vision. However, if we strike or touch them, we can get auditory or haptic feedback, from which it is possible to tell the difference.
 
 Recent advances in robotics make it possible for robots to interact with objects and hence acquire multimodal information for object recognition. The study of how to use multimodal information for object recognition has become an important research topic.
 
@@ -160,7 +160,7 @@ A proper way to fuse multimodal information should favor reliable signals and av
     \label{fig:generic}
   \end{subfigure}
 
-  \caption{Two types of object recognition task.}
+  \caption{Two types of object recognition tasks.}
 \end{figure}
 
 It is important to note that, concerning object recognition, there are two types of tasks been studied: specific object recognition and object category recognition~\cite{grauman_visual_2011}. The specific object recognition is the task of recognizing a particular object. \Cref{fig:specific} shows an example of specific object recognition. For training, the system is presented with a set of objects with their labels. For testing, the system is shown a new video of a known object and need tell which object it is.
@@ -169,8 +169,7 @@ Unlike the specific case, generic category recognition deal with classifying an 
 
 \section{Thesis Outline}
 The rest of the thesis will answer the aforementioned basic questions.
-In \Cref{ch:visual}, we will present the bag-of-words model with SIFT descriptors, which is suitable to be used as the visual feature for our application.
-In \Cref{ch:audio}, we will present MFCCs as the audio feature.  
+In \Cref{ch:visual,ch:audio}, we will present the visual and audio features for recognition systems.
 In \Cref{ch:hmm}, we will introduce the theories of hidden Markov models.  
 In \Cref{ch:bimodal}, we will describe the design of our bimodal object recognition system. Two modality fusion methods will be discussed.  
 In \Cref{ch:experiment}, we will address how experiments are carried out and show the experiment results.  
@@ -181,7 +180,7 @@ Finally in \Cref{ch:conclusion}, our findings from the experiment will be discus
 \chapter{Visual Features}
 \label{ch:visual}
 
-Visual object recognition has been extensively studied in the recent decade. Vision is very essential for both humans and artificial agents to recognize an object, since the appearance of the object provides us with the most direct and informational features. Numerous features have been proposed for visual object recognition and they have been used in a variety of applications.
+Visual object recognition has been extensively studied in the recent decade. Vision is essential for both humans and artificial agents to recognize an object, since the appearance of the object provides us with the most useful information. Numerous features have been proposed for visual object recognition and they have been used in a variety of applications.
 
 In this chapter, we will present the state-of-the-art representation of object images using local features and the bag-of-words model.
 
@@ -222,7 +221,7 @@ Once keypoints are located, the feature description of the keypoints should be i
 The SIFT descriptor describes a keypoint as histograms of gradient orientations. Specifically, it is computed via the following steps:
 \begin{enumerate}
   \item Normalize the size and orientation of the region around the keypoint according the scale and the dominant orientation.
-  \item The region is divided to a $16 \times 16$ regular grid. For each location, the gradient orientation is computed.
+  \item The region is divided to a $16 \times 16$ regular grid. For each location, the gradient is computed.
   \item These locations are again divide into a $4 \times 4$ regular grid. For each cell, the gradient orientation histogram with 8 orientation bins is computed according to the gradient magnitudes applied with a Gaussian window.
   \item Combining the $16$ histograms will result in a $128$ ($16 \times 8$) dimensional vector. Normalize this vector and the result is the SIFT descriptor.
 \end{enumerate}
@@ -268,7 +267,7 @@ In this chapter, we have presented the local features and the bag-of-words model
 \cleardoublepage
 \chapter{Audio Features}
 \label{ch:audio}
-Audio signal processing is one of the most important fields of digital signal processing. Many different audio features have been proposed to represent the audio signal. As for any system, how the data is represented affects the performance of the system dramatically. In terms of good audio features, we want to find features such that, similar sounds that human perceive also appear similar (closer) in the feature space and the number of dimensions of the feature space should be small so that it can be applied to the subsequent learning algorithms. In other words, the feature should be simple and corresponds to human perception.
+Audio signal processing is one of the most important fields of digital signal processing. Many different audio features have been proposed to represent the audio signal. For any system, the data representation may affect the performance of the system dramatically. In terms of good audio features, we want to find features such that, similar sounds that human perceive also appear similar (closer) in the feature space and the number of dimensions of the feature space should be small so that it can be applied to the subsequent learning algorithms. In other words, the feature should be simple and corresponds to human perception.
 
 Although audio features for object recognition have not been systematically studied, there has been extensive studies on audio features for speech recognition. The mel-frequency cepstrum coefficients (MFCCs) is one of the most commonly used audio features in speech recognition. Therefore, we choose MFCCs as the audio feature in our system.
 
@@ -399,13 +398,13 @@ A hidden Markov model describes a probability distribution of a stationary discr
 \begin{figure}[t]
   \centering
   \includegraphics{hmm.tikz}
-  \caption[HMM as a Bayesian network.]{HMM as a Bayesian network. The directed edges indicate conditional dependencies. Each state variable is only conditional dependent of its previous state and each observation is only conditional dependent of the state at that time.}
+  \caption[HMM as a Bayesian network.]{HMM as a Bayesian network. The directed edges indicate conditional dependencies. Each state variable is only conditional dependent on its previous state and each observation is only conditional dependent on the state at that time.}
   \label{fig:hmm}
 \end{figure}
 
 These conditional dependencies can be shown as a Bayesian network by unfolding the variables over time (see \Cref{fig:hmm}).
 
-Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$, with $N$ being the number of states). Since our features are in continuous space, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is also called HMM-GMM.
+Here, the observation can be on a discrete space ($x_t \in \{v_1, v_2, \dots, v_K\}$) or a continuous space ($x_t \in \mathbb{R}^d$) and the state space is discrete ($q_t \in \{1, 2, \dots, N\}$, with $N$ being the number of states). Since the bag-of-words model and MFCCs are in continuous space, for simplicity, we will only consider the continuous observation space. Gaussian mixture models (GMM) are usually used to describe such observation probability distribution. In this case, the model is also called HMM-GMM.
 
 Given the aforementioned assumptions, one HMM can be specified with the following parameters:
 \[ \lambda = (A, B, \pi) \]
@@ -425,23 +424,23 @@ where $c_{jk}$ is the mixture weight, $\mu_{jk}$ is the mean and $\Sigma_{jk}$ i
 
 With the formal definition of HMM, there are still three problems of interest to be solved, in order to use HMM for real-world applications. These problems are:
 \begin{enumerate}
-  \item Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, what is the probability of the model generating such sequence, namely $P(\mathbf{x}|\lambda)$?
-  \item Given a model $\lambda$, and an observation sequence $\mathbf{x}$, what is the most likely hidden state sequence $\mathbf{q} = (q_1 q_2 \dots q_t)$, namely $\argmax_{\mathbf{q}}P(\mathbf{x}|\mathbf{q},\lambda)$?
+  \item Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = x_1 x_2 \dots x_T$, what is the probability of the model generating such sequence, namely $P(\mathbf{x}|\lambda)$?
+  \item Given a model $\lambda$, and an observation sequence $\mathbf{x}$, what is the most likely hidden state sequence $\mathbf{q} = q_1 q_2 \dots q_t$, namely $\argmax_{\mathbf{q}}P(\mathbf{x}|\mathbf{q},\lambda)$?
   \item Given an observation sequence $\mathbf{x}$ (or a set of observations $\{\mathbf{x}^{(i)}\}$), how do we estimate the parameters that maximize $P(\mathbf{x}|\lambda)$ (or $\prod_{i} P(\mathbf{x}^{(i)}|\lambda) $)?
 \end{enumerate}
 
 In the following section, we will show that the first and third problem can be solved using the forward/backward procedure and the Baum-Welch algorithm, respectively. The second problem can be solved using the Viterbi algorithm~\cite{forney_viterbi_1973}. However, the second problem is not related to our system, so it will not be addressed.
 
 \section{Probability Evaluation}
-Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = (x_1 x_2 \dots x_T)$, we wish to calculate the probability, $P(\mathbf{x}|\lambda)$. A na\"ive solution to this problem is enumerating all possible state sequences and applying law of total probability, that is
+Given a model $\lambda=(A, B, \pi)$, and an observation sequence $\mathbf{x} = x_1 x_2 \dots x_T$, we wish to calculate the probability, $P(\mathbf{x}|\lambda)$. A na\"ive solution to this problem is enumerating all possible state sequences and applying law of total probability, that is
 \begin{equation}
   P(\mathbf{x}|\lambda) = \sum_{\text{all } \mathbf{q}} P(\mathbf{x}|\mathbf{q},\lambda) P(\mathbf{q}|\lambda) .
 \end{equation}
 
-For a fixed state sequence $\mathbf{q} = (q_1 q_2 \dots q_T)$, we can derive that
+For a fixed state sequence $\mathbf{q} = q_1 q_2 \dots q_T$, we can derive that
 \begin{align}
-  P(\mathbf{x}|\mathbf{q},\lambda) &= P(x_1|q_1,\lambda) P(x_2|q_1,q_2,x_1,\lambda) \dots P(x_T|q_1,\dots,q_T,x_1,\dots,x_{T-1},\lambda) \notag\\
-  &= P(x_1|q_1, \lambda) P(x_1|q_1, \lambda) \dots P(x_T|q_T, \lambda) \notag\\
+  P(\mathbf{x}|\mathbf{q},\lambda) &= P(x_1|\mathbf{q},\lambda) P(x_2|\mathbf{q},x_1,\lambda) \dots P(x_T|\mathbf{q},x_1,\dots,x_{T-1},\lambda) \notag\\
+  &= P(x_1|q_1, \lambda) P(x_2|q_2, \lambda) \dots P(x_T|q_T, \lambda) \notag\\
   &= b_{q_1}(x_1) b_{q_2}(x_2) \dots b_{q_T}(x_T)
 \end{align}
 and its probability is
@@ -452,7 +451,7 @@ and its probability is
 \end{align}
 Thus we get 
 \begin{equation}
-  P(\mathbf{x}|\lambda) = \sum_{q_1,q_2,\dots,q_T} \pi_{q_1} b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{a_T}(x_T) .
+  P(\mathbf{x}|\lambda) = \sum_{q_1,q_2,\dots,q_T} \pi_{q_1} b_{q_1}(x_1) a_{q_1q_2} b_{q_2}(x_2) \dots a_{q_{T-1}q_T} b_{q_T}(x_T) .
   \label{eq:prob_brute}
 \end{equation}
 
@@ -461,9 +460,9 @@ This is a direct solution, however, the number of possible state sequences is to
 \subsection{The Forward Procedure}
 One of the efficient solution is using the forward procedure. Consider the forward variable, $\alpha_t(i)$, which is the joint probability or the first $t$ observations and the state at time $t$, or defined as
 \begin{equation}
-  \alpha_t(i) = P(x_1,\dots,x_t,q_t=i|\lambda) 
+  \alpha_t(i) = P(x_1,\dots,x_t,q_t=i|\lambda) .
 \end{equation}
-it has the following properties:
+It has the following properties:
 \begin{enumerate}
   \item At initial time,
     \begin{equation}
@@ -482,10 +481,10 @@ it has the following properties:
     \end{equation}
 \end{enumerate}
 
-By using the three properties, we can iteratively calculate all the $N$ forward variables from time $1$ to $T$. The time efficiency of the forward procedure is $\Theta(TN^2)$, which much faster than using the na\"ive solution (\cref{eq:prob_brute}).
+By using the three properties, we can iteratively calculate all the $N$ forward variables from time $1$ to $T$. The time efficiency of the forward procedure is $\Theta(TN^2)$, which much faster than the na\"ive solution (\cref{eq:prob_brute}).
 
 \subsection{The Backward Procedure}
-The backward procedure is an alternative solution to calculating the probability. Similar to the forward procedure, the backward procedure use the same idea of iterative calculation of variables based on previous steps, while the direction of iteration is backward, namely from $T$ to $1$. The backward variable is defined as
+The backward procedure is an alternative method to compute the probability. Similar to the forward procedure, the backward procedure use the same idea of iterative calculation of variables based on previous steps, while the direction of iteration is backward, namely from $T$ to $1$. The backward variable is defined as
 \begin{equation}
   \beta_t(i) = P(x_{t+1},\dots,x_T|q_t=i,\lambda) .
 \end{equation}
@@ -511,17 +510,17 @@ The following properties hold:
 Same as the forward procedure, the time efficiency of the backward procedure is $\Theta(TN^2)$.
 
 \section{Parameter Estimation}
-Parameter estimation of a statistical model is the adjustment of the parameters such that the model can best match the observed or empirical data. It plays a crucial role in systems. As for HMM, we are interested in knowing what are the parameters that maximize the probability of the observation (i.e. maximum likelihood estimates):
+Parameter estimation of a statistical model is the adjustment of the parameters such that the model can best match the observed or empirical data. As for HMM, we are interested in knowing what are the parameters that maximize the probability of the observation (i.e. maximum likelihood estimates):
 \begin{equation}
   \lambda^* = \argmax_{\lambda} P(\mathbf{x}|\lambda) .
 \end{equation}
 
-Unlike simple models, such as Gaussian distributions, the parameters of which can be calculated directly, HMM depends on unobserved latent variables (i.e. hidden states), which make it difficult to estimate. One general solution for parameter estimation of models with latent variables is the expectation-maximization (EM) algorithm. The application of the EM algorithm for HMM is known as the Baum-Welch algorithm. We will shows these two algorithms in the following part.
+Unlike simple models, such as Gaussian distributions, the parameters of which can be computed directly, HMM depends on unobserved latent variables (i.e. hidden states), which make it difficult to estimate. One general approach for parameter estimation of models with latent variables is the expectation-maximization (EM) algorithm. The application of the EM algorithm for HMM is known as the Baum-Welch algorithm. We will shows these two algorithms in the following part.
 
 \subsection{Expectation-maximization Algorithm}
 The expectation-maximization algorithm is a method for finding the (locally) maximum likelihood estimates of parameters of models with latent variables~\cite{dempster_maximum_1977}. Its idea is reestimating parameters via an expectation step (E-step) and a maximization step (M-step), in which the reestimated parameters have greater likelihood, and repeating such procedure until the likelihood reaches a maximum.
 
-More specifically, consider observed data $\mathbf{x}$, unobserved data (i.e. latent variables) $\mathbf{z}$ and a set of parameters $\lambda$, the likelihood function is
+More specifically, consider observed data $\mathbf{x}$, unobserved data (i.e. latent variables) $\mathbf{z}$ and a set of parameters $\lambda$. The likelihood function is
 \begin{equation}
   L(\lambda;\mathbf{x}) = P(\mathbf{x}|\lambda) = \sum_{\mathbf{z}} P(\mathbf{x},\mathbf{z}|\lambda) .
 \end{equation}
@@ -541,7 +540,7 @@ A procedure of parameters reestimation consists of the following two steps:
   \item[M-Step] Choose $\lambda^{(p+1)}$ to be the value of $\lambda$ that maximize $Q(\lambda|\lambda^{(p)})$.
 \end{description}
 
-After each procedure it is assured that $L(\lambda^{(p+1)};\mathbf{x}) \geq L(\lambda^{(p)};\mathbf{x})$. Therefore, if we start from an initial estimate $\lambda^{(0)}$ and iteratively compute $\lambda^{(1)},\lambda^{(2)},\lambda^{(3)},\dots$, we will get a sequence of estimates, which converges to a local maximum.
+After each procedure it is assured that $L(\lambda^{(p+1)};\mathbf{x}) \geq L(\lambda^{(p)};\mathbf{x})$. Therefore, if we start from an initial estimate $\lambda^{(0)}$ and iteratively compute $\lambda^{(1)},\lambda^{(2)},\lambda^{(3)},\dots$, we will get a sequence of estimates, the likelihood of which converges to a local maximum.
 
 The increase of likelihood function can be proved as follows: for any $\mathbf{z}$, we have
 \begin{equation}
@@ -569,12 +568,12 @@ with equality if and only if $\lambda = \lambda'$. Therefore, together with \cre
   & \geq Q(\lambda|\lambda') - Q(\lambda'|\lambda')
 \end{align}
 
-Since $\lambda^{(p+1)}$ is a maximum of $Q(\lambda|\lambda^{(p)})$, $Q(\lambda^{(p+1)}|\lambda^{(p)}) - Q(\lambda^{(p)}|\lambda^{(p)}) \geq 0$. Therefore, $L(\lambda^{(p+1)};\mathbf{x}) \geq L(\lambda^{(p)};\mathbf{x})$.
+Since $\lambda^{(p+1)}$ is a maximum of $Q(\lambda|\lambda^{(p)})$, we have $Q(\lambda^{(p+1)}|\lambda^{(p)}) - Q(\lambda^{(p)}|\lambda^{(p)}) \geq 0$. Therefore, $L(\lambda^{(p+1)};\mathbf{x}) \geq L(\lambda^{(p)};\mathbf{x})$.
 
 It is important to note that although the EM algorithm converges to a maximum estimate, there is no guarantee that the estimate is a global maximizer (thus not a MLE). The resulting estimate depends on the initial estimate. Therefore, additional heuristic methods should be chosen for application of the EM algorithm.
 
 \subsection{Baum-Welch Algorithm}
-We have shown that the EM algorithm can be used for parameter estimation for models with latent variables and HMMs are examples or such models. Thus, applying the EM algorithm to the HMM would result in a solution for the third problem we stated in \cref{sec:hmm}. This method is known as the Baum-Welch algorithm.
+We have shown that the EM algorithm can be used for parameter estimation of models with latent variables and HMMs are examples of such models. Thus, applying the EM algorithm to the HMM would result in a solution for the third problem we stated in \cref{sec:hmm}. This method is known as the Baum-Welch algorithm.
 
 Before we proceed to derive the reestimation formulas, we first define variables $\gamma_t(i) = P(q_t=i|\mathbf{x},\lambda)$ and $\xi_t(i,j) = P(q_t=i,q_{t+1}=j|\mathbf{x},\lambda)$, which can be computed as follows:
 \begin{align}
@@ -593,7 +592,7 @@ Now, we put the HMM into the frame of the EM algorithm.
 
 \paragraph{E-step}
 Consider parameters $\lambda=(A,B,\pi)$ and $\lambda'=(A',B',\pi')$ 
-\footnote{We use `` $'$ '' to indicate parameters or variables from the previous estimate.}
+\footnote{We use `` $'$ '' to indicate parameters or variables of the previous estimate.}
 , compute $Q(\lambda|\lambda')$:
 \begin{align}
   Q(\lambda|\lambda') &= \sum_{\mathbf{q}} P(\mathbf{q}|\mathbf{x},\lambda') \log P(\mathbf{x},\mathbf{q}|\lambda) \notag\\
@@ -688,12 +687,12 @@ In this chapter, we have presented the theories of hidden Markov models. The key
 \cleardoublepage
 \chapter{HMM for Bimodal Object Recognition}
 \label{ch:bimodal}
-So far we have introduced some methods for extracting visual and audio features as well as HMM, a statistical model for time series data. It is now sufficient to combine them together to build a system for visual-audio object recognition. This chapter describes and discusses the design of our system as well as the issues we meet upon implementing the system. 
+So far we have introduced some methods for extracting visual and audio features as well as HMM, a statistical model for time series data. It is now sufficient to combine them together to build a system for visual-audio object recognition. This chapter describes and discusses the design of the bimodal object recognition system as well as the issues of implementation of the system. 
 
 Before proceeding to explain how the system is structured, it is necessary to mention that the goal is to build a system for recognizing objects from video recordings of interactions with the objects. To achieve this goal, the system should be designed in the way that:
 \begin{itemize}
-  \item The visual and audio representations can be effectively learned for category classification.
-  \item The system utilized sequential relationship in signals, since an interaction is in essence perceived as images and sound which vary over time.
+  \item The visual and audio representations can be effectively learned for both specific object recognition and generic category recognition.
+  \item The system utilizes sequential relationship in signals, since an interaction is in essence perceived as images and sound which vary over time.
   \item A proper modality fusion method is selected in order to make vision and audio a good complement of each other.
 \end{itemize}
 
@@ -713,7 +712,7 @@ As mentioned in \cref{ch:visual}, the bag-of-words models with SIFT descriptors 
 First, the image frames from the raw video are taken at frame rate of 5 frames per second. For each image frame, the keypoints are detected using the DoG keypoint detector. Then, the SIFT descriptors of all the keypoints are computed. All the descriptors are quantized using a codebook of visual descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a normalized histogram (i.e. the bag-of-words feature). Since the codebook used in the experiment contains 20 ``words'', the visual feature is a sequence of 20-dimensional vectors.
 
 \subsection{Audio Processing Pipeline}
-We choose the MFCCs as the audio feature, because the MFCCs have been commonly used in speech recognition, speaker recognition as well as music information retrieval applications. The audio processing pipeline is shown in \Cref{fig:apipe}.
+We choose the MFCCs as the audio feature, because the MFCCs have been commonly used in related fields, such as speech recognition, speaker recognition as well as music information retrieval. The audio processing pipeline is shown in \Cref{fig:apipe}.
 
 \begin{figure}[t]
   \centering
@@ -731,7 +730,7 @@ Classification using HMM requires one model to be learned for each class $c$. Th
 \begin{equation}
   \lambda^c = \argmax_{\lambda} \prod_{\mathbf{x} \in D^c} P(\mathbf{x}|\lambda^c)
 \end{equation}
-in which $D^c$ is the set of data instances of which the labels are $c$. The models are learned with the Baum-Welch algorithm. Then, when given a new instance of observation sequence, we can approximate the likelihood of a class with the learned model by
+in which $D^c$ is the set of data instances the labels of which are $c$. The models are learned with the Baum-Welch algorithm. Then, when given a new instance of observation sequence, we can approximate the likelihood of a class with the learned model by
 \begin{equation}
   P(\mathbf{x}|c) = P(\mathbf{x}|\lambda^c) .
 \end{equation}
@@ -756,13 +755,13 @@ From Bayesian theory, the posterior probability of a class given the observation
 \end{equation}
 in which $P(c)$ is the prior probability of the class.
 
-Considering the fact that randomly selecting objects as data set is not likely to be the same as randomly drawing a sample in a real world, we notice that the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewrite as 
+Considering the fact that randomly selecting objects as dataset is not likely to be the same as randomly drawing a sample in a real world, we notice that the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can have the same decision by varying the threshold. We will later evaluate the performance of a classifier using area under the receiver operating characteristic curve and such evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewrite as 
 \begin{equation}
   \label{eq:postsimp}
   P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)} .
 \end{equation}
 
-As seen from \cref{eq:classif_s,eq:classif_g}, the key for both object recognition tasks is to know the likelihood.
+As seen from \cref{eq:classif_s,eq:classif_g}, the key for both object recognition tasks is to know the likelihood $P(\mathbf{x}|\lambda^c)$.
 
 \subsection{Model Selection}
 An important issue about HMM is selecting the model size and the observation distribution, i.e. the number states, the number of components for each state and the type of covariance matrix. The choice of models can have a dramatic impact on the result.
@@ -785,7 +784,7 @@ For the number of states and the number of components, the larger the numbers ar
 
 In general, simple models have smaller hypothesis space, which means it is it is easy to learn. However, smaller hypothesis space is less likely to contain target distribution, thus problems of underfitting can occur.
 
-On the other hand, complex models have larger hypothesis space, hence can better approximate the target distribution. However, since the Baum-Welch algorithm does not guarantee MLE, more complex models are more prone to local optima. Furthermore, it could also result in overfitting if the training set is not large enough. The comparison of simple and complex models are listed in \cref{tab:model}.
+On the other hand, complex models have larger hypothesis space, hence can better approximate the target distribution. However, since the Baum-Welch algorithm does not guarantee MLE, complex models are more prone to local optima. Furthermore, it could also result in overfitting if the training set is not large enough. The comparison of simple and complex models are listed in \cref{tab:model}.
 
 Making decision for the model choice should follow the principle of Occam's razor. Depending on different data, the best choice is the simplest model that can fit the data.
 
@@ -805,11 +804,11 @@ As previously described in the Baum-Welch algorithm, the reestimation procedure 
 From our experience, the training process of the HMM parameters can take very long time. Our system incorporates parallel computation with OpenMP. The parallelization increases the speed up to 8 times of the original on a computer with an 8-core CPU.
 
 \section{Methods of Multimodal Fusion}
-Having discussed how to extract feature vectors and how to make decision based on it, we now move on to the final part of system design addresses the question of how multimodal signals are fused. The way to fuse the visual and audio information is essential to the object recognition system, that good method makes use of both modalities and avoid noises from unreliable signal.
+Having discussed how to extract feature vectors and how to make decision based on it, we now move on to the final part of system design of multimodal signals fusion. The way to fuse the visual and audio information is essential to the object recognition system, that good method makes use of both modalities and avoid noises from unreliable signal.
 
 Multimodal fusion methods may be classified according to the level of fusion into feature fusion, decision fusion and hybrid fusion~\cite{atrey_multimodal_2010}. The feature fusion or early fusion is the approach of combining the multimodal features before they are sent as input of a learning model. The decision fusion or late fusion approach, on the other hand, analyzes each modality independently and then combines the individual decisions to a final result. The hybrid fusion is a combination of these two approaches.
 
-The system incorporates two different designs regarding the fusion method: one with feature fusion and the other with decision fusion. Such methods will be presented in the remaining of this section. The performance of these two methods will be further discussed with experimental results in later chapters.
+The system incorporates two different designs regarding the fusion method: one with feature fusion and the other with decision fusion. Such methods will be presented in the remaining of this section. The performance of these two methods will be further discussed with experiment results in later chapters.
 
 To ground our discussion, consider the problem of classification using HMM with visual and audio features. The observation is a combination of visual and audio features, $\mathbf{x} = (\mathbf{v}, \mathbf{a})$. To make a decision using \cref{eq:classif_s,eq:classif_g}, we need the to know the joint likelihood $P(\mathbf{v},\mathbf{a}|c)$.
 
@@ -837,7 +836,7 @@ The advantage of feature fusion is that it utilizes the correlation between moda
   \label{fig:decisionf}
 \end{figure}
 
-An alternative approach, which is the decision fusion, is learning separate HMMs and combine the likelihood at decision level. If we assume the features of different modalities are conditionally independent given the class, the joint likelihood can be computed as
+An alternative approach, the decision fusion, is learning separate HMMs and combine the likelihood at decision level. If we assume the features of different modalities are conditionally independent given the class, the joint likelihood can be computed as
 \begin{equation}
   P(\mathbf{v},\mathbf{a}|c) = P(\mathbf{v}|c) P(\mathbf{a}|c) = P(\mathbf{v}|\lambda_v^c) P(\mathbf{a}|\lambda_a^c)
 \end{equation}
@@ -925,17 +924,17 @@ The performances of each method are evaluated with two different criteria for th
 \subsection{Evaluation of Specific Object Recognition}
 For the specific object recognition task, the accuracy of each method is calculated with 5-fold cross validation. The accuracy (ACC) is the percentage of correctly classified instances, namely 
 \[ \text{ACC} =  \frac{\text{\# correctly classified}}{\text{\# total}} . \]
-For all methods, the HMM parameters are learned with two states, six mixture components for each states and diagonal covariance matrix.
+For all methods, the HMM parameters are learned with two states, six mixture components for each state and diagonal covariance matrix.
 
 \subsection{Evaluation of Generic Category Recognition}
-For the generic category recognition task, we evaluate the classification performance with object-based validation. Each time the video instances of one object is separated from the whole dataset to be the testing data and the rest are used for training. Therefore, all the testing objects are unseen objects, which are not in the training set. The HMM parameters are learned with various number of states and mixture components. For each method, the best setting is selected to represent the result of the method.
+For the generic category recognition task, we evaluate the classification performance with object-based validation. Each time the video instances of one object is separated from the whole dataset to be the testing data and the rest are used for training. Therefore, all the testing objects are unseen objects, which are not in the training set. The HMM parameters are learned with various number of states and mixture components. For each method, the best model is selected to represent the result of the method.
 
 In the case of generic category recognition, instead of accuracy we used the area under the receiver operating characteristic curve as the criterion. The accuracy does not comprehensively indicate the performance of a binary classifier. It is because there can be cases where more than 90 percents of the instances are negative and a trivial classifier which always predict negative would result in a rather high accuracy.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=.5\textwidth]{roc.tikz}
-  \caption[Example of a ROC curve.]{Example of a ROC curve. The curve is created by plotting the TPR against the FPR by varying the threshold. The dashed line shows the ROC curve of a random classifier. The green line at the upper left shows a ROC curve of a perfect classifier. The ROC curve of a normal classifier is expected to have a shape of the blue curve in the figure.}
+  \caption[Example of an ROC curve.]{Example of an ROC curve. The curve is created by plotting the TPR against the FPR by varying the threshold. The dashed line shows the ROC curve of a random classifier. The green line at the upper left shows an ROC curve of a perfect classifier. The ROC curve of a normal classifier is expected to have a shape of the blue curve in the figure.}
   \label{fig:roc}
 \end{figure}
 
@@ -966,7 +965,7 @@ The accuracy of each method for the specific object recognition task is shown in
 \end{table}
 
 \subsection{Generic Category Recognition Results}
-The results of generic category recognition is shown in \cref{tab:cateory} and \Cref{fig:catroc}. For the recognition of mugs (\Cref{fig:rocmug}), the decision fusion method has the best performance, followed closely by the visual only method and feature fusion method. For the recognition of bottles and plastic objects (\Cref{fig:rocbottle,fig:rocplastic}), both fusion methods are better than the unimodal methods. For the recognition of metal objects (\Cref{fig:rocmetal}), the visual only method is the best and the fusion methods are slightly worse. For the recognition of fragile objects (\Cref{fig:rocfragile}), the audio only method have rather good performance while the visual only method is nearly random. In this case, the performance of both fusion methods are hurt by the visual signals. For the recognition of containers with contents (\Cref{fig:rocnonempty}), although all the methods performed poorly, there are improvements with the fusion methods.
+The results of generic category recognition is shown in \cref{tab:cateory} and \Cref{fig:catroc}. For recognition of mugs (\Cref{fig:rocmug}), the decision fusion method has the best performance, followed closely by the visual only method and feature fusion method. For recognition of bottles and plastic objects (\Cref{fig:rocbottle,fig:rocplastic}), both fusion methods are better than the unimodal methods. For recognition of metal objects (\Cref{fig:rocmetal}), the visual only method is the best and the fusion methods are slightly worse. For recognition of fragile objects (\Cref{fig:rocfragile}), the audio only method have rather good performance while the visual only method is nearly random. In this case, the performance of both fusion methods are hurt by the visual signals. For recognition of containers with contents (\Cref{fig:rocnonempty}), although all the methods performed poorly, there are improvements with the fusion methods.
 
 On average, both fusion methods are better than the unimodal methods. What is interesting is that the two fusion methods are not only similar in AUC scores, but also their ROC curves appear close to each other. This indicates that they have similar classification results.
 
@@ -1045,7 +1044,7 @@ The current system cannot perform real-time recognition, for that the extraction
 
 The size of the dataset is critical to the system. With large dataset it is possible to use discriminative methods to learn combination rules. For example, the reliabilities of the modalities can be estimated using a validation set taken from the training set. The reliabilities can be further used for modifying the influence of each signal. To increase the size of the dataset, it is possible to implement robotic systems to automatically collect data or acquire unlabeled data from Internet sources.
 
-Although the performance of a multimodal object recognition system can be improved by finding the optimal combination rule, the upper bound of the performance is decided by the quality of the features. On the hand, thinking of the properties of multimodal signals, for example that the signals appear at the same time contain congruent semantic information, we can actually use the properties as a heuristic for learning good representation.
+Although the performance of a multimodal object recognition system can be improved by finding the optimal combination rule, the upper bound of the performance is decided by the quality of the features. On the hand, thinking of the properties of multimodal signals, for example that the signals appear at the same time contain congruent semantic information, we can actually use the properties as a heuristic for unsupervised learning of good representation. Eventually, the better representation will improve the performance of the recognition system.
 % There is some related study in this topic by using deep neural networks~\cite{ngiam_multimodal_2011}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1061,14 +1060,14 @@ Although the performance of a multimodal object recognition system can be improv
 \label{app:dataset}
 
 \begin{longtable}{rl*{6}{p{.08\linewidth}}}
-  \caption{List of objects.} \label{tab:list}
+  \caption{List of objects in dataset.} \label{tab:list}
   \\
   \toprule
   & & \multicolumn{6}{c}{Categories} \\ \cmidrule(r){3-8}
   \multicolumn{1}{l}{Object ID} & Picture & \rotatebox{55}{Mug} & \rotatebox{55}{Bottle} & \rotatebox{55}{Plastic Object} & \rotatebox{55}{Metal Object} & \rotatebox{55}{Fragile Object} & \rotatebox{55}{\parbox{2.8cm}{Container with Contents}} \\ \midrule
 \endfirsthead
 
-\multicolumn{8}{c}{\textit{{\tablename} \thetable{} List of objects (continued).}} \\
+\multicolumn{8}{c}{\textit{{\tablename} \thetable{} List of objects in dataset (continued).}} \\
 \toprule
 & & \multicolumn{6}{c}{Categories} \\ \cmidrule(r){3-8}
 \multicolumn{1}{l}{Object ID} & Picture & \rotatebox{55}{Mug} & \rotatebox{55}{Bottle} & \rotatebox{55}{Plastic Object} & \rotatebox{55}{Metal Object} & \rotatebox{55}{Fragile Object} & \rotatebox{55}{\parbox{2.8cm}{Container with Contents}} \\ \midrule
