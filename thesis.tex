@@ -972,8 +972,9 @@ On average, both fusion methods are better than the unimodal methods. What is in
 \begin{table}
   \caption[Results of generic category recognition.]{Results of generic category recognition. The numbers are the AUC of different methods for the six object categories.}
   \label{tab:cateory}
+  \small
   \centering
-  \begin{tabular}[h]{l*{6}{>{\centering}b{.11\textwidth}}}
+  \begin{tabular}[h]{l*{5}{>{\centering}b{.09\linewidth}}>{\centering}b{.11\linewidth}}
     \toprule
     \multicolumn{1}{c}{Method} & Mugs & Bottles & Plastic Objects & Metal Objects & Fragile Objects & Containers with content \tabularnewline \midrule
     Feature Fusion & 0.750 & \textbf{0.802} & 0.820 & 0.830 & 0.711 & 0.671 \tabularnewline
@@ -1059,59 +1060,60 @@ Although the performance of a multimodal object recognition system can be improv
 \chapter{Specification of the Dataset}
 \label{app:dataset}
 
-\begin{longtable}{rl*{6}{p{.08\linewidth}}}
+\begin{longtable}{>{\centering}b{.06\linewidth}c*{5}{>{\centering}b{.09\linewidth}}>{\centering}b{.12\linewidth}}
   \caption{List of objects in dataset.} \label{tab:list}
-  \\
+  \small
+  \tabularnewline
   \toprule
-  & & \multicolumn{6}{c}{Categories} \\ \cmidrule(r){3-8}
-  \multicolumn{1}{l}{Object ID} & Picture & \rotatebox{55}{Mug} & \rotatebox{55}{Bottle} & \rotatebox{55}{Plastic Object} & \rotatebox{55}{Metal Object} & \rotatebox{55}{Fragile Object} & \rotatebox{55}{\parbox{2.8cm}{Container with Contents}} \\ \midrule
+  & & \multicolumn{6}{c}{Categories} \tabularnewline \cmidrule(r){3-8}
+  Object ID & Picture & Mug & Bottle & Plastic Object & Metal Object & Fragile Object & Container with Contents \tabularnewline \midrule
 \endfirsthead
 
-\multicolumn{8}{c}{\textit{{\tablename} \thetable{} List of objects in dataset (continued).}} \\
+\multicolumn{8}{c}{\textit{{\tablename} \thetable{} List of objects in dataset (continued).}} \tabularnewline
 \toprule
-& & \multicolumn{6}{c}{Categories} \\ \cmidrule(r){3-8}
-\multicolumn{1}{l}{Object ID} & Picture & \rotatebox{55}{Mug} & \rotatebox{55}{Bottle} & \rotatebox{55}{Plastic Object} & \rotatebox{55}{Metal Object} & \rotatebox{55}{Fragile Object} & \rotatebox{55}{\parbox{2.8cm}{Container with Contents}} \\ \midrule
+& & \multicolumn{6}{c}{Categories} \tabularnewline \cmidrule(r){3-8}
+Object ID & Picture & Mug & Bottle & Plastic Object & Metal Object & Fragile Object & Container with Contents \tabularnewline \midrule
         \endhead
 
-        \bottomrule \multicolumn{8}{r}{(Continued on next page\ldots)} \\
+        \bottomrule \multicolumn{8}{r}{(Continued on next page\ldots)} \tabularnewline
       \endfoot
 
       \bottomrule
     \endlastfoot
 
-    1 & \includegraphics[width=.12\linewidth]{object1} & No & No & No & No & Yes & No \\ 
-    2 & \includegraphics[width=.12\linewidth]{object2} & Yes & No & No & No & Yes & No \\ 
-    3 & \includegraphics[width=.12\linewidth]{object3} & Yes & No & No & No & Yes & No \\ 
-    4 & \includegraphics[width=.12\linewidth]{object4} & No & No & No & No & No & No \\ 
-    5 & \includegraphics[width=.12\linewidth]{object5} & No & No & No & No & No & No \\ 
-    6 & \includegraphics[width=.12\linewidth]{object6} & Yes & No & No & No & Yes & No \\ 
-    7 & \includegraphics[width=.12\linewidth]{object7} & No & No & No & No & Yes & No \\ 
-    8 & \includegraphics[width=.12\linewidth]{object9} & No & No & No & Yes & No & No \\ 
-    9 & \includegraphics[width=.12\linewidth]{object10} & No & No & No & Yes & No & No \\ 
-    10 & \includegraphics[width=.12\linewidth]{object11} & No & No & No & Yes & No & No \\ 
-    11 & \includegraphics[width=.12\linewidth]{object12} & No & No & No & Yes & No & No \\ 
-    12 & \includegraphics[width=.12\linewidth]{object13} & No & No & No & No & Yes & No \\ 
-    13 & \includegraphics[width=.12\linewidth]{object14} & No & No & No & Yes & No & No \\ 
-    14 & \includegraphics[width=.12\linewidth]{object16} & No & Yes & Yes & No & No & No \\ 
-    15 & \includegraphics[width=.12\linewidth]{object17} & No & No & Yes & No & No & Yes \\ 
-    16 & \includegraphics[width=.12\linewidth]{object18} & No & No & No & No & No & No \\ 
-    17 & \includegraphics[width=.12\linewidth]{object19} & No & Yes & No & No & Yes & Yes \\ 
-    18 & \includegraphics[width=.12\linewidth]{object20} & No & Yes & No & No & Yes & No \\ 
-    19 & \includegraphics[width=.12\linewidth]{object21} & No & Yes & No & No & Yes & No \\ 
-    20 & \includegraphics[width=.12\linewidth]{object22} & No & Yes & No & No & Yes & No \\ 
-    21 & \includegraphics[width=.12\linewidth]{object23} & Yes & No & No & No & Yes & No \\ 
-    22 & \includegraphics[width=.12\linewidth]{object24} & No & Yes & Yes & No & No & Yes \\ 
-    23 & \includegraphics[width=.12\linewidth]{object25} & No & No & No & No & Yes & No \\ 
-    24 & \includegraphics[width=.12\linewidth]{object26} & No & No & No & No & No & Yes \\ 
-    25 & \includegraphics[width=.12\linewidth]{object27} & No & No & No & No & Yes & No \\ 
-    26 & \includegraphics[width=.12\linewidth]{object28} & No & No & No & No & No & No \\ 
-    27 & \includegraphics[width=.12\linewidth]{object29} & No & No & Yes & No & No & Yes \\ 
-    28 & \includegraphics[width=.12\linewidth]{object30} & Yes & No & No & No & Yes & No \\ 
-    29 & \includegraphics[width=.12\linewidth]{object31} & No & No & Yes & No & No & No \\ 
-    30 & \includegraphics[width=.12\linewidth]{object32} & No & Yes & No & No & Yes & No \\ 
-    31 & \includegraphics[width=.12\linewidth]{object33} & No & No & Yes & No & No & No \\ 
-    32 & \includegraphics[width=.12\linewidth]{object34} & No & No & Yes & No & No & No \\ 
-    33 & \includegraphics[width=.12\linewidth]{object35} & No & No & Yes & No & No & Yes \\ 
+    1 & \includegraphics[width=.12\linewidth]{object1} & No & No & No & No & Yes & No \tabularnewline 
+    2 & \includegraphics[width=.12\linewidth]{object2} & Yes & No & No & No & Yes & No \tabularnewline 
+    3 & \includegraphics[width=.12\linewidth]{object3} & Yes & No & No & No & Yes & No \tabularnewline 
+    4 & \includegraphics[width=.12\linewidth]{object4} & No & No & No & No & No & No \tabularnewline 
+    5 & \includegraphics[width=.12\linewidth]{object5} & No & No & No & No & No & No \tabularnewline 
+    6 & \includegraphics[width=.12\linewidth]{object6} & Yes & No & No & No & Yes & No \tabularnewline 
+    7 & \includegraphics[width=.12\linewidth]{object7} & No & No & No & No & Yes & No \tabularnewline 
+    8 & \includegraphics[width=.12\linewidth]{object9} & No & No & No & Yes & No & No \tabularnewline 
+    9 & \includegraphics[width=.12\linewidth]{object10} & No & No & No & Yes & No & No \tabularnewline 
+    10 & \includegraphics[width=.12\linewidth]{object11} & No & No & No & Yes & No & No \tabularnewline 
+    11 & \includegraphics[width=.12\linewidth]{object12} & No & No & No & Yes & No & No \tabularnewline 
+    12 & \includegraphics[width=.12\linewidth]{object13} & No & No & No & No & Yes & No \tabularnewline 
+    13 & \includegraphics[width=.12\linewidth]{object14} & No & No & No & Yes & No & No \tabularnewline 
+    14 & \includegraphics[width=.12\linewidth]{object16} & No & Yes & Yes & No & No & No \tabularnewline 
+    15 & \includegraphics[width=.12\linewidth]{object17} & No & No & Yes & No & No & Yes \tabularnewline 
+    16 & \includegraphics[width=.12\linewidth]{object18} & No & No & No & No & No & No \tabularnewline 
+    17 & \includegraphics[width=.12\linewidth]{object19} & No & Yes & No & No & Yes & Yes \tabularnewline 
+    18 & \includegraphics[width=.12\linewidth]{object20} & No & Yes & No & No & Yes & No \tabularnewline 
+    19 & \includegraphics[width=.12\linewidth]{object21} & No & Yes & No & No & Yes & No \tabularnewline 
+    20 & \includegraphics[width=.12\linewidth]{object22} & No & Yes & No & No & Yes & No \tabularnewline 
+    21 & \includegraphics[width=.12\linewidth]{object23} & Yes & No & No & No & Yes & No \tabularnewline 
+    22 & \includegraphics[width=.12\linewidth]{object24} & No & Yes & Yes & No & No & Yes \tabularnewline 
+    23 & \includegraphics[width=.12\linewidth]{object25} & No & No & No & No & Yes & No \tabularnewline 
+    24 & \includegraphics[width=.12\linewidth]{object26} & No & No & No & No & No & Yes \tabularnewline 
+    25 & \includegraphics[width=.12\linewidth]{object27} & No & No & No & No & Yes & No \tabularnewline 
+    26 & \includegraphics[width=.12\linewidth]{object28} & No & No & No & No & No & No \tabularnewline 
+    27 & \includegraphics[width=.12\linewidth]{object29} & No & No & Yes & No & No & Yes \tabularnewline 
+    28 & \includegraphics[width=.12\linewidth]{object30} & Yes & No & No & No & Yes & No \tabularnewline 
+    29 & \includegraphics[width=.12\linewidth]{object31} & No & No & Yes & No & No & No \tabularnewline 
+    30 & \includegraphics[width=.12\linewidth]{object32} & No & Yes & No & No & Yes & No \tabularnewline 
+    31 & \includegraphics[width=.12\linewidth]{object33} & No & No & Yes & No & No & No \tabularnewline 
+    32 & \includegraphics[width=.12\linewidth]{object34} & No & No & Yes & No & No & No \tabularnewline 
+    33 & \includegraphics[width=.12\linewidth]{object35} & No & No & Yes & No & No & Yes \tabularnewline 
   \end{longtable}
 
   \cleardoublepage
