@@ -761,7 +761,7 @@ Considering the fact that randomly selecting objects as dataset is not likely to
   P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)} .
 \end{equation}
 
-As seen from \cref{eq:classif_s,eq:classif_g}, the key for both object recognition tasks is to know the likelihood $P(\mathbf{x}|\lambda^c)$.
+As seen from \cref{eq:classif_s,eq:classif_g}, the key for both object recognition tasks is to know the likelihood $P(\mathbf{x}|c)$.
 
 \subsection{Model Selection}
 An important issue about HMM is selecting the model size and the observation distribution, i.e. the number of states, the number of components per state and the type of covariance matrix. The choice of models can have a dramatic impact on the result.
