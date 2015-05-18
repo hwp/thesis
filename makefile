@@ -25,7 +25,10 @@ FIGS   = uhhLogoL.pdf mug2v2.jpg mug2m.jpg \
 				 object25.jpg object26.jpg object27.jpg \
 				 object28.jpg object29.jpg object30.jpg \
 				 object31.jpg object32.jpg object33.jpg \
-				 object34.jpg object35.jpg
+				 object34.jpg object35.jpg \
+				 knock0.png knock1.png knock2.png \
+				 push0.png push1.png push2.png \
+				 shake0.png shake1.png shake2.png
 GPSRC  = spec256 spec1024 spec64 roc \
 				 mug bottle plastic metal fragile nonempty \
 				 knock shake push
