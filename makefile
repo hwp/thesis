@@ -33,7 +33,8 @@ GPSRC  = spec256 spec1024 spec64 roc \
 				 mug bottle plastic metal fragile nonempty \
 				 knock shake push
 SVGSRC = 
-TIKZS  = hmm vpipe apipe featuref decisionf featurefs decisionfs specific generic bow
+TIKZS  = hmm vpipe apipe featuref decisionf featurefs \
+				 decisionfs specific generic bow
 				 
 # intermediate files
 TIKZMI = $(foreach p, $(GPSRC), $(FIGDIR)/$(p).tikz)

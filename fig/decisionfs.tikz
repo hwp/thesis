@@ -1,6 +1,5 @@
 % a tikz figure for decision fusion block diagram
 
-\scriptsize
 \begin{tikzpicture}
   \node[io] (pv) at (4,0) {};
   \node[io] (pa) at (4,3) {};

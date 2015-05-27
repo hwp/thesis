@@ -1,6 +1,5 @@
 % a tikz figure for feature fusion block diagram
 
-\scriptsize
 \begin{tikzpicture}
   \node[io] (pv) at (4,0) {};
   \node[io] (pa) at (4,2) {};

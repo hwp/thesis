@@ -6,8 +6,8 @@
   \node[process] (p2) at (6,0) {MFCCs};
   \node[io] (o) at (9,0) {};
 
-  \draw[->] (i) -- node[data,text width=3cm,pos=0.2] {Time-domain signal} (p1);
+  \draw[->] (i) -- node[data,text width=3cm,pos=0.2] {Time-domain\\ signal} (p1);
   \draw[->] (p1) -- (p2);
-  \draw[->] (p2) -- node[data,text width=3cm,pos=1] {Sequence of feature vectors} (o);
+  \draw[->] (p2) -- node[data,text width=3cm,pos=1] {Sequence of\\ feature vectors} (o);
 \end{tikzpicture}
 

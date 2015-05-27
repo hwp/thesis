@@ -11,7 +11,7 @@
   \node[edata] at (9,2) {Codebook}
     edge [->] (p3);
 
-  \draw[->] (i) -- node[data,text width=2.8cm,pos=0] {Sequence of image frames} (p1);
-  \draw[->] (p3) -- node[data,text width=3cm,pos=1] {Sequence of feature vectors} (o);
+  \draw[->] (i) -- node[data,text width=2.8cm,pos=0] {Sequence of\\ image frames} (p1);
+  \draw[->] (p3) -- node[data,text width=3cm,pos=1] {Sequence of\\ feature vectors} (o);
 \end{tikzpicture}
 
