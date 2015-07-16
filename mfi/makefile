@@ -1,6 +1,6 @@
-# programs 
-TEX    = latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode --shell-escape" 
-XETEX  = latexmk -pdf -pdflatex="xelatex -interaction=nonstopmode --shell-escape" 
+# programs
+TEX    = latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode --shell-escape"
+XETEX  = latexmk -pdf -pdflatex="xelatex -interaction=nonstopmode --shell-escape"
 PLTEPS = gnuplot -e 'set term tikz'
 
 # figure directory
@@ -12,19 +12,22 @@ PAPER_PRE = ieeeconf.cls
 BIBS   = thesis.bib
 FIGS   = knock0.png knock1.png knock2.png \
 				 push0.png push1.png push2.png \
-				 shake0.png shake1.png shake2.png
+				 shake0.png shake1.png shake2.png \
+				 object1.jpg object2.jpg object3.jpg object6.jpg \
+				 object9.jpg object10.jpg object12.jpg object16.jpg \
+				 object17.jpg object19.jpg object24.jpg object29.jpg
 GPSRC  = mug bottle plastic metal fragile nonempty \
 				 knock shake push
-SVGSRC = 
-TIKZS  = apipe vpipe featurefs decisionfs 
-				 
+SVGSRC =
+TIKZS  = apipe vpipe featurefs decisionfs
+
 # intermediate files
 TIKZMI = $(foreach p, $(GPSRC), $(FIGDIR)/$(p).tikz)
 PDFMID = $(foreach p, $(SVGSRC), $(FIGDIR)/$(p).pdf)
 
 MIDALL = $(TIKZMI) $(PDFMID)
 
-# all figures 
+# all figures
 FIGALL = $(TIKZMI) $(PDFMID) \
 				 $(foreach p, $(TIKZS), $(FIGDIR)/$(p).tikz) \
 				 $(foreach p, $(FIGS), $(FIGDIR)/$(p))
@@ -32,7 +35,7 @@ FIGALL = $(TIKZMI) $(PDFMID) \
 # rules
 $(FIGDIR)/%.tikz : $(FIGDIR)/%.gp
 	$(PLTEPS) -e "set output '$@'" $<
-	
+
 $(FIGDIR)/%.pdf : $(FIGDIR)/%.svg
 	inkscape -D -z --file=$< --export-pdf=$@
 
