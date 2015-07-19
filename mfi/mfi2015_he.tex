@@ -63,7 +63,7 @@ Multimodal Object Recognition from Visual and Audio Sequences%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-This paper describes a visual-audio object recognition system using hidden Markov models. The system uses the bag-of-words model with scale invariant feature transform descriptors as the visual feature and the mel-frequency cepstrum coefficients as the audio feature. The classification of objects is based on computing the probabilities with learned hidden Markov models. Two different fusion methods are used in the system: feature fusion and decision fusion. The former method learns a joint probability distribution with one HMM, while the latter method learns two separate distributions for each modality and combines them under the conditional independence assumption. Experiments based on a dataset of 33 different household objects are carried out to evaluate the performance of these two fusion methods as well as unimodal approaches. The result shows that both fusion methods outperform unimodal methods, while these two methods are mostly comparable.
+This paper describes a visual-audio object recognition system using hidden Markov models. The system uses the bag-of-words model with scale invariant feature transform descriptors as the visual feature and the mel-frequency cepstrum coefficients as the audio feature. The classification of objects is based on the computation of the probabilities with learned hidden Markov models. Two different fusion methods are used in the system: feature fusion and decision fusion. The former method learns a joint probability distribution with one HMM, while the latter method learns two separate distributions for each modality and combines them under the conditional independence assumption. Experiments based on a dataset of 33 different household objects are carried out to evaluate the performance of these two fusion methods as well as unimodal approaches. The result shows that both fusion methods outperform unimodal methods, while these two methods are mostly comparable.
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,10 +99,10 @@ The bag-of-words (BoW) model with SIFT descriptors is effective in representing 
   \label{fig:vpipe}
 \end{figure}
 
-First, the image frames from the raw video are taken at a  frame rate of 5 frames per second. For each image frame, the keypoints are detected using the difference-of-Gaussian keypoint detector. Then, the SIFT descriptors of all the keypoints are computed (as described in \cite{lowe_distinctive_2004}). All the descriptors are quantized using a codebook of visual descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a normalized histogram (i.e. the bag-of-words feature). The codebook used in the experiment contains 20 ``words'', thus the visual feature is a sequence of 20-dimensional vectors.
+First, the image frames from the raw video are taken at a  frame rate of 5 frames per second. For each image frame, the keypoints are detected using the difference-of-Gaussian (DoG) keypoint detector. Then, the SIFT descriptors of all the keypoints are computed (as described in \cite{lowe_distinctive_2004}). All the descriptors are quantized using a codebook of visual descriptors, which is prepared in advance. After that, the number of occurrences of the visual ``words'' are counted and represented as a normalized histogram (i.e. the bag-of-words feature). The codebook used in the experiment contains 20 ``words'', thus the visual feature is a sequence of 20-dimensional vectors.
 
 \subsection{Audio Feature}
-The mel-frequency cepstrum coefficients (MFCCs) are a kind of spectral feature of audio data. They encode interpretation of sounds similar to human perception. MFCCs have been commonly used for speech recognition, speaker recognition as well as music information retrieval. Hence, we choose MFCCs as the audio feature. The audio processing pipeline is shown in \cref{fig:apipe}.
+The mel-frequency cepstrum coefficients (MFCCs) are a type of spectral feature of audio data. They encode interpretation of sounds similar to human perception. MFCCs have been commonly used for speech recognition, speaker recognition as well as music information retrieval. Hence, we choose MFCCs as the audio feature. The audio processing pipeline is shown in \cref{fig:apipe}.
 
 \begin{figure}[t]
   \footnotesize
@@ -115,7 +115,7 @@ The mel-frequency cepstrum coefficients (MFCCs) are a kind of spectral feature o
 The audio data are sampled at 8000 Hz. We first apply a shifting window with a window size of 2048 and shifting size of 1600 to get the audio frames, so that the rate of the audio frames is equal to that of the visual data. Then, for each audio frame, we calculate the MFCCs with 32 filter banks. Out of all the coefficients, the second to the 17th are taken and the rest is discarded, resulting in a 16-dimensional feature vector.
 
 \section{Classification with HMM}
-The hidden Markov model (HMM) is a statistical model for time series data, which have been well-known and widely used by researchers~\cite{rabiner_tutorial_1989}\cite{rabiner_fundamentals_1993}. The HMMs have been successfully applied to a number of research fields, including speech recognition~\cite{rabiner_fundamentals_1993}\cite{baker_dragon_1975}, image processing~\cite{chen_off-line_1994} and gesture recognition~\cite{mitra_gesture_2007}. As our object recognition system requires a learning model which can model time series data, the HMM is a perfect choice in this case. In addition to its wide usage, the HMM also allows us to estimate the probability, which can be used for further inference in modality fusion.
+The hidden Markov model (HMM) is a statistical model for time series data, which has been well-known and widely used by researchers~\cite{rabiner_tutorial_1989}\cite{rabiner_fundamentals_1993}. The HMM has been successfully applied to a number of research fields, including speech recognition~\cite{rabiner_fundamentals_1993}\cite{baker_dragon_1975}, image processing~\cite{chen_off-line_1994} and gesture recognition~\cite{mitra_gesture_2007}. As our object recognition system requires a learning model which can model time series data, the HMM is a perfect choice in this case. In addition to its wide usage, the HMM, as it is a generative model, also allows us to estimate the probability, which can be used for further inference in modality fusion.
 
 \subsection{Method}
 Classification using HMM requires one model to be learned for each class $c$. The model for a class ($\lambda^c$) is learned to describe the distribution of all the instances of this class, that is:
@@ -147,7 +147,7 @@ From Bayesian theory, the posterior probability of a class given the observation
 \end{equation}
 in which $P(c)$ is the prior probability of the class.
 
-Considering the fact that randomly selecting objects as dataset is not likely to be the same as randomly drawing a sample in a real world, we notice that the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can make the same decision by varying the threshold. We will later evaluate the performance of a classifier using the area under the receiver operating characteristic curve and such an evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewritten as
+Considering the fact that randomly selecting objects as dataset is not likely to be the same as randomly drawing a sample in the real world, we notice that the prior probability is hard to estimate. However, if we assume that the prior probabilities are equal, we still can make the same decision by varying the threshold. We will later evaluate the performance of a classifier using the area under the receiver operating characteristic curve and such an evaluation method is not affected by the threshold. Therefore, by assuming equal prior probabilities, \cref{eq:posterior} can be rewritten as
 \begin{equation}
   \label{eq:postsimp}
   P(c|\mathbf{x}) = \frac{P(\mathbf{x}|c)}{\sum_{c \in \{-1,+1\}} P(\mathbf{x}|c)} .
@@ -176,12 +176,12 @@ Models with larger number of states and components are more complex. The covaria
 
 In general, simple models have a smaller hypothesis space, which means it is easy to learn. However, a smaller hypothesis space is less likely to contain target distribution, thus problems of underfitting can occur.
 
-On the other hand, complex models have a larger hypothesis space, hence can better approximate the target distribution. However, since the Baum-Welch algorithm does not guarantee MLE, complex models are more prone to local optima. Furthermore, it could also result in overfitting if the training set is not large enough. The comparison of simple and complex models is listed in \cref{tab:model}.
+On the other hand, complex models have a larger hypothesis space, hence can better approximate the target distribution. However, since the Baum-Welch algorithm does not guarantee global maximum likelihood estimate, complex models are more prone to local optima. Furthermore, it could also result in overfitting if the training set is not large enough. The comparison of simple and complex models is listed in \cref{tab:model}.
 
 The decision on the model choice should follow the principle of Occam's razor. Depending on different data, the best choice is the simplest model that can fit the data.
 
 \section{Methods of Multimodal Fusion}
-Having discussed how to extract feature vectors and how to make decisions based on it, we now move on to the final part of system design: multimodal signal fusion. The way to fuse the visual and audio information is essential to the object recognition system. A good method makes use of both modalities and avoids noises from unreliable signals.
+Having discussed how to extract feature vectors and how to make decisions based on it, we now move on to the final part of system design: multimodal signal fusion. The way to fuse the visual and audio information is essential to the multimodal object recognition system. A good method makes use of both modalities and avoids noises from unreliable signals.
 
 Multimodal fusion methods may be classified into feature fusion, decision fusion and hybrid fusion according to the level of fusion ~\cite{atrey_multimodal_2010}. The feature fusion or early fusion is the approach of combining the multimodal features before they are sent as input of a learning model. The decision fusion or late fusion approach, on the other hand, analyzes each modality independently and then combines the individual decisions to a final result. The hybrid fusion is a combination of the two approaches.
 
@@ -230,7 +230,7 @@ The difference between feature fusion and decision fusion is summarized in \cref
   \begin{tabular}{p{.42\linewidth}p{.42\linewidth}}
     \toprule
     \multicolumn{1}{c}{\bfseries Feature Fusion} & \multicolumn{1}{c}{\bfseries Decision Fusion} \\ \midrule
-    Correlation between modalities is utilized. & Independent assumption needs to be held. \\
+    Correlation between modalities is utilized. & Independent assumption needs to be satisfied. \\
     Models are complex. & Models are simple. \\
     Synchronization is necessary. & Synchronization is not necessary. \\
     \bottomrule
