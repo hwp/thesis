@@ -1,0 +1,19 @@
+% graph for example of generic category recognition
+
+\begin{tikzpicture}
+\node (n1) at (0,0) {\includegraphics[width=.16\linewidth]{object2}};
+\node (n2) at (3,0) {\includegraphics[width=.16\linewidth]{object3}};
+\node (n3) at (6,0) {\includegraphics[width=.16\linewidth]{object6}};
+\node (n4) at (9,0) {\includegraphics[width=.16\linewidth]{object18}};
+\node (n5) at (13,0) {\includegraphics[width=.16\linewidth]{object23}};
+\node (l1) at (0,-2) {mug};
+\node (l2) at (3,-2) {mug};
+\node (l3) at (6,-2) {mug};
+\node (l4) at (9,-2) {not mug};
+\node (l5) at (13,-2) {mug};
+\node (x1) at (0, 2.5) {\textbf{Train}};
+\node (x2) at (13, 2.5) {\textbf{Test}};
+\node[draw, thick, rounded corners, fit=(n1)(n2)(n3)(n4)(l1)(l2)(l3)(l4)(x1)] {};
+\node[draw, thick, rounded corners, fit=(n5)(l5)(x2)] {};
+\end{tikzpicture}
+

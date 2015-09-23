@@ -5,15 +5,15 @@
   \node[io] (pa) at (4,3) {};
   \node[process] (cv) at (7,0) {Probability Computation};
   \node[process] (ca) at (7,3) {Probability Computation};
-  \node[process,minimum height=4cm] (df) at (11,1.5) {Dececion Fusion};
+  \node[process,minimum height=4cm] (df) at (12,1.5) {Dececion Fusion};
   \node[edata] at (7, 1.3) {HMM for Visual Feature} edge[->] (cv);
   \node[edata] at (7, 4.3) {HMM for Audio Feature} edge[->] (ca);
-  \node[io] (o) at (13.2,1.5) {};
+  \node[io] (o) at (15,1.5) {};
 
   \draw[->] (pv) -- node[data] {Visual\\ Feature} (cv);
   \draw[->] (pa) -- node[data] {Audio\\ Feature} (ca);
-  \draw[->] (cv) -- node[data] {Visual Likelihood} (cv -| df.west);
-  \draw[->] (ca) -- node[data] {Audio Likelihood} (ca -| df.west);
+  \draw[->] (cv) -- node[data,pos=.7] {Visual\\ Likelihood} (cv -| df.west);
+  \draw[->] (ca) -- node[data,pos=.7] {Audio\\ Likelihood} (ca -| df.west);
   \draw[->] (df) -- node[data,pos=1] {Joint\\Likelihood} (o);
 \end{tikzpicture}
 
