@@ -5,7 +5,7 @@ set key right bottom spacing 2.5
 set xlabel 'false positive rate' offset 0,-.5
 set ylabel 'true positive rate' offset -2,0
 set size square
-plot x dt 3 notitle, '-' w l lw 3 title 'Feature Fusion', '-' w l lw 3 title 'Decision Fusion', '-' w l lw 3 title 'Visual Only', '-' w l lw 3 title 'Audio Only'
+plot '-' w l lw 3 title 'Feature Fusion', '-' w l lw 3 title 'Decision Fusion', '-' w l lw 3 title 'Visual Only', '-' w l lw 3 title 'Audio Only'
 1.00000 1.00000
 0.92500 0.98525
 0.83750 0.97935
