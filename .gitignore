@@ -107,3 +107,30 @@ sympy-plots-for-*.tex/
 
 # xindy
 *.xdy
+
+fig/bottle.tikz
+fig/fragile.tikz
+fig/knock.tikz
+fig/metal.tikz
+fig/mug.tikz
+fig/nonempty.tikz
+fig/plastic.tikz
+fig/push.tikz
+fig/roc.tikz
+fig/shake.tikz
+fig/spec1024.tikz
+fig/spec256.tikz
+fig/spec64.tikz
+mfi/fig/bottle.tikz
+mfi/fig/fragile.tikz
+mfi/fig/knock.tikz
+mfi/fig/metal.tikz
+mfi/fig/mug.tikz
+mfi/fig/nonempty.tikz
+mfi/fig/plastic.tikz
+mfi/fig/push.tikz
+mfi/fig/shake.tikz
+mfi/mfi2015_he.pdf
+mfi/pres.pdf
+pres.pdf
+thesis.pdf
